@@ -84,15 +84,15 @@
         "compare": ">="
     },
     "finish__timing__setup__tns": {
-        "value": -80300.0,
+        "value": -21300.0,
         "compare": ">="
     },
     "finish__timing__hold__ws": {
-        "value": -377.0,
+        "value": -196.0,
         "compare": ">="
     },
     "finish__timing__hold__tns": {
-        "value": -104000.0,
+        "value": -43700.0,
         "compare": ">="
     },
     "finish__design__instance__area": {
