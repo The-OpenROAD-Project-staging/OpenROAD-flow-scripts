@@ -35,8 +35,8 @@
         "value": -440.0,
         "compare": ">="
     },
-    "cts__timing__hold__ws": {
-        "value": -194.0,
+   "cts__timing__hold__ws": {
+        "value": -197.0,
         "compare": ">="
     },
     "cts__timing__hold__tns": {
