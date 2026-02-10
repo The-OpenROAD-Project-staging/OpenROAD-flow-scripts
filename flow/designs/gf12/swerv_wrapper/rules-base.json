@@ -28,15 +28,15 @@
         "compare": "<="
     },
     "cts__timing__setup__ws": {
-        "value": -172.0,
+        "value": -109.0,
         "compare": ">="
     },
     "cts__timing__setup__tns": {
-        "value": -899.0,
+        "value": -440.0,
         "compare": ">="
     },
     "cts__timing__hold__ws": {
-        "value": -108.0,
+        "value": -194.0,
         "compare": ">="
     },
     "cts__timing__hold__tns": {
@@ -88,11 +88,11 @@
         "compare": ">="
     },
     "finish__timing__hold__ws": {
-        "value": -84.1,
+        "value": -82.6,
         "compare": ">="
     },
     "finish__timing__hold__tns": {
-        "value": -508.0,
+        "value": -493.0,
         "compare": ">="
     },
     "finish__design__instance__area": {
