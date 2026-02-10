@@ -132,8 +132,6 @@ export CORE_UTILIZATION       = 65
 export CORE_MARGIN            = 2
 export MACRO_PLACE_HALO       = 2 2
 
-export PLACE_DENSITY          = 0.65
-
 export ENABLE_DPO = 0
 
 # a smoketest for this option, there are a
