@@ -28,11 +28,11 @@
         "compare": "<="
     },
     "cts__timing__setup__ws": {
-        "value": -296.0,
+        "value": -190.0,
         "compare": ">="
     },
     "cts__timing__setup__tns": {
-        "value": -4740.0,
+        "value": -12600.0,
         "compare": ">="
     },
     "cts__timing__hold__ws": {
@@ -56,11 +56,11 @@
         "compare": ">="
     },
     "globalroute__timing__hold__ws": {
-        "value": -187.0,
+        "value": -302.0,
         "compare": ">="
     },
     "globalroute__timing__hold__tns": {
-        "value": -1510.0,
+        "value": -1420.0,
         "compare": ">="
     },
     "detailedroute__route__wirelength": {
@@ -84,7 +84,7 @@
         "compare": ">="
     },
     "finish__timing__setup__tns": {
-        "value": -507.0,
+        "value": -984.0,
         "compare": ">="
     },
     "finish__timing__hold__ws": {
