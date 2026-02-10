@@ -23,7 +23,7 @@ proc write_lec_script { step file1 file2 } {
 proc run_lec_test { step file1 file2 } {
   write_lec_script $step $file1 $file2
   # tclint-disable-next-line command-args
-  eval exec kepler-formal --config $::env(OBJECTS_DIR)/${step}_lec_test.yml
+  eval exec $::env(KEPLER_FORMAL_EXE) --config $::env(OBJECTS_DIR)/${step}_lec_test.yml
   try {
     set count [exec grep -c "Found difference" $::env(LOG_DIR)/${step}_lec_check.log]]
   } trap CHILDSTATUS {results options} {
