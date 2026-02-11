@@ -17,3 +17,6 @@ export TNS_END_PERCENT        = 100
 export ASAP7_USE_VT           = LVT
 
 export RECOVER_POWER          = 100
+
+export REMOVE_CELLS_FOR_LEC   = TAPCELL*
+
