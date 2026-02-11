@@ -29,8 +29,8 @@ export ABC_AREA = 1
 
 export SDC_FILE      = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint.sdc
 
-export CORE_UTILIZATION       = 55
-export CORE_ASPECT_RATIO      = 1
+export CORE_UTILIZATION       = 70
+export CORE_ASPECT_RATIO      = 1.3
 export CORE_MARGIN            = 2
 
 export chameleon_DIR = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)
