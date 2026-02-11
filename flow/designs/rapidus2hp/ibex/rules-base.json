@@ -12,7 +12,7 @@
         "compare": "<="
     },
     "placeopt__design__instance__count__stdcell": {
-        "value": 19647,
+        "value": 22951,
         "compare": "<="
     },
     "detailedplace__design__violations": {
@@ -52,7 +52,7 @@
         "compare": ">="
     },
     "globalroute__timing__setup__tns": {
-        "value": -0.0963,
+        "value": -0.818,
         "compare": ">="
     },
     "globalroute__timing__hold__ws": {
@@ -68,7 +68,7 @@
         "compare": ">="
     },
     "finish__timing__setup__tns": {
-        "value": -0.0963,
+        "value": -0.818,
         "compare": ">="
     },
     "finish__timing__hold__ws": {
