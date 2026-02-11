@@ -36,7 +36,6 @@ export CORE_UTILIZATION = $(strip \
     ))
 
 export CORE_MARGIN          = 1
-export PLACE_DENSITY        = 0.50
 
 # a smoketest for this option, there are a
 # few last gasp iterations
