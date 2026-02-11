@@ -30,3 +30,4 @@ export PWR_NETS_VOLTAGES      =
 export MACRO_PLACE_HALO        ?= 3 3
 
 export ROUTING_LAYER_ADJUSTMENT = 0.3
+export REMOVE_CELLS_FOR_LEC     = TAPCELL*

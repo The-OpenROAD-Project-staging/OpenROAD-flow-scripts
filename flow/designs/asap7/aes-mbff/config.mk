@@ -16,3 +16,5 @@ export TNS_END_PERCENT          = 100
 
 export CLUSTER_FLOPS            = 1
 export ENABLE_DPO               = 0
+
+export REMOVE_CELLS_FOR_LEC     = TAPCELL*
