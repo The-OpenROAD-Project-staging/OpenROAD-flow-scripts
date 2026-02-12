@@ -37,6 +37,5 @@ export ABC_AREA               = 1
 export CORE_UTILIZATION       = 60
 export CORE_ASPECT_RATIO      = 1
 export CORE_MARGIN            = 0.75
-export PLACE_DENSITY          = 0.62
 
 export TNS_END_PERCENT        = 100

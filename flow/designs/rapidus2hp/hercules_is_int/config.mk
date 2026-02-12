@@ -64,7 +64,6 @@ export CORE_UTILIZATION = $(strip \
     ))
 
 export CORE_MARGIN            = 1
-export PLACE_DENSITY          = 0.58
 
 export PLACE_PINS_ARGS = -min_distance_in_tracks -min_distance 1
 export CELL_PAD_IN_SITES_GLOBAL_PLACEMENT = 0
