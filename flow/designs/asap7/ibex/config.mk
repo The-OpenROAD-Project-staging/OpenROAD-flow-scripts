@@ -30,3 +30,6 @@ export TNS_END_PERCENT        = 100
 
 export SWAP_ARITH_OPERATORS = 1
 export OPENROAD_HIERARCHICAL = 1
+
+export DISABLE_LEC_CHECK = 1
+

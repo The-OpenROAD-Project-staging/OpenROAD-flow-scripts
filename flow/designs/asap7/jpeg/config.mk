@@ -16,3 +16,6 @@ export PLACE_DENSITY          = 0.75
 export TNS_END_PERCENT        = 100
 export EQUIVALENCE_CHECK     ?=   1
 export REMOVE_CELLS_FOR_LEC   = TAPCELL*
+
+export DISABLE_LEC_CHECK = 1
+
