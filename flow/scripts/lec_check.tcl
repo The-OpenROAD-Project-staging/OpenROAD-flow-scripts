@@ -1,6 +1,6 @@
 proc write_lec_verilog { filename } {
-  if { [env_var_exists_and_non_empty REMOVE_CELLS_FOR_EQY] } {
-    write_verilog -remove_cells $::env(REMOVE_CELLS_FOR_EQY) $::env(RESULTS_DIR)/$filename
+  if { [env_var_exists_and_non_empty REMOVE_CELLS_FOR_LEC] } {
+    write_verilog -remove_cells $::env(REMOVE_CELLS_FOR_LEC) $::env(RESULTS_DIR)/$filename
   } else {
     write_verilog $::env(RESULTS_DIR)/$filename
   }
