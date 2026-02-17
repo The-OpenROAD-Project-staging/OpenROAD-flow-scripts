@@ -23,5 +23,5 @@ export PDN_TCL = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/pdn.tcl
 
 export BLOCKS = I2cDeviceCtrl
 
-export DISABLE_LEC_CHECK = 1
+export LEC_CHECK = 0
 

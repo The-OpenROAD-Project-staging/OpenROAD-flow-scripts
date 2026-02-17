@@ -19,5 +19,5 @@ export CORNERS = slow typ fast
 
 export PDN_TCL = $(DESIGN_HOME)/$(PLATFORM)/$(TOP_DESIGN_NICKNAME)/${DESIGN_NAME}/pdn.tcl
 
-export DISABLE_LEC_CHECK = 1
+export LEC_CHECK = 0
 

@@ -18,4 +18,4 @@ export IO_CONSTRAINTS  = $(DESIGN_HOME)/asap7/riscv32i-mock-sram/fakeram7_256x32
 
 export PDN_TCL                = $(PLATFORM_DIR)/openRoad/pdn/BLOCK_grid_strategy.tcl
 
-export REMOVE_CELLS_FOR_LEC = TAPCELL*
+*

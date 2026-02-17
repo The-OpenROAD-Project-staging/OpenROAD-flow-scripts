@@ -15,7 +15,6 @@ export CORE_AREA              = 1.08 1.08 16 16
 export TNS_END_PERCENT        = 100
 export EQUIVALENCE_CHECK     ?=   1
 export REMOVE_CELLS_FOR_EQY   = TAPCELL*
-export REMOVE_CELLS_FOR_LEC   = TAPCELL*
 export SKIP_GATE_CLONING      = 1
 export VERILOG_TOP_PARAMS     = DATA_WIDTH 8
 export SYNTH_HDL_FRONTEND     = slang

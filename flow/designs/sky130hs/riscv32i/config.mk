@@ -18,4 +18,3 @@ export REMOVE_ABC_BUFFERS = 1
 export SWAP_ARITH_OPERATORS = 1
 export OPENROAD_HIERARCHICAL = 1
 
-export REMOVE_CELLS_FOR_LEC = sky130_fd_sc_hs__tapvpwrvgnd*

@@ -15,7 +15,6 @@ export PLACE_DENSITY            = 0.65
 export TNS_END_PERCENT          = 100
 export EQUIVALENCE_CHECK       ?=   1
 export REMOVE_CELLS_FOR_EQY     = TAPCELL*
-export REMOVE_CELLS_FOR_LEC     = TAPCELL*
 
 ifeq ($(FLOW_VARIANT),top)
 	export DESIGN_NAME = aes_cipher_top

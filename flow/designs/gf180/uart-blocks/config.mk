@@ -23,5 +23,5 @@ export TAPCELL_TCL ?= $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/tapcell.tcl
 export MACRO_ROWS_HALO_X = 14
 export MACRO_ROWS_HALO_Y = 14
 
-export DISABLE_LEC_CHECK = 1
+export LEC_CHECK = 0
 

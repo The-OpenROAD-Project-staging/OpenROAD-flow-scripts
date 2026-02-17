@@ -14,4 +14,3 @@ export FASTROUTE_TCL = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/fastroute.t
 
 export REMOVE_ABC_BUFFERS = 1
 
-export REMOVE_CELLS_FOR_LEC = sky130_fd_sc_hd__tapvpwrvgnd*

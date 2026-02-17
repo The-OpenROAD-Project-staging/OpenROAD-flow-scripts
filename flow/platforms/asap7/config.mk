@@ -213,3 +213,5 @@ export IR_DROP_LAYER ?= M1
 
 # Allow empty GDS cell
 export GDS_ALLOW_EMPTY ?= fakeram.*
+
+export REMOVE_CELLS_FOR_LEC   = TAPCELL*

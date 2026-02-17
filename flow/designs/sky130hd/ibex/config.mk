@@ -29,6 +29,5 @@ export CTS_CLUSTER_DIAMETER = 50
 export SWAP_ARITH_OPERATORS = 1
 export OPENROAD_HIERARCHICAL = 1
 
-export REMOVE_CELLS_FOR_LEC = sky130_fd_sc_hs__tapvpwrvgnd*
 
-export DISABLE_LEC_CHECK = 1
+export LEC_CHECK = 0

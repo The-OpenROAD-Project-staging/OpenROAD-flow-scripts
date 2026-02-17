@@ -15,4 +15,3 @@ export PLACE_DENSITY          = 0.35
 # few last gasp iterations
 export SKIP_LAST_GASP ?= 1
 
-export REMOVE_CELLS_FOR_LEC   = TAPCELL*

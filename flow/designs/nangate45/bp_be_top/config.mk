@@ -31,4 +31,4 @@ export SYNTH_MINIMUM_KEEP_SIZE = 3000
 
 export FASTROUTE_TCL = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NAME)/fastroute.tcl
 
-export DISABLE_LEC_CHECK = 1
+export LEC_CHECK = 0

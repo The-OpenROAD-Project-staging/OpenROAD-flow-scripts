@@ -18,4 +18,3 @@ export RECOVER_POWER          = 100
 
 export ASAP7_USE_VT           = LVT
 
-export REMOVE_CELLS_FOR_LEC   = TAPCELL*
