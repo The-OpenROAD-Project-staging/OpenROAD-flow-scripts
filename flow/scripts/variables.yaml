@@ -305,6 +305,16 @@ SYNTH_REPEATABLE_BUILD:
   stages:
     - synth
   default: 0
+SYNTH_INSBUF:
+  description: >
+    Insert input buffers on top-level input ports during synthesis.
+
+    Useful to disable when doing parallel synthesis and
+    concatenating netlists later as we're generating netlists
+    of submodules.
+  stages:
+    - synth
+  default: 1
 DFF_MAP_FILE:
   description: |
     Optional mapping file supplied to Yosys to map D flip-flops
@@ -1119,7 +1129,7 @@ RTLMP_NOTCH_WT:
   description: >
     Weight for the notch, or the existence of dead space that cannot be used
     for placement and routing.
-  default: 10.0
+  default: 50.0
   stages:
     - floorplan
 RTLMP_RPT_DIR:
@@ -1162,7 +1172,7 @@ RTLMP_ARGS:
     - floorplan
 GDS_ALLOW_EMPTY:
   description: >
-    Regular expression of module names of macros that have no .gds file
+    Single regular expression of module names of macros that have no .gds file
   stages:
     - final
 RUN_SCRIPT:
@@ -1285,3 +1295,14 @@ WRITE_ODB_AND_SDC_EACH_STAGE:
   stages:
     - All stages
   default: 1
+LEC_CHECK:
+  description: >
+    Perform a formal equivalence check between before and after netlists.
+  default: 1
+  stages:
+    - cts
+REMOVE_CELLS_FOR_LEC:
+  description: >
+    String patterns directly passed to write_verilog -remove_cells <> for
+    lec checks.
+  type: string

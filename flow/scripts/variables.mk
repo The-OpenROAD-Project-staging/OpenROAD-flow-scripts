@@ -117,6 +117,9 @@ YOSYS_IS_VALID := $(if $(YOSYS_EXE),$(shell test -x $(YOSYS_EXE) && echo "true")
 KLAYOUT_DIR = $(abspath $(FLOW_HOME)/../tools/install/klayout/)
 KLAYOUT_BIN_FROM_DIR = $(KLAYOUT_DIR)/klayout
 
+KEPLER_FORMAL_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/kepler-formal/bin/kepler-formal)
+export KEPLER_FORMAL_EXE := $(KEPLER_FORMAL_EXE)
+
 ifeq ($(wildcard $(KLAYOUT_BIN_FROM_DIR)), $(KLAYOUT_BIN_FROM_DIR))
 export KLAYOUT_CMD ?= sh -c 'LD_LIBRARY_PATH=$(dir $(KLAYOUT_BIN_FROM_DIR)) $$0 "$$@"' $(KLAYOUT_BIN_FROM_DIR)
 else
@@ -213,7 +216,6 @@ vars:
 	$(UTILS_DIR)/generate-vars.sh $(OBJECTS_DIR)/vars
 
 .PHONY: print-%
-# Print any variable, for instance: make print-DIE_AREA
 print-%:
   # HERE BE DRAGONS!
   #
@@ -223,7 +225,8 @@ print-%:
   #
   # We have to use $(file ...) because we want to be able
   # to print variables that contain newlines.
-	$(file >/tmp/print_tmp$$,$($*))
-	@echo -n "$* = "
-	@cat /tmp/print_tmp$$
-	@rm /tmp/print_tmp$$
+	$(eval TEMP_FILE := $(shell mktemp /tmp/print_tmp.XXXXXX))
+	@$(file >$(TEMP_FILE),$($*))
+	@echo -n "$*: "
+	@cat $(TEMP_FILE)
+	@rm -f $(TEMP_FILE)

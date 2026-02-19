@@ -97,6 +97,7 @@ export ADDITIONAL_LIBS += $(PLATFORM_DIR)/ram/lib/sacrls0g0d1p64x128m2b1w0c1p0d0
 DEFAULT_SDC_FILE  = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint.sdc
 _0P2A_6T_SDC_FILE = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint_0.2a_6T.sdc
 _0P2A_8T_SDC_FILE = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint_0.2a_8T.sdc
+_0P15_8T_SDC_FILE = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint_0.15_8T.sdc
 _0P3_6T_SDC_FILE  = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint_0.3_6T.sdc
 _0P3_8T_SDC_FILE  = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint_0.3_8T.sdc
 
@@ -107,12 +108,18 @@ export SDC_FILE = $(strip \
             $(_0P2A_6T_SDC_FILE), \
             $(_0P2A_8T_SDC_FILE) \
         ), \
-        $(if $(filter 0.3,$(RAPIDUS_PDK_VERSION)), \
-            $(if $(filter ra02h138_DST_45CPP,$(PLACE_SITE)), \
-                $(_0P3_6T_SDC_FILE), \
-                $(_0P3_8T_SDC_FILE) \
+        $(if $(filter 0.15,$(RAPIDUS_PDK_VERSION)), \
+            $(if $(filter ra02h184_HST_45CPP,$(PLACE_SITE)), \
+                $(_0P15_8T_SDC_FILE), \
+                $(DEFAULT_SDC_FILE) \
             ), \
-            $(DEFAULT_SDC_FILE) \
+            $(if $(filter 0.3,$(RAPIDUS_PDK_VERSION)), \
+                $(if $(filter ra02h138_DST_45CPP,$(PLACE_SITE)), \
+                    $(_0P3_6T_SDC_FILE), \
+                    $(_0P3_8T_SDC_FILE) \
+                ), \
+                $(DEFAULT_SDC_FILE) \
+            ) \
         ) \
     ))
 
@@ -124,8 +131,6 @@ export CORE_UTILIZATION       = 65
 
 export CORE_MARGIN            = 2
 export MACRO_PLACE_HALO       = 2 2
-
-export PLACE_DENSITY          = 0.65
 
 export ENABLE_DPO = 0
 
@@ -140,3 +145,6 @@ export SYNTH_MINIMUM_KEEP_SIZE ?= 40000
 
 # Remove rvfi_probes_o interface
 export SYNTH_CANONICALIZE_TCL = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NAME)/canonicalize.tcl
+
+export SWAP_ARITH_OPERATORS = 1
+export OPENROAD_HIERARCHICAL = 1
