@@ -9,4 +9,6 @@ if { [env_var_exists_and_non_empty TAPCELL_TCL] } {
   cut_rows
 }
 
+report_design_area
+
 orfs_write_db $::env(RESULTS_DIR)/2_3_floorplan_tapcell.odb

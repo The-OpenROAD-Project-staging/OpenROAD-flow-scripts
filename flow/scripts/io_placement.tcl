@@ -16,3 +16,5 @@ if {
 } else {
   log_cmd exec cp $::env(RESULTS_DIR)/3_1_place_gp_skip_io.odb $::env(RESULTS_DIR)/3_2_place_iop.odb
 }
+
+report_design_area
