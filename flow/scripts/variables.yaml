@@ -1306,3 +1306,10 @@ REMOVE_CELLS_FOR_LEC:
     String patterns directly passed to write_verilog -remove_cells <> for
     lec checks.
   type: string
+ASAP7_USE_VT:
+  description: >
+    A space separated list of VT options to use with the ASAP7 standard cell library:
+    RVT, LVT, SLVT.
+  stages:
+    - All stages
+  default: RVT
