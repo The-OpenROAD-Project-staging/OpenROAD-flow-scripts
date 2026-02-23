@@ -132,8 +132,6 @@ export CORE_UTILIZATION       = 65
 export CORE_MARGIN            = 2
 export MACRO_PLACE_HALO       = 2 2
 
-export PLACE_DENSITY          = 0.65
-
 export ENABLE_DPO = 0
 
 # a smoketest for this option, there are a
@@ -147,3 +145,9 @@ export SYNTH_MINIMUM_KEEP_SIZE ?= 40000
 
 # Remove rvfi_probes_o interface
 export SYNTH_CANONICALIZE_TCL = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NAME)/canonicalize.tcl
+
+export SWAP_ARITH_OPERATORS = 1
+export OPENROAD_HIERARCHICAL = 1
+
+# Until the verilog writer fix is merged
+export LEC_CHECK = 0
