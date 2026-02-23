@@ -80,7 +80,7 @@
         "compare": "<="
     },
     "finish__timing__setup__ws": {
-        "value": -0.593,
+        "value": -0.985,
         "compare": ">="
     },
     "finish__timing__setup__tns": {
