@@ -92,7 +92,7 @@
         "compare": ">="
     },
     "finish__timing__hold__tns": {
-        "value": -45200.0,
+        "value": -68300.0,
         "compare": ">="
     },
     "finish__design__instance__area": {
