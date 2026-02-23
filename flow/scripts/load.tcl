@@ -3,6 +3,10 @@ source $::env(SCRIPTS_DIR)/util.tcl
 source $::env(SCRIPTS_DIR)/report_metrics.tcl
 
 proc load_design { design_file sdc_file } {
+  # Workaround for flaky STA under mutlithreading starting
+  # with the rel_3.0 upgrade
+  sta::set_thread_count 1
+
   # Do not reload if design is already loaded
   set db [ord::get_db]
   if { [$db getChip] != "NULL" && [[$db getChip] getBlock] != "NULL" } {
