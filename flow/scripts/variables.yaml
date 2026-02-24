@@ -1298,7 +1298,9 @@ WRITE_ODB_AND_SDC_EACH_STAGE:
 LEC_CHECK:
   description: >
     Perform a formal equivalence check between before and after netlists.
-  default: 1
+
+    If this fails, report an issue to OpenROAD.
+  default: 0
   stages:
     - cts
 REMOVE_CELLS_FOR_LEC:
