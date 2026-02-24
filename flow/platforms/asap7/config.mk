@@ -1,6 +1,5 @@
 export PLATFORM                = asap7
 export PROCESS                 = 7
-export ASAP7_USE_VT           ?= RVT
 
 ifeq ($(LIB_MODEL),)
    export LIB_MODEL = NLDM
