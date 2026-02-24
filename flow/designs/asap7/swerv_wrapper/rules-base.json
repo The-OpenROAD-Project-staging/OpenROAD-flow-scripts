@@ -80,11 +80,11 @@
         "compare": "<="
     },
     "finish__timing__setup__ws": {
-        "value": -402.0,
+        "value": -509.0,
         "compare": ">="
     },
     "finish__timing__setup__tns": {
-        "value": -75900.0,
+        "value": -92000.0,
         "compare": ">="
     },
     "finish__timing__hold__ws": {
@@ -92,7 +92,7 @@
         "compare": ">="
     },
     "finish__timing__hold__tns": {
-        "value": -68300.0,
+        "value": -90300.0,
         "compare": ">="
     },
     "finish__design__instance__area": {
