@@ -20,7 +20,10 @@ _versionCompare() {
 }
 
 _installORDependencies() {
-    ./tools/OpenROAD/etc/DependencyInstaller.sh ${OR_INSTALLER_ARGS}
+    if [[ ${YOSYS_VER} == "" ]]; then
+        YOSYS_VER=v$(grep 'yosys_ver =' tools/yosys/docs/source/conf.py | awk -F'"' '{print $2}')
+    fi
+    ./tools/OpenROAD/etc/DependencyInstaller.sh ${OR_INSTALLER_ARGS} -yosys-ver="${YOSYS_VER}"
 }
 
 _installPipCommon() {
@@ -306,6 +309,10 @@ Usage: $0 [-all|-base|-common] [-<ARGS>]
                                 #    sudo or with root access.
        $0 -ci
                                 # Installs CI tools
+       $0 -yosys-ver=VERSION
+                                # Installs specified version of Yosys.
+                                #    By default, the Yosys version is
+                                #    obtained from tools/yosys/docs/source/conf.py
        $0 -constant-build-dir
                                 #  Use constant build directory, instead of
                                 #    random one.
@@ -315,6 +322,7 @@ EOF
 
 # default args
 OR_INSTALLER_ARGS="-eqy"
+YOSYS_VER=""
 # default prefix
 PREFIX=""
 # default option
@@ -354,6 +362,9 @@ while [ "$#" -gt 0 ]; do
         -ci)
             CI="yes"
             OR_INSTALLER_ARGS="${OR_INSTALLER_ARGS} -save-deps-prefixes=/etc/openroad_deps_prefixes.txt"
+            ;;
+        -yosys-ver=*)
+            YOSYS_VER=${1#*=}
             ;;
         -prefix=*)
             OR_INSTALLER_ARGS="${OR_INSTALLER_ARGS} $1"
