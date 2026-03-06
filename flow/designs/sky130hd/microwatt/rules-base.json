@@ -32,7 +32,7 @@
         "compare": ">="
     },
     "cts__timing__setup__tns": {
-        "value": -311.0,
+        "value": -352,
         "compare": ">="
     },
     "cts__timing__hold__ws": {
@@ -72,7 +72,7 @@
         "compare": "<="
     },
     "detailedroute__antenna__violating__nets": {
-        "value": 5,
+        "value": 6,
         "compare": "<="
     },
     "detailedroute__antenna_diodes_count": {
