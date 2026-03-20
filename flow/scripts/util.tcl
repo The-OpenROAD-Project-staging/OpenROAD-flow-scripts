@@ -1,3 +1,8 @@
+# Extract cell names
+proc get_liberty_cell_names { } {
+  return [tee -q -s result.string select -list-mod =A:liberty_cell]
+}
+
 proc log_cmd { cmd args } {
   # log the command, escape arguments with spaces
   set log_cmd "$cmd[join [lmap arg $args { format " %s" [expr { [string match {* *} $arg] ? "\"$arg\"" : "$arg" }] }] ""]" ;# tclint-disable-line line-length
@@ -192,6 +197,7 @@ proc source_env_var_if_exists { env_var } {
   }
 }
 
+
 # Feature toggle for now, eventually the -hier option
 # will be default and this code will be deleted.
 proc hier_options { } {
@@ -291,33 +297,7 @@ proc orfs_write_sdc { output_file } {
   log_cmd write_sdc -no_timestamp $output_file
 }
 
-proc check_parasitic_annotation { } {
-  foreach scene [sta::scenes] {
-    set nmissing 0
-    set example "NULL"
-    foreach pin [get_pins *] {
-      if { [$pin is_leaf] && [$pin is_driver] } {
-        if { ![sta::parasitics_annotated $pin $scene] } {
-          set has_loads false
-          set pin_iter [$pin connected_pin_iterator]
-          while { [$pin_iter has_next] } {
-            set other_pin [$pin_iter next]
-            if { [$other_pin is_leaf] && [$other_pin is_load] && $other_pin != $pin } {
-              set has_loads true
-              break
-            }
-          }
-          $pin_iter finish
-          if { $has_loads } {
-            set nmissing [expr $nmissing + 1]
-            set example $pin
-          }
-        }
-      }
-    }
-    if { $nmissing > 0 } {
-      error "Missing parasitic annotation in scene $scene on $nmissing \
-             driver pins, for example [get_full_name $example]"
-    }
-  }
+proc source_step_tcl { hook_type step_name } {
+  set env_var "${hook_type}_${step_name}_TCL"
+  source_env_var_if_exists $env_var
 }
