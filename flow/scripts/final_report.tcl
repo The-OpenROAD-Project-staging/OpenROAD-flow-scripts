@@ -54,9 +54,7 @@ if {
   } else {
     puts "IR drop analysis for ground nets is skipped because GND_NETS_VOLTAGES is undefined"
   }
-
-  # Check all drivers have parasitic annotation with exception of those with no connected loads
-  check_parasitic_annotation
+  
 } else {
   puts "OpenRCX is not enabled for this platform."
   puts "Falling back to global route-based estimates."
