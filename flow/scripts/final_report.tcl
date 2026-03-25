@@ -53,7 +53,7 @@ if {
     }
   } else {
     puts "IR drop analysis for ground nets is skipped because GND_NETS_VOLTAGES is undefined"
-  } 
+  }
 } else {
   puts "OpenRCX is not enabled for this platform."
   puts "Falling back to global route-based estimates."
