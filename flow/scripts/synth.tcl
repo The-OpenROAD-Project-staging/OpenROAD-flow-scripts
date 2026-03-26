@@ -193,6 +193,13 @@ opt
 # Replace undef values with defined constants
 setundef -zero
 
+# 2025-03-26: Temporary workaround before yosys fix.
+# Sort design objects before abc execution to avoid non-deterministic result.
+# Enabled by default and can be disabled with SYNTH_SORT_BEFORE_ABC=-1.
+if { ![env_var_equals SYNTH_SORT_BEFORE_ABC -1] } {
+  sort
+}
+
 if {
   ![env_var_exists_and_non_empty SYNTH_WRAPPED_OPERATORS] &&
   ![env_var_exists_and_non_empty SWAP_ARITH_OPERATORS]
