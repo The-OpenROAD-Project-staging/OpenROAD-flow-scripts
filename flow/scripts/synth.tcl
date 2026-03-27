@@ -196,6 +196,7 @@ setundef -zero
 # 2025-03-26: Temporary workaround before yosys fix.
 # Sort design objects before abc execution to avoid non-deterministic result.
 if { $::env(SYNTH_SORT_BEFORE_ABC) } {
+  puts "Workaround: sorting design objects before ABC to avoid non-deterministic results."
   sort
 }
 
