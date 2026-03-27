@@ -10,11 +10,13 @@ from datetime import datetime, timezone
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+
 # --- END FIRESTORE ---
 
 # --- PUBSUB ---
 from google.cloud import pubsub_v1
 from google.oauth2 import service_account
+
 # --- END PUBSUB ---
 
 # make sure the working dir is flow/
@@ -192,7 +194,9 @@ def upload_data(db, dataFile, platform, design, variant, args, rules):
 
 
 # --- PUBSUB ---
-def publish_to_pubsub(publisher, topic_path, dataFile, platform, design, variant, args, rules):
+def publish_to_pubsub(
+    publisher, topic_path, dataFile, platform, design, variant, args, rules
+):
     """Publish a single design's metrics to Pub/Sub as a JSON message."""
     with open(dataFile) as f:
         data = json.load(f)
@@ -215,7 +219,9 @@ def publish_to_pubsub(publisher, topic_path, dataFile, platform, design, variant
     message_data = json.dumps(payload).encode("utf-8")
     future = publisher.publish(topic_path, data=message_data)
     message_id = future.result()
-    print(f"[INFO] Published to Pub/Sub (message ID: {message_id}) for {platform} {design} {variant}.")
+    print(
+        f"[INFO] Published to Pub/Sub (message ID: {message_id}) for {platform} {design} {variant}."
+    )
 
 
 # --- END PUBSUB ---
@@ -251,7 +257,9 @@ elif args.pubsubProjectID:
     # No credentials file — use default credentials (e.g., emulator or ADC)
     publisher = pubsub_v1.PublisherClient()
     topic_path = publisher.topic_path(args.pubsubProjectID, args.pubsubTopicID)
-    print(f"[INFO] Pub/Sub publisher initialized (default creds) for topic: {topic_path}")
+    print(
+        f"[INFO] Pub/Sub publisher initialized (default creds) for topic: {topic_path}"
+    )
 # --- END PUBSUB init ---
 
 RUN_FILENAME = "metadata.json"
@@ -273,7 +281,9 @@ for reportDir, dirs, files in sorted(os.walk("reports", topdown=False)):
         print(f"[WARN] Skiping upload {platform} {design} {variant}.")
         continue
     print(f"[INFO] Get rules for {platform} {design} {variant}.")
-    rules = get_rules(os.path.join("designs", platform, design, f"rules-{variant}.json"))
+    rules = get_rules(
+        os.path.join("designs", platform, design, f"rules-{variant}.json")
+    )
 
     # --- FIRESTORE (remove when deprecating) ---
     if db:
@@ -288,5 +298,7 @@ for reportDir, dirs, files in sorted(os.walk("reports", topdown=False)):
                 publisher, topic_path, dataFile, platform, design, variant, args, rules
             )
         except Exception as e:
-            print(f"[WARN] Pub/Sub publish failed for {platform} {design} {variant}: {e}")
+            print(
+                f"[WARN] Pub/Sub publish failed for {platform} {design} {variant}: {e}"
+            )
     # --- END PUBSUB ---
