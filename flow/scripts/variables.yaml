@@ -305,6 +305,14 @@ SYNTH_REPEATABLE_BUILD:
   stages:
     - synth
   default: 0
+SYNTH_SORT_BEFORE_ABC:
+  description: >
+    Sort design objects before ABC execution to produce deterministic
+    synthesis results. Workaround for Yosys nondeterminism where abc_new
+    visits modules in dict insertion order which can vary between runs.
+  stages:
+    - synth
+  default: 1
 SYNTH_INSBUF:
   description: >
     Insert input buffers on top-level input ports during synthesis.
