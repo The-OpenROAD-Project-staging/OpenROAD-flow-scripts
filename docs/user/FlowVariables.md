@@ -295,6 +295,7 @@ configuration file.
 | <a name="SYNTH_REPEATABLE_BUILD"></a>SYNTH_REPEATABLE_BUILD| License to prune anything that makes builds less repeatable, typically used with Bazel to ensure that builds are bit-for-bit identical so that caching works optimally. Removes debug information that encodes paths, timestamps, etc.| 0|
 | <a name="SYNTH_RETIME_MODULES"></a>SYNTH_RETIME_MODULES| *This is an experimental option and may cause adverse effects.* *No effort has been made to check if the retimed RTL is logically equivalent to the non-retimed RTL.* List of modules to apply automatic retiming to. These modules must not get dissolved and as such they should either be the top module or be included in SYNTH_KEEP_MODULES. The main use case is to quickly identify if performance can be improved by manually retiming the input RTL. Retiming will treat module ports like register endpoints/startpoints. The objective function of retiming isn't informed by SDC, even the clock period is ignored. As such, retiming will optimize for best delay at potentially high register number cost. Automatic retiming can produce suboptimal results as its timing model is crude and it doesn't find the optimal distribution of registers on long pipelines. See OR discussion #8080.| |
 | <a name="SYNTH_SLANG_ARGS"></a>SYNTH_SLANG_ARGS| Additional arguments passed to the slang frontend during synthesis.| |
+| <a name="SYNTH_SORT_BEFORE_ABC"></a>SYNTH_SORT_BEFORE_ABC| Sort design objects before ABC execution to produce deterministic synthesis results. Workaround for Yosys nondeterminism where abc_new visits modules in dict insertion order which can vary between runs.| 1|
 | <a name="SYNTH_WRAPPED_ADDERS"></a>SYNTH_WRAPPED_ADDERS| Specify the adder modules that can be used for synthesis, separated by commas. The default adder module is determined by the first element of this variable.| |
 | <a name="SYNTH_WRAPPED_MULTIPLIERS"></a>SYNTH_WRAPPED_MULTIPLIERS| Specify the multiplier modules that can be used for synthesis, separated by commas. The default multiplier module is determined by the first element of this variable.| |
 | <a name="SYNTH_WRAPPED_OPERATORS"></a>SYNTH_WRAPPED_OPERATORS| Synthesize multiple architectural options for each arithmetic operator in the design. These options are available for switching among in later stages of the flow.| |
@@ -346,6 +347,7 @@ configuration file.
 - [SYNTH_REPEATABLE_BUILD](#SYNTH_REPEATABLE_BUILD)
 - [SYNTH_RETIME_MODULES](#SYNTH_RETIME_MODULES)
 - [SYNTH_SLANG_ARGS](#SYNTH_SLANG_ARGS)
+- [SYNTH_SORT_BEFORE_ABC](#SYNTH_SORT_BEFORE_ABC)
 - [SYNTH_WRAPPED_ADDERS](#SYNTH_WRAPPED_ADDERS)
 - [SYNTH_WRAPPED_MULTIPLIERS](#SYNTH_WRAPPED_MULTIPLIERS)
 - [TIEHI_CELL_AND_PORT](#TIEHI_CELL_AND_PORT)
