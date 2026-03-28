@@ -142,16 +142,13 @@ def extractGnuTime(prefix, jsonFile, file):
 #
 def read_sdc(file_name):
     clkList = []
-    sdcFile = None
 
     try:
-        sdcFile = open(file_name, "r")
+        with open(file_name, "r") as sdcFile:
+            lines = sdcFile.readlines()
     except IOError:
         print("[WARN] Failed to open file:", file_name)
         return clkList
-
-    lines = sdcFile.readlines()
-    sdcFile.close()
 
     for line in lines:
         if len(line.split()) < 2:
@@ -185,10 +182,9 @@ def is_git_repo(folder=None):
 def merge_jsons(root_path, output, files):
     paths = sorted(glob(os.path.join(root_path, files)))
     for path in paths:
-        file = open(path, "r")
-        data = json.load(file)
+        with open(path, "r") as file:
+            data = json.load(file)
         output.update(data)
-        file.close()
 
 
 def extract_metrics(
