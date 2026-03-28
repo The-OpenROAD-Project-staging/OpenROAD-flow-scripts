@@ -146,8 +146,8 @@ def read_sdc(file_name):
     try:
         with open(file_name, "r") as sdcFile:
             lines = sdcFile.readlines()
-except IOError as e:
-    print(f"[WARN] Failed to open file: {file_name} ({e.strerror})")
+    except OSError as e:
+        print(f"[WARN] Failed to open file: {file_name} ({e})")
         return clkList
 
     for line in lines:
