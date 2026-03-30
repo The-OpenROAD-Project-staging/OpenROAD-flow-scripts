@@ -265,7 +265,24 @@ __local_build()
 
         if [ -z "${SKIP_OPENROAD+x}" ]; then
             echo "[INFO FLW-0018] Compiling OpenROAD."
-            eval ${NICE} ./tools/OpenROAD/etc/Build.sh -dir="$DIR/tools/OpenROAD/build" -threads=${PROC} -cmake=\'${OPENROAD_APP_ARGS}\'
+            if [ -f "${DIR}/openroad_deps_prefixes.txt" ]; then
+                DEPS_PREFIX_ARG="${DIR}/openroad_deps_prefixes.txt"
+            elif [ -f "${DIR}/tools/OpenROAD/etc/openroad_deps_prefixes.txt" ]; then
+                DEPS_PREFIX_ARG="${DIR}/tools/OpenROAD/etc/openroad_deps_prefixes.txt"
+            elif [ -f /etc/openroad_deps_prefixes.txt ]; then
+                DEPS_PREFIX_ARG="/etc/openroad_deps_prefixes.txt"
+            else
+                DEPS_PREFIX_ARG=""
+            fi
+            if [[ -n "${DEPS_PREFIX_ARG}" ]]; then
+                echo "[INFO FLW-0029] Found OpenROAD dependencies prefixes file: '${DEPS_PREFIX_ARG}'."
+                DEPS_PREFIX_ARG="-deps-prefixes-file=${DEPS_PREFIX_ARG}"
+            fi
+            eval ${NICE} ./tools/OpenROAD/etc/Build.sh \
+                -dir="$DIR/tools/OpenROAD/build" \
+                -threads=${PROC} \
+                -cmake=\'${OPENROAD_APP_ARGS}\' \
+                ${DEPS_PREFIX_ARG}
             ${NICE} cmake --build tools/OpenROAD/build --target install -j "${PROC}"
         fi
 
