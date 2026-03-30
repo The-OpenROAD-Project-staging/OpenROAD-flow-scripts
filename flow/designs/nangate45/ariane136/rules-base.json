@@ -40,7 +40,7 @@
         "compare": ">="
     },
     "cts__timing__hold__tns": {
-        "value": -8.05,
+        "value": -5.66,
         "compare": ">="
     },
     "globalroute__antenna_diodes_count": {
@@ -76,7 +76,7 @@
         "compare": "<="
     },
     "detailedroute__antenna_diodes_count": {
-        "value": 201,
+        "value": 200,
         "compare": "<="
     },
     "finish__timing__setup__ws": {
