@@ -48,9 +48,9 @@ def parse_args():
         "--output", "-o", required=False, default="metadata.json", help="Output file"
     )
     parser.add_argument("--hier", "-x", action="store_true", help="Hierarchical JSON")
-    parser.add_argument("--logs", help="Path to logs")
-    parser.add_argument("--reports", help="Path to reports")
-    parser.add_argument("--results", help="Path to results")
+    parser.add_argument("--logs", required=True, help="Path to logs")
+    parser.add_argument("--reports", required=True, help="Path to reports")
+    parser.add_argument("--results", required=True, help="Path to results")
     args = parser.parse_args()
 
     return args
@@ -175,10 +175,11 @@ def read_sdc(file_name):
 
 def is_git_repo(folder=None):
     cmd = ["git", "branch"]
-    if folder is not None:
-        return call(cmd, stderr=STDOUT, stdout=open(os.devnull, "w"), cwd=folder) == 0
-    else:
-        return call(cmd, stderr=STDOUT, stdout=open(os.devnull, "w")) == 0
+    with open(os.devnull, "w") as devnull:
+        if folder is not None:
+            return call(cmd, stderr=STDOUT, stdout=devnull, cwd=folder) == 0
+        else:
+            return call(cmd, stderr=STDOUT, stdout=devnull) == 0
 
 
 def merge_jsons(root_path, output, files):
