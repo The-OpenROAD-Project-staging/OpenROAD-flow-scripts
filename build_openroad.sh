@@ -29,9 +29,11 @@ OPENROAD_APP_ARGS=""
 DOCKER_OS_NAME="ubuntu22.04"
 PROC=-1
 
-VERIFIC_COMPONENTS='database util containers pct hier_tree verilog'
 WITH_VERIFIC=0
-VERIFIC_DIR=""
+VERIFIC_SRC=""
+VERIFIC_COMPONENTS='database util containers pct hier_tree verilog'
+VERIFIC_ARGS=" VERIFIC_COMPONENTS='${VERIFIC_COMPONENTS}'"
+VERIFIC_ARGS+=" ENABLE_VERIFIC=1 ENABLE_VERIFIC_VHDL=0 VERIFIC_DIR=verific"
 
 function usage() {
         cat << EOF
@@ -145,20 +147,17 @@ while (( "$#" )); do
                         YOSYS_OVERWRITE_ARGS=1
                         ;;
                 --yosys-args)
-                        YOSYS_USER_ARGS="$2"
+                        YOSYS_USER_ARGS+="$2"
                         shift
                         ;;
                 --with-verific)
-                        YOSYS_USER_ARGS+=" ENABLE_VERIFIC=1"
-                        YOSYS_USER_ARGS+=" ENABLE_VERIFIC_VHDL=0"
-                        YOSYS_USER_ARGS+=" VERIFIC_COMPONENTS='${VERIFIC_COMPONENTS}'"
-                        VERIFIC_DIR=${2}
-                        if [ ! -d "${VERIFIC_DIR}" ]; then
-                                echo "[ERROR] Verific path '${VERIFIC_DIR}' does not exist." >&2
+                        WITH_VERIFIC=1
+                        VERIFIC_SRC=${2}
+                        if [ ! -d "${VERIFIC_SRC}" ]; then
+                                echo "[ERROR] Verific path '${VERIFIC_SRC}' does not exist." >&2
                                 exit 1
                         fi
-                        YOSYS_USER_ARGS+=" VERIFIC_DIR=${VERIFIC_DIR}"
-                        WITH_VERIFIC=1
+                        YOSYS_USER_ARGS+="${VERIFIC_ARGS}"
                         shift
                         ;;
                 --openroad-args-overwrite)
@@ -238,8 +237,14 @@ __docker_build()
                 cp .dockerignore{,.bak}
                 sed -i '/flow\/platforms/d' .dockerignore
         fi
+        options=""
+        if [ -n "${WITH_VERIFIC}" ]; then
+                cp -r "${VERIFIC_SRC}" tools/verific
+                options="-buildArgs=--build-arg verificPath=tools/verific"
+        fi
         ./etc/DockerHelper.sh create -target=dev -os="${DOCKER_OS_NAME}" -threads="${PROC}"
-        ./etc/DockerHelper.sh create -target=builder -os="${DOCKER_OS_NAME}" -threads="${PROC}"
+        ./etc/DockerHelper.sh create -target=builder -os="${DOCKER_OS_NAME}" -threads="${PROC}" "${options}"
+        rm -rf tools/verific
         if [ ! -z "${DOCKER_COPY_PLATFORMS+x}" ]; then
                 mv .dockerignore{.bak,}
         fi
@@ -248,56 +253,56 @@ __docker_build()
 __local_build()
 {
         if [[ "$OSTYPE" == "darwin"* ]]; then
-          export PATH="$(brew --prefix bison)/bin:$(brew --prefix flex)/bin:$(brew --prefix tcl-tk)/bin:$PATH"
-          export CMAKE_PREFIX_PATH=$(brew --prefix or-tools)
+                export PATH="$(brew --prefix bison)/bin:$(brew --prefix flex)/bin:$(brew --prefix tcl-tk)/bin:$PATH"
+                export CMAKE_PREFIX_PATH=$(brew --prefix or-tools)
         fi
         if [[ -f "/opt/rh/rh-python38/enable" ]]; then
-            set +u
-            source /opt/rh/rh-python38/enable
-            set -u
+                set +u
+                source /opt/rh/rh-python38/enable
+                set -u
         fi
         if [[ -f "/opt/rh/devtoolset-8/enable" ]]; then
-            # the scl script has unbound variables
-            set +u
-            source /opt/rh/devtoolset-8/enable
-            set -u
+                # the scl script has unbound variables
+                set +u
+                source /opt/rh/devtoolset-8/enable
+                set -u
         fi
 
         if [ -z "${SKIP_OPENROAD+x}" ]; then
-            echo "[INFO FLW-0018] Compiling OpenROAD."
-            if [ -f "${DIR}/openroad_deps_prefixes.txt" ]; then
-                DEPS_PREFIX_ARG="${DIR}/openroad_deps_prefixes.txt"
-            elif [ -f "${DIR}/tools/OpenROAD/etc/openroad_deps_prefixes.txt" ]; then
-                DEPS_PREFIX_ARG="${DIR}/tools/OpenROAD/etc/openroad_deps_prefixes.txt"
-            elif [ -f /etc/openroad_deps_prefixes.txt ]; then
-                DEPS_PREFIX_ARG="/etc/openroad_deps_prefixes.txt"
-            else
-                DEPS_PREFIX_ARG=""
-            fi
-            if [[ -n "${DEPS_PREFIX_ARG}" ]]; then
-                echo "[INFO FLW-0029] Found OpenROAD dependencies prefixes file: '${DEPS_PREFIX_ARG}'."
-                DEPS_PREFIX_ARG="-deps-prefixes-file=${DEPS_PREFIX_ARG}"
-            fi
-            eval ${NICE} ./tools/OpenROAD/etc/Build.sh \
-                -dir="$DIR/tools/OpenROAD/build" \
-                -threads=${PROC} \
-                -cmake=\'${OPENROAD_APP_ARGS}\' \
-                ${DEPS_PREFIX_ARG}
-            ${NICE} cmake --build tools/OpenROAD/build --target install -j "${PROC}"
+                echo "[INFO FLW-0018] Compiling OpenROAD."
+                if [ -f "${DIR}/openroad_deps_prefixes.txt" ]; then
+                        DEPS_PREFIX_ARG="${DIR}/openroad_deps_prefixes.txt"
+                elif [ -f "${DIR}/tools/OpenROAD/etc/openroad_deps_prefixes.txt" ]; then
+                        DEPS_PREFIX_ARG="${DIR}/tools/OpenROAD/etc/openroad_deps_prefixes.txt"
+                elif [ -f /etc/openroad_deps_prefixes.txt ]; then
+                        DEPS_PREFIX_ARG="/etc/openroad_deps_prefixes.txt"
+                else
+                        DEPS_PREFIX_ARG=""
+                fi
+                if [[ -n "${DEPS_PREFIX_ARG}" ]]; then
+                        echo "[INFO FLW-0029] Found OpenROAD dependencies prefixes file: '${DEPS_PREFIX_ARG}'."
+                        DEPS_PREFIX_ARG="-deps-prefixes-file=${DEPS_PREFIX_ARG}"
+                fi
+                eval ${NICE} ./tools/OpenROAD/etc/Build.sh \
+                        -dir="$DIR/tools/OpenROAD/build" \
+                        -threads=${PROC} \
+                        -cmake=\'${OPENROAD_APP_ARGS}\' \
+                        ${DEPS_PREFIX_ARG}
+                ${NICE} cmake --build tools/OpenROAD/build --target install -j "${PROC}"
         fi
 
         YOSYS_ABC_PATH=tools/yosys/abc
         if [[ -d "${YOSYS_ABC_PATH}/.git" ]]; then
-            # update indexes to make sure git diff-index uses correct data
-            git --work-tree=${YOSYS_ABC_PATH} --git-dir=${YOSYS_ABC_PATH}/.git update-index --refresh
+                # update indexes to make sure git diff-index uses correct data
+                git --work-tree=${YOSYS_ABC_PATH} --git-dir=${YOSYS_ABC_PATH}/.git update-index --refresh
         fi
 
         if [ ${WITH_VERIFIC} -eq 1 ]; then
                 echo "[INFO FLW-0031] Compiling Verific components."
-                cp -r "${VERIFIC_DIR}" verific
+                cp -r "${VERIFIC_SRC}" tools/yosys/verific
                 for c in ${VERIFIC_COMPONENTS}; do
-                        make -j -C "verific/${c}" clean
-                        make -j -C "verific/${c}"
+                        make -j -C "tools/yosys/verific/${c}" clean
+                        make -j -C "tools/yosys/verific/${c}"
                 done
         fi
 
@@ -322,7 +327,7 @@ __local_build()
 
         if [ ${WITH_VERIFIC} -eq 1 ]; then
                 echo "[INFO FLW-0032] Cleaning up Verific components."
-                rm -rf verific
+                rm -rf tools/yosys/verific
         fi
 }
 
