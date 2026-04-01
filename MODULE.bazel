@@ -3,7 +3,6 @@
 module(
     name = "orfs",
     version = "0.0.1",
-    compatibility_level = 1,
 )
 
 bazel_dep(name = "bazel-orfs")
