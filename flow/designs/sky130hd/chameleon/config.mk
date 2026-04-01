@@ -29,7 +29,7 @@ export ABC_AREA = 1
 
 export SDC_FILE      = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint.sdc
 
-export CORE_UTILIZATION       = 70
+export CORE_UTILIZATION       = 60
 export CORE_ASPECT_RATIO      = 1.3
 export CORE_MARGIN            = 2
 
@@ -44,8 +44,6 @@ export ADDITIONAL_LEFS  = $(DESIGN_DIR)/lef/apb_sys_0.lef \
                           $(DESIGN_DIR)/lef/DFFRAM_4K.lef \
                           $(DESIGN_DIR)/lef/DMC_32x16HC.lef \
                           $(DESIGN_DIR)/lef/ibex_wrapper.lef
-
-#export MACRO_PLACEMENT_TCL = $(DESIGN_DIR)/macro_placement.tcl
 
 export FP_PDN_RAIL_WIDTH  = 0.48
 export FP_PDN_RAIL_OFFSET = 0
