@@ -88,7 +88,7 @@ DESIGN_CONFIG ?= ./designs/nangate45/gcd/config.mk
 export DESIGN_CONFIG
 include $(DESIGN_CONFIG)
 
-export DESIGN_DIR ?= $(dir $(DESIGN_CONFIG))
+export DESIGN_DIR ?= $(patsubst %/,%,$(dir $(DESIGN_CONFIG)))
 
 # default value "base" for FLOW_VARIANT and "." for WORK_HOME are duplicated
 # from variables.yaml and variables.mk because we need it
