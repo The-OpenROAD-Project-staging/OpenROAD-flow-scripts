@@ -14,7 +14,7 @@ git_override(
     remote = "https://github.com/The-OpenROAD-Project/bazel-orfs.git",
 )
 
-bazel_dep(name = "rules_python", version = "1.2.0")
+bazel_dep(name = "rules_python", version = "1.8.5")
 bazel_dep(name = "rules_shell", version = "0.6.1")
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
