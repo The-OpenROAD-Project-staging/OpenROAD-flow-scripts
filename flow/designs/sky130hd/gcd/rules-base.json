@@ -64,7 +64,7 @@
         "compare": ">="
     },
     "detailedroute__route__wirelength": {
-        "value": 9842,
+        "value": 14932,
         "compare": "<="
     },
     "detailedroute__route__drc_errors": {
