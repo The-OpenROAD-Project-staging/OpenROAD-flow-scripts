@@ -17,6 +17,7 @@ export VERILOG_INCLUDE_DIRS   = $(DESIGN_HOME)/src/$(DESIGN_NICKNAME)/include
 ._0P3S_SDC_FILE    = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/jpeg_encoder15_0.3s.sdc
 ._0P3_6T_SDC_FILE  = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/jpeg_encoder15_0.3_6T.sdc
 ._0P3_8T_SDC_FILE  = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/jpeg_encoder15_0.3_8T.sdc
+.T0P5_8T_SDC_FILE  = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/jpeg_encoder15_t0.5_8T.sdc
 
 # Use $(if) to defer conditional eval until all makefiles are read
 export SDC_FILE = $(strip \
@@ -34,7 +35,10 @@ export SDC_FILE = $(strip \
 	            	$(._0P3_6T_SDC_FILE), \
 	            	$(._0P3_8T_SDC_FILE) \
 		    ), \
-                    $(.DEFAULT_SDC_FILE) \
+                    $(if $(and $(filter t0.5,$(RAPIDUS_PDK_VERSION)),$(filter SC8T,$(PLACE_SITE))), \
+	            	$(.T0P5_8T_SDC_FILE), \
+                        $(.DEFAULT_SDC_FILE) \
+                    ) \
 	        ) \
             ) \
         ) \

@@ -30,6 +30,7 @@ else
   ._0P3S_6T_SDC_FILE = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint_0.3s_6T.sdc
   ._0P3S_8T_SDC_FILE = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint_0.3s_8T.sdc
   ._0P3_8T_SDC_FILE = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint_0.3_8T.sdc
+  .T0P5_8T_SDC_FILE = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint_t0.5_8T.sdc
 
   # Use $(if) to defer conditional eval until all makefiles are read
   export SDC_FILE = $(strip \
@@ -50,7 +51,10 @@ else
 	                $(._0P3_8T_SDC_FILE), \
 	                $(.DEFAULT_SDC_FILE) \
 		    ), \
-	            $(.DEFAULT_SDC_FILE) \
+                    $(if $(and $(filter t0.5,$(RAPIDUS_PDK_VERSION)),$(filter SC8T,$(PLACE_SITE))), \
+	                $(.T0P5_8T_SDC_FILE), \
+	                $(.DEFAULT_SDC_FILE) \
+                    ) \
 		) \
             ) \
         ) \
@@ -73,7 +77,10 @@ export CORE_UTILIZATION = $(strip \
 		    55, \
 	    	    70 \
                 ), \
-	        70 \
+                $(if $(and $(filter t0.5,$(RAPIDUS_PDK_VERSION)),$(filter SC5T,$(PLACE_SITE))), \
+	            65, \
+	            70 \
+                ) \
             ) \
         ) \
     ))
