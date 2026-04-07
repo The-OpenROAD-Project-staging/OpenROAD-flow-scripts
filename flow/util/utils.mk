@@ -150,10 +150,10 @@ clean_issues:
 	rm -f vars*.sh vars*.tcl vars*.gdb run-me*.sh
 
 $(RESULTS_DIR)/6_final_only_clk.def: $(RESULTS_DIR)/6_final.def
-	$(RUN_CMD) -- $(OPENROAD_CMD) $(SCRIPTS_DIR)/deleteNonClkNets.tcl
+	$(RUN_CMD) --tee -- $(OPENROAD_CMD) $(SCRIPTS_DIR)/deleteNonClkNets.tcl
 
 $(RESULTS_DIR)/6_final_no_power.def: $(RESULTS_DIR)/6_final.def
-	$(RUN_CMD) -- $(OPENROAD_CMD) $(SCRIPTS_DIR)/deletePowerNets.tcl
+	$(RUN_CMD) --tee -- $(OPENROAD_CMD) $(SCRIPTS_DIR)/deletePowerNets.tcl
 
 
 .PHONY: gallery
