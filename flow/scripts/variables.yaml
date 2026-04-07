@@ -643,10 +643,12 @@ CAP_MARGIN:
   description: >
     Specifies a capacitance margin when fixing max capacitance violations. This
     option allows you to overfix.
+  tunable: 1
 SLEW_MARGIN:
   description: >
     Specifies a slew margin when fixing max slew violations. This option allows
     you to overfix.
+  tunable: 1
 CTS_ARGS:
   description: |
     Override `clock_tree_synthesis` arguments.
@@ -711,6 +713,7 @@ SETUP_SLACK_MARGIN:
     - floorplan
     - grt
   default: 0
+  tunable: 1
 SETUP_REPAIR_SEQUENCE:
   description: |
     Specifies the sequence of moves to do in repair_timing -setup. This should be a string
