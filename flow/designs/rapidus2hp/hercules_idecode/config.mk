@@ -50,14 +50,20 @@ export CORE_UTILIZATION = $(strip \
 	            58 \
                 ) \
             ), \
-            $(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
+            $(if $(and $(filter t0.5,$(RAPIDUS_PDK_VERSION)),$(filter SC5T,$(PLACE_SITE))), \
 	        $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
 	            44, \
-	            43 \
+	            42 \
                 ), \
-	        $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
-	            50, \
-	            48 \
+                $(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
+	            $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
+	                44, \
+	                43 \
+                    ), \
+	            $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
+	                50, \
+	                48 \
+                    ) \
                 ) \
             ) \
         ) \

@@ -27,7 +27,7 @@ class TestParams(ParamTestBase):
             return 62
         return 60
 
-    def get_exp_sdc(self, place_site, pdk_version):
+    def get_exp_sdc(self, place_site, pdk_version, front_end):
         """Returns the expected SDC file path"""
 
         if pdk_version == "0.2a":
@@ -49,6 +49,10 @@ class TestParams(ParamTestBase):
             return os.path.join(
                 self._design_full_dir, f"jpeg_encoder15_{pdk_version}.sdc"
             )
+        if pdk_version == "t0.5" and place_site in ["", "SC8T"]:
+            return os.path.join(
+                self._design_full_dir, f"jpeg_encoder15_{pdk_version}_8T.sdc"
+            )
         return os.path.join(self._design_full_dir, "jpeg_encoder15_7nm.sdc")
 
     def test_pdk_0p3_default(self):
@@ -60,7 +64,7 @@ class TestParams(ParamTestBase):
         for front_end in self._front_end_list:
             for place_site in self._synopsys_site_list:
                 exp_util = self.get_exp_util(place_site, pdk_version)
-                exp_sdc = self.get_exp_sdc(place_site, pdk_version)
+                exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
                     "CORE_UTILIZATION",
                     exp_util,
@@ -85,7 +89,7 @@ class TestParams(ParamTestBase):
         for front_end in self._front_end_list:
             for place_site in self._ibm_site_list:
                 exp_util = self.get_exp_util(place_site, pdk_version)
-                exp_sdc = self.get_exp_sdc(place_site, pdk_version)
+                exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
                     "CORE_UTILIZATION",
                     exp_util,
@@ -110,7 +114,7 @@ class TestParams(ParamTestBase):
         for front_end in self._front_end_list:
             for place_site in self._synopsys_site_list:
                 exp_util = self.get_exp_util(place_site, pdk_version)
-                exp_sdc = self.get_exp_sdc(place_site, pdk_version)
+                exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
                     "CORE_UTILIZATION",
                     exp_util,
@@ -135,7 +139,7 @@ class TestParams(ParamTestBase):
         for front_end in self._front_end_list:
             for place_site in self._synopsys_site_list:
                 exp_util = self.get_exp_util(place_site, pdk_version)
-                exp_sdc = self.get_exp_sdc(place_site, pdk_version)
+                exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
                     "CORE_UTILIZATION",
                     exp_util,
@@ -160,7 +164,7 @@ class TestParams(ParamTestBase):
         for front_end in self._front_end_list:
             for place_site in self._synopsys_site_list:
                 exp_util = self.get_exp_util(place_site, pdk_version)
-                exp_sdc = self.get_exp_sdc(place_site, pdk_version)
+                exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
                     "CORE_UTILIZATION",
                     exp_util,
@@ -185,7 +189,32 @@ class TestParams(ParamTestBase):
         for front_end in self._front_end_list:
             for place_site in self._synopsys_site_list:
                 exp_util = self.get_exp_util(place_site, pdk_version)
-                exp_sdc = self.get_exp_sdc(place_site, pdk_version)
+                exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
+                self.execute_cmd(
+                    "CORE_UTILIZATION",
+                    exp_util,
+                    place_site=place_site,
+                    pdk_version=pdk_version,
+                    front_end=front_end,
+                )
+                self.execute_cmd(
+                    "SDC_FILE",
+                    exp_sdc,
+                    place_site=place_site,
+                    pdk_version=pdk_version,
+                    front_end=front_end,
+                )
+
+    def test_pdk_t0p5(self):
+        """
+        Tests Titan PDK 0.5 utilization
+        """
+
+        pdk_version = "t0.5"
+        for front_end in self._front_end_list:
+            for place_site in self._synopsys_site_list:
+                exp_util = self.get_exp_util(place_site, pdk_version)
+                exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
                     "CORE_UTILIZATION",
                     exp_util,

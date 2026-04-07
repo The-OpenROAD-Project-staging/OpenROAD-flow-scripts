@@ -64,14 +64,17 @@ export CORE_UTILIZATION = $(strip \
 		        63 \
                     ) \
 		), \
-                $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
-                    $(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
-                        30, \
-                        52 \
-                    ), \
-	            $(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
-                        30, \
-                        54 \
+                $(if $(and $(filter t0.5,$(RAPIDUS_PDK_VERSION)),$(filter SC5T,$(PLACE_SITE))), \
+                    45, \
+                    $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
+                        $(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
+                            30, \
+                            52 \
+                        ), \
+	                $(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
+                            30, \
+                            54 \
+                        ) \
                     ) \
                 ) \
             ) \
