@@ -84,13 +84,6 @@ DETAILED_METRICS:
   stages:
     - cts
     - grt
-EQUIVALENCE_CHECK:
-  description: >
-    Enable running equivalence checks to verify logical correctness of
-    repair_timing.
-  default: 0
-  stages:
-    - cts
 CORE_UTILIZATION:
   description: |
     The core utilization percentage (0-100).
@@ -760,12 +753,6 @@ SKIP_CRIT_VT_SWAP:
     - cts
     - floorplan
     - grt
-REMOVE_CELLS_FOR_EQY:
-  description: >
-    String patterns directly passed to write_verilog -remove_cells <> for
-    equivalence checks.
-  stages:
-    - cts
 SKIP_CTS_REPAIR_TIMING:
   description: >
     Skipping CTS repair, which can take a long time, can be useful in
