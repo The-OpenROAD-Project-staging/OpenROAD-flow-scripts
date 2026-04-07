@@ -23,7 +23,7 @@ jobs:
     - name: Install dependencies
       run: |
         python3 -m venv venv
-        venv/bin/pip install --quiet pyyaml yamlfix==1.17.0
+        venv/bin/pip install --quiet pyyaml yamlfix==1.19.1
     - name: Run generate-variables-docs.py
       run: |
         venv/bin/python3 flow/scripts/generate-variables-docs.py
@@ -40,4 +40,4 @@ jobs:
         yamlfix --version
         set -x
         yamlfix -c yamlfix.toml flow/scripts/variables.yaml
-        git diff flow/scripts/variables.yaml
+        git diff --exit-code flow/scripts/variables.yaml
