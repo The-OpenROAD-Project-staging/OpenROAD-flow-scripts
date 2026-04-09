@@ -2,7 +2,7 @@
 #
 # This fifo is from http://www.sunburst-design.com/papers/CummingsSNUG2002SJ_FIFO1.pdf
 
-source designs/src/mock-array/util.tcl
+source $::env(SDC_FILE_EXTRA)
 
 set sdc_version 2.0
 

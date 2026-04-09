@@ -15,29 +15,61 @@ export VERILOG_INCLUDE_DIRS =  $(SRC_HOME)/hercules_idecode/verilog \
 	$(SRC_HOME)/shared/verilog \
 	$(SRC_HOME)/models/cells/generic
 
-export SDC_FILE             = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NAME)/prects.sdc
+.DEFAULT_SDC_FILE = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/prects.sdc
+._0P3_SDC_FILE    = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/prects_0.3.sdc
+export SDC_FILE = $(strip \
+    $(if $(filter 0.3,$(RAPIDUS_PDK_VERSION)), \
+	$(._0P3_SDC_FILE), \
+	$(.DEFAULT_SDC_FILE) \
+    ))
 
 export SYNTH_HDL_FRONTEND  ?= slang
 
-# Use $(if) to defer conditional eval until all makefiles are read
-#
-# | Front End | Place Site | Utilization |
-# | --------- | ---------- | ----------- |
-# |   slang   |     6T     |      44     |
-# |   slang   |     8T     |      50     |
-# |  verific  |     6T     |      43     |
-# |  verific  |     8T     |      48     |
 
-export CORE_UTILIZATION = $(strip $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
-	$(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
-		44, \
-		50), \
-	$(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
-		43, \
-		48)))
+# Use $(if) to defer conditional eval until all makefiles are read
+export CORE_UTILIZATION = $(strip \
+    $(if $(filter 0.15,$(RAPIDUS_PDK_VERSION)), \
+        $(if $(filter ra02h138_DST_45CPP,$(PLACE_SITE)), \
+	    $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
+	        42, \
+	        43 \
+            ), \
+	    $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
+	        50, \
+	        48 \
+            ) \
+        ), \
+        $(if $(filter 0.3,$(RAPIDUS_PDK_VERSION)), \
+            $(if $(filter ra02h138_DST_45CPP,$(PLACE_SITE)), \
+	        $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
+	            47, \
+	            48 \
+                ), \
+	        $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
+	            62, \
+	            58 \
+                ) \
+            ), \
+            $(if $(and $(filter t0.5,$(RAPIDUS_PDK_VERSION)),$(filter SC5T,$(PLACE_SITE))), \
+	        $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
+	            44, \
+	            42 \
+                ), \
+                $(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
+	            $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
+	                44, \
+	                43 \
+                    ), \
+	            $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
+	                50, \
+	                48 \
+                    ) \
+                ) \
+            ) \
+        ) \
+    ))
 
 export CORE_MARGIN          = 1
-export PLACE_DENSITY        = 0.50
 
 # a smoketest for this option, there are a
 # few last gasp iterations

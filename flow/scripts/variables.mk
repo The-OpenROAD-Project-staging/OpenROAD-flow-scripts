@@ -73,13 +73,7 @@ export NUM_CORES
 PYTHON_EXE ?= $(shell command -v python3)
 export PYTHON_EXE := $(PYTHON_EXE)
 
-export TIME_BIN   ?= env time
-TIME_CMD = $(TIME_BIN) -f 'Elapsed time: %E[h:]min:sec. CPU time: user %U sys %S (%P). Peak memory: %MKB.'
-TIME_TEST = $(shell $(TIME_CMD) echo foo 2>/dev/null)
-ifeq (,$(strip $(TIME_TEST)))
-  TIME_CMD = $(TIME_BIN)
-endif
-export TIME_CMD := $(TIME_CMD)
+export RUN_CMD = $(PYTHON_EXE) $(FLOW_HOME)/scripts/run_command.py
 
 # The following determine the executable location for each tool used by this flow.
 # Priority is given to
@@ -122,6 +116,9 @@ YOSYS_IS_VALID := $(if $(YOSYS_EXE),$(shell test -x $(YOSYS_EXE) && echo "true")
 KLAYOUT_DIR = $(abspath $(FLOW_HOME)/../tools/install/klayout/)
 KLAYOUT_BIN_FROM_DIR = $(KLAYOUT_DIR)/klayout
 
+KEPLER_FORMAL_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/kepler-formal/bin/kepler-formal)
+export KEPLER_FORMAL_EXE
+
 ifeq ($(wildcard $(KLAYOUT_BIN_FROM_DIR)), $(KLAYOUT_BIN_FROM_DIR))
 KLAYOUT_CMD ?= sh -c 'LD_LIBRARY_PATH=$(dir $(KLAYOUT_BIN_FROM_DIR)) $$0 "$$@"' $(KLAYOUT_BIN_FROM_DIR)
 else
@@ -131,10 +128,6 @@ endif
 endif
 
 export KLAYOUT_CMD := $(KLAYOUT_CMD)
-
-ifneq ($(shell command -v stdbuf),)
-  STDBUF_CMD ?= stdbuf -o L
-endif
 
 #-------------------------------------------------------------------------------
 WRAPPED_LEFS = $(foreach lef,$(notdir $(WRAP_LEFS)),$(OBJECTS_DIR)/lef/$(lef:.lef=_mod.lef))
@@ -191,10 +184,11 @@ export RESULTS_ODB = $(notdir $(sort $(wildcard $(RESULTS_DIR)/*.odb)))
 export RESULTS_DEF = $(notdir $(sort $(wildcard $(RESULTS_DIR)/*.def)))
 export RESULTS_GDS = $(notdir $(sort $(wildcard $(RESULTS_DIR)/*.gds)))
 export RESULTS_OAS = $(notdir $(sort $(wildcard $(RESULTS_DIR)/*.oas)))
+export RESULTS_V = $(notdir $(sort $(wildcard $(RESULTS_DIR)/*.v)))
 export GDS_MERGED_FILE = $(RESULTS_DIR)/6_1_merged.$(STREAM_SYSTEM_EXT)
 
 define get_variables
-$(foreach V, $(.VARIABLES),$(if $(filter-out $(1), $(origin $V)), $(if $(filter-out .% %QT_QPA_PLATFORM% %TIME_CMD% KLAYOUT% GENERATE_ABSTRACT_RULE% do-step% do-copy% OPEN_GUI% OPEN_GUI_SHORTCUT% SUB_MAKE% UNSET_VARS% export%, $(V)), $V$ )))
+$(foreach V, $(.VARIABLES),$(if $(filter-out $(1), $(origin $V)), $(if $(filter-out .% %QT_QPA_PLATFORM% KLAYOUT% GENERATE_ABSTRACT_RULE% do-step% do-copy% OPEN_GUI% OPEN_GUI_SHORTCUT% SUB_MAKE% UNSET_VARS% export%, $(V)), $V$ )))
 endef
 
 export UNSET_VARIABLES_NAMES := $(call get_variables,command% line environment% default automatic)
@@ -220,17 +214,6 @@ vars:
 	$(UTILS_DIR)/generate-vars.sh $(OBJECTS_DIR)/vars
 
 .PHONY: print-%
-# Print any variable, for instance: make print-DIE_AREA
 print-%:
-  # HERE BE DRAGONS!
-  #
-  # We have to use /tmp. $(OBJECTS_DIR) may not exist
-  # at $(file) expansion time, which is before commands are run
-  # here, so we can't mkdir -p $(OBJECTS_DIR) either
-  #
-  # We have to use $(file ...) because we want to be able
-  # to print variables that contain newlines.
-	$(file >/tmp/print_tmp$$,$($*))
-	@echo -n "$* = "
-	@cat /tmp/print_tmp$$
-	@rm /tmp/print_tmp$$
+	$(info $*: $($*))
+	@true

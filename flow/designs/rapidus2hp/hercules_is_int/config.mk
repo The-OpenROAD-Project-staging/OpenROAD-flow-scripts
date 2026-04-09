@@ -20,43 +20,68 @@ export VERILOG_INCLUDE_DIRS   = $(SRC_HOME)/hercules_issue/verilog \
 	$(SRC_HOME)/shared/verilog \
 	$(SRC_HOME)/models/cells/generic
 
-export SDC_FILE               = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NAME)/prects.sdc
+.DEFAULT_SDC_FILE = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/prects.sdc
+._0P3_SDC_FILE    = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/prects_0.3.sdc
+export SDC_FILE = $(strip \
+    $(if $(filter 0.3,$(RAPIDUS_PDK_VERSION)), \
+	$(._0P3_SDC_FILE), \
+	$(.DEFAULT_SDC_FILE) \
+    ))
 
 # Must be defined before the ifeq's
 export SYNTH_HDL_FRONTEND    ?= slang
 export SYNTH_HIERARCHICAL    ?= 0
 
 # Use $(if) to defer conditional eval until all makefiles are read
-#
-# | PDK Version | Front End | Place Site | Utilization |
-# | ------------| --------- | ---------- | ----------- |
-# |      all    |   slang   |     6T     |      30     |
-# |   non-0.3   |   slang   |     8T     |      52     |
-# |      all    |  verific  |     6T     |      30     |
-# |   non-0.3   |  verific  |     8T     |      54     |
-# |      0.3    |   slang   |     8T     |      54     |
-# |      0.3    |  verific  |     8T     |      55     |
-
 export CORE_UTILIZATION = $(strip \
-    $(if $(filter 0.3,$(RAPIDUS_PDK_VERSION)), \
-        $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
-            54, \
-            55 \
+    $(if $(filter 0.3s,$(RAPIDUS_PDK_VERSION)), \
+        $(if $(filter ra02h138_DST_45CPP,$(PLACE_SITE)), \
+            $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
+                $(if $(filter 14LM,$(LAYER_STACK_OPTION)), \
+                    52, \
+                    $(if $(filter 16LM,$(LAYER_STACK_OPTION)), \
+                        54, \
+                        56 \
+                    ) \
+                ), \
+                $(if $(filter 14LM,$(LAYER_STACK_OPTION)), \
+                    50, \
+                    56 \
+                ) \
+            ), \
+            56 \
         ), \
-        $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
-	    $(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
+        $(if $(filter 0.15,$(RAPIDUS_PDK_VERSION)), \
+            $(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
                 30, \
                 52 \
             ), \
-	    $(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
-                30, \
-                54 \
+            $(if $(filter 0.3,$(RAPIDUS_PDK_VERSION)), \
+                $(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
+		    52, \
+                    $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
+                        65, \
+		        63 \
+                    ) \
+		), \
+                $(if $(and $(filter t0.5,$(RAPIDUS_PDK_VERSION)),$(filter SC5T,$(PLACE_SITE))), \
+                    45, \
+                    $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
+                        $(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
+                            30, \
+                            52 \
+                        ), \
+	                $(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
+                            30, \
+                            54 \
+                        ) \
+                    ) \
+                ) \
             ) \
         ) \
     ))
 
 export CORE_MARGIN            = 1
-export PLACE_DENSITY          = 0.58
 
 export PLACE_PINS_ARGS = -min_distance_in_tracks -min_distance 1
 export CELL_PAD_IN_SITES_GLOBAL_PLACEMENT = 0

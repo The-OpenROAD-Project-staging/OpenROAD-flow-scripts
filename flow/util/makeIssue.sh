@@ -56,8 +56,8 @@ if [[ ! -v EXCLUDE_PLATFORM ]]; then
     fi
 fi
 
-VARS_BASENAME=vars-$DESIGN_NICKNAME-$PLATFORM-$FLOW_VARIANT
-RUN_ME_SCRIPT=run-me-$DESIGN_NICKNAME-$PLATFORM-$FLOW_VARIANT.sh
+VARS_BASENAME=${WORK_HOME}/vars-$DESIGN_NICKNAME-$PLATFORM-$FLOW_VARIANT
+RUN_ME_SCRIPT=${WORK_HOME}/run-me-$DESIGN_NICKNAME-$PLATFORM-$FLOW_VARIANT.sh
 
 for i in $ISSUE_CP_FILE_VARS ; do
     if [ -v ${i} ]; then
@@ -77,9 +77,9 @@ cat > ${RUN_ME_SCRIPT} <<EOF
 #!/usr/bin/env bash
 source ${VARS_BASENAME}.sh
 if [[ ! -z \${GDB+x} ]]; then
-    gdb --args openroad -no_init \${SCRIPTS_DIR}/${ISSUE_TARGET}.tcl
+    gdb --args openroad -no_init -threads ${NUM_CORES:-1} \${SCRIPTS_DIR}/${ISSUE_TARGET}.tcl
 else
-    openroad -no_init \${SCRIPTS_DIR}/${ISSUE_TARGET}.tcl
+    openroad -no_init -threads ${NUM_CORES:-1} \${SCRIPTS_DIR}/${ISSUE_TARGET}.tcl
 fi
 EOF
 chmod +x ${RUN_ME_SCRIPT}
@@ -103,7 +103,7 @@ echo "Using $COMPRESS to compress tar file"
 if [ -v FULL_ISSUE ]; then
     DESIGN_PLATFORM_FILES="$DESIGN_DIR $PLATFORM_DIR"
 else
-    DESIGN_PLATFORM_FILES="$DESIGN_CONFIG $PLATFORM_DIR/config.mk"
+    DESIGN_PLATFORM_FILES="$DESIGN_CONFIG $PLATFORM_DIR/config*.mk"
 fi
 
 tar --use-compress-program=${COMPRESS} \
