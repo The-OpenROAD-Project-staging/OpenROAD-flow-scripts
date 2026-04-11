@@ -7,6 +7,9 @@ ifeq ($(FLOW_VARIANT), verific)
 	export SYNTH_HDL_FRONTEND = verific
 endif
 
+# Don't set default frontend as slang, since slang doesn't like the JPEG RTL
+#export SYNTH_HDL_FRONTEND ?= slang
+
 export VERILOG_FILES          = $(sort $(wildcard $(DESIGN_HOME)/src/$(DESIGN_NICKNAME)/*.v))
 export VERILOG_INCLUDE_DIRS   = $(DESIGN_HOME)/src/$(DESIGN_NICKNAME)/include
 
@@ -48,7 +51,7 @@ export ABC_AREA               = 1
 
 export CORE_UTILIZATION = $(strip \
     $(if $(filter 0.3,$(RAPIDUS_PDK_VERSION)), \
-	62, \
+	61, \
 	60 \
     ))
 

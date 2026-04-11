@@ -21,10 +21,10 @@ class TestParams(ParamTestBase):
 
         ParamTestBase.setUp(self, "jpeg")
 
-    def get_exp_util(self, place_site, pdk_version):
+    def get_exp_util(self, place_site, pdk_version, front_end):
         """Returns the expected utilization"""
         if pdk_version in ["", "0.3"]:
-            return 62
+            return 61
         return 60
 
     def get_exp_sdc(self, place_site, pdk_version, front_end):
@@ -63,7 +63,7 @@ class TestParams(ParamTestBase):
         pdk_version = ""
         for front_end in self._front_end_list:
             for place_site in self._synopsys_site_list:
-                exp_util = self.get_exp_util(place_site, pdk_version)
+                exp_util = self.get_exp_util(place_site, pdk_version, front_end)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
                     "CORE_UTILIZATION",
@@ -88,7 +88,7 @@ class TestParams(ParamTestBase):
         pdk_version = "0.2"
         for front_end in self._front_end_list:
             for place_site in self._ibm_site_list:
-                exp_util = self.get_exp_util(place_site, pdk_version)
+                exp_util = self.get_exp_util(place_site, pdk_version, front_end)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
                     "CORE_UTILIZATION",
@@ -113,7 +113,7 @@ class TestParams(ParamTestBase):
         pdk_version = "0.2a"
         for front_end in self._front_end_list:
             for place_site in self._synopsys_site_list:
-                exp_util = self.get_exp_util(place_site, pdk_version)
+                exp_util = self.get_exp_util(place_site, pdk_version, front_end)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
                     "CORE_UTILIZATION",
@@ -138,7 +138,7 @@ class TestParams(ParamTestBase):
         pdk_version = "0.15"
         for front_end in self._front_end_list:
             for place_site in self._synopsys_site_list:
-                exp_util = self.get_exp_util(place_site, pdk_version)
+                exp_util = self.get_exp_util(place_site, pdk_version, front_end)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
                     "CORE_UTILIZATION",
@@ -163,7 +163,7 @@ class TestParams(ParamTestBase):
         pdk_version = "0.3s"
         for front_end in self._front_end_list:
             for place_site in self._synopsys_site_list:
-                exp_util = self.get_exp_util(place_site, pdk_version)
+                exp_util = self.get_exp_util(place_site, pdk_version, front_end)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
                     "CORE_UTILIZATION",
@@ -188,7 +188,7 @@ class TestParams(ParamTestBase):
         pdk_version = "0.3"
         for front_end in self._front_end_list:
             for place_site in self._synopsys_site_list:
-                exp_util = self.get_exp_util(place_site, pdk_version)
+                exp_util = self.get_exp_util(place_site, pdk_version, front_end)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
                     "CORE_UTILIZATION",
@@ -213,7 +213,7 @@ class TestParams(ParamTestBase):
         pdk_version = "t0.5"
         for front_end in self._front_end_list:
             for place_site in self._synopsys_site_list:
-                exp_util = self.get_exp_util(place_site, pdk_version)
+                exp_util = self.get_exp_util(place_site, pdk_version, front_end)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
                     "CORE_UTILIZATION",
@@ -231,7 +231,12 @@ class TestParams(ParamTestBase):
                 )
 
     def test_flow_variant(self):
-        """Tests that setting the flow variant uses the right frontend"""
+        """
+        Tests that setting the flow variant uses the right frontend
+
+        slang doesn't like the JPEG RTL, so the default is to use the yosys
+        Verilog frontend
+        """
 
         test_tag = "flow_variant default"
         cmd = self.build_cmd("SYNTH_HDL_FRONTEND")

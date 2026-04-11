@@ -35,11 +35,11 @@ class TestParams(ParamTestBase):
         if pdk_version in ["", "0.3"]:
             if place_site == "ra02h138_DST_45CPP":
                 if front_end in ["", "slang"]:
-                    return 47
-                return 48
+                    return 45
+                return 45
             if front_end in ["", "slang"]:
-                return 62
-            return 58
+                return 58
+            return 54
         if pdk_version == "t0.5" and place_site == "SC5T":
             if front_end in ["", "slang"]:
                 return 48
