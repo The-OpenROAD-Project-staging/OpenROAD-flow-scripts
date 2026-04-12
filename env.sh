@@ -17,7 +17,7 @@ function __setpaths() {
 
   if [[ "$OSTYPE" == "darwin"* ]]; then
     export PATH="/Applications/KLayout/klayout.app/Contents/MacOS:$PATH"
-    export PATH="$(brew --prefix bison)/bin:$(brew --prefix flex)/bin:$(brew --prefix tcl-tk)/bin:$PATH"
+    export PATH="$(brew --prefix bison)/bin:$(brew --prefix flex)/bin:$(brew --prefix tcl-tk@8)/bin:$PATH"
   fi
 
   export FLOW_HOME=$DIR/flow
