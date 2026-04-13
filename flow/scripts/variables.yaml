@@ -627,6 +627,12 @@ GPL_ROUTABILITY_DRIVEN:
   stages:
     - place
   default: 1
+GPL_KEEP_OVERFLOW:
+  description: >
+    Passed as -keep_resize_below_overflow to global_placement.
+    Only used when GPL_TIMING_DRIVEN is enabled.
+  stages:
+    - place
 MIN_PLACE_STEP_COEF:
   description: >
     Sets the minimum phi coefficient (pcof_min / µ_k Lower Bound) for global
