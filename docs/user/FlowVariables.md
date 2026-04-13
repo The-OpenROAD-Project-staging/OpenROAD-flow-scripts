@@ -115,6 +115,7 @@ configuration file.
 | <a name="CORE_MARGIN"></a>CORE_MARGIN| The margin between the core area and die area, specified in microns. Allowed values are either one value for all margins or a set of four values, one for each margin. The order of the four values are: `{bottom top left right}`. This variable is only used when `CORE_UTILIZATION` is set.| 1.0|
 | <a name="CORE_UTILIZATION"></a>CORE_UTILIZATION| The core utilization percentage (0-100).| |
 | <a name="CORNER"></a>CORNER| PVT corner library selection. Only available for ASAP7 and GF180 PDKs.| |
+| <a name="CORNERS"></a>CORNERS| List of timing corner names for multi-corner analysis (e.g. "slow fast"). When set, liberty files are loaded per corner using [CORNER]_LIB_FILES environment variables and timing models are generated per corner.| |
 | <a name="CTS_ARGS"></a>CTS_ARGS| Override `clock_tree_synthesis` arguments.| |
 | <a name="CTS_BUF_DISTANCE"></a>CTS_BUF_DISTANCE| Distance (in microns) between buffers.| |
 | <a name="CTS_BUF_LIST"></a>CTS_BUF_LIST| List of cells used to construct the clock tree. Overrides buffer inference.| |
@@ -564,6 +565,7 @@ configuration file.
 ## All stages variables
 
 - [ASAP7_USE_VT](#ASAP7_USE_VT)
+- [CORNERS](#CORNERS)
 - [KEEP_VARS](#KEEP_VARS)
 - [NUM_CORES](#NUM_CORES)
 - [OPENROAD_HIERARCHICAL](#OPENROAD_HIERARCHICAL)

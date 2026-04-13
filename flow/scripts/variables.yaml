@@ -128,6 +128,13 @@ PROCESS:
 CORNER:
   description: >
     PVT corner library selection. Only available for ASAP7 and GF180 PDKs.
+CORNERS:
+  description: >
+    List of timing corner names for multi-corner analysis (e.g. "slow fast").
+    When set, liberty files are loaded per corner using [CORNER]_LIB_FILES
+    environment variables and timing models are generated per corner.
+  stages:
+    - All stages
 TECH_LEF:
   description: >
     A technology LEF file of the PDK that includes all relevant information
