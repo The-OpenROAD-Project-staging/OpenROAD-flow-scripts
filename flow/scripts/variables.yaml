@@ -828,6 +828,12 @@ MAX_ROUTING_LAYER:
     - grt
     - route
     - final
+VIA_IN_PIN_MIN_LAYER:
+  description: >
+    Passed as -via_in_pin_bottom_layer to pin_access and detailed_route.
+  stages:
+    - grt
+    - route
 DETAILED_ROUTE_ARGS:
   description: |
     Add additional arguments for debugging purposes during detail route.
