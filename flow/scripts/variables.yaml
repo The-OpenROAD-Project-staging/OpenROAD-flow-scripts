@@ -1586,3 +1586,10 @@ ASAP7_USE_VT:
   stages:
     - All stages
   default: RVT
+CACHED_REPORTS:
+  description: >
+    List of pre-existing report files to copy into the reports directory
+    before synthesis. Used when reusing prior synthesis results with
+    SYNTH_NETLIST_FILES.
+  stages:
+    - synth

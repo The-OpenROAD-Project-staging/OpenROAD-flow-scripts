@@ -105,6 +105,7 @@ configuration file.
 | <a name="BALANCE_ROWS"></a>BALANCE_ROWS| Balance rows during placement.| 0|
 | <a name="BLOCKS"></a>BLOCKS| Blocks used as hard macros in a hierarchical flow. Do note that you have to specify block-specific inputs file in the directory mentioned by Makefile.| |
 | <a name="BUFFER_PORTS_ARGS"></a>BUFFER_PORTS_ARGS| Specify arguments to the buffer_ports call during placement. Only used if DONT_BUFFER_PORTS=0.| |
+| <a name="CACHED_REPORTS"></a>CACHED_REPORTS| List of pre-existing report files to copy into the reports directory before synthesis. Used when reusing prior synthesis results with SYNTH_NETLIST_FILES.| |
 | <a name="CAP_MARGIN"></a>CAP_MARGIN| Specifies a capacitance margin when fixing max capacitance violations. This option allows you to overfix.| |
 | <a name="CDL_FILES"></a>CDL_FILES| Insert additional Circuit Description Language (`.cdl`) netlist files.| |
 | <a name="CELL_PAD_IN_SITES_DETAIL_PLACEMENT"></a>CELL_PAD_IN_SITES_DETAIL_PLACEMENT| Cell padding on both sides in site widths to ease routability in detail placement.| 0|
@@ -336,6 +337,7 @@ configuration file.
 - [ABC_DRIVER_CELL](#ABC_DRIVER_CELL)
 - [ABC_LOAD_IN_FF](#ABC_LOAD_IN_FF)
 - [ADDER_MAP_FILE](#ADDER_MAP_FILE)
+- [CACHED_REPORTS](#CACHED_REPORTS)
 - [CLKGATE_MAP_FILE](#CLKGATE_MAP_FILE)
 - [DFF_LIB_FILE](#DFF_LIB_FILE)
 - [DFF_MAP_FILE](#DFF_MAP_FILE)
