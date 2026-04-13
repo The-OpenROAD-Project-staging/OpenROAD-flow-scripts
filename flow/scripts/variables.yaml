@@ -995,6 +995,12 @@ SYNTH_ARGS:
     Optional synthesis variables for yosys.
   stages:
     - synth
+SYNTH_OPERATIONS_ARGS:
+  description: >
+    Extra arguments appended to the Yosys synth command operations list.
+    When set, replaces the default Kogge-Stone adder extra-map.
+  stages:
+    - synth
 SYNTH_HIER_SEPARATOR:
   description: |
     Separator used for the synthesis flatten stage.
