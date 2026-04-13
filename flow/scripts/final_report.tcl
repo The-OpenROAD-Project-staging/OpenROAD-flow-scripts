@@ -2,6 +2,7 @@ utl::set_metrics_stage "finish__{}"
 source $::env(SCRIPTS_DIR)/load.tcl
 erase_non_stage_variables final
 load_design 6_1_fill.odb 6_1_fill.sdc
+source_step_tcl PRE FINAL_REPORT
 
 set_propagated_clock [all_clocks]
 
@@ -63,8 +64,9 @@ report_cell_usage
 
 report_metrics 6 "finish"
 
+source_step_tcl POST FINAL_REPORT
+
 # Save a final image if openroad is compiled with the gui
-# and a display is available (skip on headless machines)
-if { [ord::openroad_gui_compiled] && [env_var_exists_and_non_empty DISPLAY] } {
+if { [ord::openroad_gui_compiled] } {
   gui::show "source $::env(SCRIPTS_DIR)/save_images.tcl" false
 }
