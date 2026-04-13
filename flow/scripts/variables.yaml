@@ -765,6 +765,14 @@ SKIP_LAST_GASP:
     - cts
     - floorplan
     - grt
+SKIP_BUFFER_REMOVAL:
+  description: >
+    Passed as -skip_buffer_removal to repair_timing. Do not remove buffers
+    as a transform to fix timing violations (default: allow buffer removal).
+  stages:
+    - cts
+    - floorplan
+    - grt
 SKIP_PIN_SWAP:
   description: >
     Do not use pin swapping as a transform to fix timing violations (default:
