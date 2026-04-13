@@ -31,7 +31,7 @@ class TestParams(ParamTestBase):
         if pdk_version in ["", "0.3"]:
             if place_site == "ra02h138_DST_45CPP":
                 return 36
-            return 42
+            return 41
         if place_site in ["SC6T", "ra02h138_DST_45CPP"]:
             return 43
         return 45

@@ -75,7 +75,7 @@ export CORE_UTILIZATION = $(strip \
             $(if $(filter 0.3,$(RAPIDUS_PDK_VERSION)), \
                 $(if $(filter ra02h138_DST_45CPP,$(PLACE_SITE)), \
 		    55, \
-	    	    70 \
+	    	    60 \
                 ), \
                 $(if $(and $(filter t0.5,$(RAPIDUS_PDK_VERSION)),$(filter SC5T,$(PLACE_SITE))), \
 	            65, \
