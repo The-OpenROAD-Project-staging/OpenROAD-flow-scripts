@@ -1001,10 +1001,17 @@ CTS_BUF_LIST:
     - cts
 CLUSTER_FLOPS:
   description: >
-    Minimum number of flip-flops per sink cluster.
+    Enable clustering of flip-flops into multi-bit flip-flops, if the platform
+    PDK includes multi-bit flip-flops
   stages:
     - place
   default: 0
+CLUSTER_FLOPS_ARGS:
+  description: >
+    Additional arguments passed to the cluster_flops command.
+  stages:
+    - place
+  default: ""
 CTS_CLUSTER_DIAMETER:
   description: >
     Maximum diameter (in microns) of sink cluster.
