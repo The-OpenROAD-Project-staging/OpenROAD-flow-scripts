@@ -845,6 +845,11 @@ DETAILED_ROUTE_ARGS:
     Add additional arguments for debugging purposes during detail route.
   stages:
     - route
+DISABLE_VIA_GEN:
+  description: >
+    Passed as -disable_via_gen to detailed_route.
+  stages:
+    - route
 MACRO_EXTENSION:
   description: |
     Sets the number of GCells added to the blockages boundaries from macros.
