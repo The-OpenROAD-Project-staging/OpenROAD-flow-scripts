@@ -971,6 +971,12 @@ CDL_FILES:
 DFF_LIB_FILES:
   description: |
     Technology mapping liberty files for flip-flops.
+DFF_LIB_FILE:
+  description: >
+    Single Liberty file for flip-flop technology mapping (dfflibmap) during
+    synthesis. Takes precedence over DFF_MAP_FILE when set.
+  stages:
+    - synth
 SYNTH_KEEP_MODULES:
   description: |
     Mark modules to keep from getting removed in flattening.
