@@ -315,6 +315,7 @@ configuration file.
 | <a name="VERILOG_FILES"></a>VERILOG_FILES| The path to the design Verilog/SystemVerilog files providing a description of modules.| |
 | <a name="VERILOG_INCLUDE_DIRS"></a>VERILOG_INCLUDE_DIRS| Specifies the include directories for the Verilog input files.| |
 | <a name="VERILOG_TOP_PARAMS"></a>VERILOG_TOP_PARAMS| Apply toplevel params (if exist). Passed in as a list of key value pairs in tcl syntax; separated by spaces: PARAM1 VALUE1 PARAM2 VALUE2| |
+| <a name="VIA_IN_PIN_MAX_LAYER"></a>VIA_IN_PIN_MAX_LAYER| Passed as -via_in_pin_top_layer to pin_access and detailed_route.| |
 | <a name="VIA_IN_PIN_MIN_LAYER"></a>VIA_IN_PIN_MIN_LAYER| Passed as -via_in_pin_bottom_layer to pin_access and detailed_route.| |
 | <a name="WRITE_ODB_AND_SDC_EACH_STAGE"></a>WRITE_ODB_AND_SDC_EACH_STAGE| Save out .sdc and .odb file after each stage, useful to disable when using a single OpenROAD instance to run all stages of the flow.| 1|
 | <a name="YOSYS_FLAGS"></a>YOSYS_FLAGS| Flags to pass to yosys.| -v 3|
@@ -538,6 +539,7 @@ configuration file.
 - [SKIP_REPORT_METRICS](#SKIP_REPORT_METRICS)
 - [SKIP_VT_SWAP](#SKIP_VT_SWAP)
 - [TNS_END_PERCENT](#TNS_END_PERCENT)
+- [VIA_IN_PIN_MAX_LAYER](#VIA_IN_PIN_MAX_LAYER)
 - [VIA_IN_PIN_MIN_LAYER](#VIA_IN_PIN_MIN_LAYER)
 
 ## route variables
@@ -558,6 +560,7 @@ configuration file.
 - [SKIP_ANTENNA_REPAIR_POST_DRT](#SKIP_ANTENNA_REPAIR_POST_DRT)
 - [SKIP_DETAILED_ROUTE](#SKIP_DETAILED_ROUTE)
 - [SKIP_REPORT_METRICS](#SKIP_REPORT_METRICS)
+- [VIA_IN_PIN_MAX_LAYER](#VIA_IN_PIN_MAX_LAYER)
 - [VIA_IN_PIN_MIN_LAYER](#VIA_IN_PIN_MIN_LAYER)
 
 ## final variables
