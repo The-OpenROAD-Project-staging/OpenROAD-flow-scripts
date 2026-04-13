@@ -1567,6 +1567,13 @@ LEC_CHECK:
   default: 0
   stages:
     - cts
+LEC_AUX_VERILOG_FILES:
+  description: >
+    Additional Verilog files (e.g. blackbox stubs) to include in LEC
+    equivalence checks. Appended to the generated Verilog netlist before
+    running the formal equivalence check.
+  stages:
+    - cts
 REMOVE_CELLS_FOR_LEC:
   description: >
     String patterns directly passed to write_verilog -remove_cells <> for
