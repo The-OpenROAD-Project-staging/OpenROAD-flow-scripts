@@ -1593,3 +1593,9 @@ CACHED_REPORTS:
     SYNTH_NETLIST_FILES.
   stages:
     - synth
+CDL_FILE:
+  description: >
+    CDL master netlist file used as the -masters argument to write_cdl
+    for generating Circuit Description Language output.
+  stages:
+    - final

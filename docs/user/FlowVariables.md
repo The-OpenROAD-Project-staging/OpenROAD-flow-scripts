@@ -107,6 +107,7 @@ configuration file.
 | <a name="BUFFER_PORTS_ARGS"></a>BUFFER_PORTS_ARGS| Specify arguments to the buffer_ports call during placement. Only used if DONT_BUFFER_PORTS=0.| |
 | <a name="CACHED_REPORTS"></a>CACHED_REPORTS| List of pre-existing report files to copy into the reports directory before synthesis. Used when reusing prior synthesis results with SYNTH_NETLIST_FILES.| |
 | <a name="CAP_MARGIN"></a>CAP_MARGIN| Specifies a capacitance margin when fixing max capacitance violations. This option allows you to overfix.| |
+| <a name="CDL_FILE"></a>CDL_FILE| CDL master netlist file used as the -masters argument to write_cdl for generating Circuit Description Language output.| |
 | <a name="CDL_FILES"></a>CDL_FILES| Insert additional Circuit Description Language (`.cdl`) netlist files.| |
 | <a name="CELL_PAD_IN_SITES_DETAIL_PLACEMENT"></a>CELL_PAD_IN_SITES_DETAIL_PLACEMENT| Cell padding on both sides in site widths to ease routability in detail placement.| 0|
 | <a name="CELL_PAD_IN_SITES_GLOBAL_PLACEMENT"></a>CELL_PAD_IN_SITES_GLOBAL_PLACEMENT| Cell padding on both sides in site widths to ease routability during global placement.| 0|
@@ -588,6 +589,7 @@ configuration file.
 ## final variables
 
 - [ADDITIONAL_GDS](#ADDITIONAL_GDS)
+- [CDL_FILE](#CDL_FILE)
 - [GDS_ALLOW_EMPTY](#GDS_ALLOW_EMPTY)
 - [GND_NETS_VOLTAGES](#GND_NETS_VOLTAGES)
 - [MAX_ROUTING_LAYER](#MAX_ROUTING_LAYER)
