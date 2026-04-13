@@ -111,6 +111,7 @@ configuration file.
 | <a name="CELL_PAD_IN_SITES_GLOBAL_PLACEMENT"></a>CELL_PAD_IN_SITES_GLOBAL_PLACEMENT| Cell padding on both sides in site widths to ease routability during global placement.| 0|
 | <a name="CLKGATE_MAP_FILE"></a>CLKGATE_MAP_FILE| Optional mapping file supplied to Yosys to map clock gating cells| |
 | <a name="CLUSTER_FLOPS"></a>CLUSTER_FLOPS| Minimum number of flip-flops per sink cluster.| 0|
+| <a name="CLUSTER_FLOPS_ARGS"></a>CLUSTER_FLOPS_ARGS| Additional arguments passed to the cluster_flops command. Only used when CLUSTER_FLOPS is set.| |
 | <a name="CORE_AREA"></a>CORE_AREA| The core area specified as a list of lower-left and upper-right corners in microns (X1 Y1 X2 Y2).| |
 | <a name="CORE_ASPECT_RATIO"></a>CORE_ASPECT_RATIO| The core aspect ratio (height / width). This variable is only used when `CORE_UTILIZATION` is set.| 1.0|
 | <a name="CORE_MARGIN"></a>CORE_MARGIN| The margin between the core area and die area, specified in microns. Allowed values are either one value for all margins or a set of four values, one for each margin. The order of the four values are: `{bottom top left right}`. This variable is only used when `CORE_UTILIZATION` is set.| 1.0|
@@ -454,6 +455,7 @@ configuration file.
 - [CELL_PAD_IN_SITES_DETAIL_PLACEMENT](#CELL_PAD_IN_SITES_DETAIL_PLACEMENT)
 - [CELL_PAD_IN_SITES_GLOBAL_PLACEMENT](#CELL_PAD_IN_SITES_GLOBAL_PLACEMENT)
 - [CLUSTER_FLOPS](#CLUSTER_FLOPS)
+- [CLUSTER_FLOPS_ARGS](#CLUSTER_FLOPS_ARGS)
 - [DETAIL_PLACEMENT_ARGS](#DETAIL_PLACEMENT_ARGS)
 - [DONT_BUFFER_PORTS](#DONT_BUFFER_PORTS)
 - [EARLY_SIZING_CAP_RATIO](#EARLY_SIZING_CAP_RATIO)
