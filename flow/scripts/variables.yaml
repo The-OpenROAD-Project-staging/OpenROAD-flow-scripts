@@ -864,6 +864,11 @@ OR_K:
     Passed as -or_k to detailed routing.
   stages:
     - route
+OR_SEED:
+  description: >
+    Passed as -or_seed to detailed routing.
+  stages:
+    - route
 RCX_RULES:
   description: |
     RC Extraction rules file path.
