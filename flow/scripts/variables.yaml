@@ -457,6 +457,11 @@ BALANCE_ROWS:
   stages:
     - place
   default: 0
+ADDITIONAL_SITES:
+  description: >
+    Passed as -additional_sites to initialize_floorplan.
+  stages:
+    - floorplan
 PLACE_SITE:
   description: |
     Placement site for core cells defined in the technology LEF file.
