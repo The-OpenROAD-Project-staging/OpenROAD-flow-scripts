@@ -118,6 +118,7 @@ configuration file.
 | <a name="CORNER"></a>CORNER| PVT corner library selection. Only available for ASAP7 and GF180 PDKs.| |
 | <a name="CORNERS"></a>CORNERS| List of timing corner names for multi-corner analysis (e.g. "slow fast"). When set, liberty files are loaded per corner using [CORNER]_LIB_FILES environment variables and timing models are generated per corner.| |
 | <a name="CTS_ARGS"></a>CTS_ARGS| Override `clock_tree_synthesis` arguments.| |
+| <a name="CTS_BUF_CELL"></a>CTS_BUF_CELL| Single cell name for clock tree buffer insertion.| |
 | <a name="CTS_BUF_DISTANCE"></a>CTS_BUF_DISTANCE| Distance (in microns) between buffers.| |
 | <a name="CTS_BUF_LIST"></a>CTS_BUF_LIST| List of cells used to construct the clock tree. Overrides buffer inference.| |
 | <a name="CTS_CLUSTER_DIAMETER"></a>CTS_CLUSTER_DIAMETER| Maximum diameter (in microns) of sink cluster.| |
@@ -492,6 +493,7 @@ configuration file.
 
 - [CELL_PAD_IN_SITES_DETAIL_PLACEMENT](#CELL_PAD_IN_SITES_DETAIL_PLACEMENT)
 - [CTS_ARGS](#CTS_ARGS)
+- [CTS_BUF_CELL](#CTS_BUF_CELL)
 - [CTS_BUF_DISTANCE](#CTS_BUF_DISTANCE)
 - [CTS_BUF_LIST](#CTS_BUF_LIST)
 - [CTS_CLUSTER_DIAMETER](#CTS_CLUSTER_DIAMETER)
