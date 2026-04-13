@@ -859,6 +859,11 @@ DETAILED_ROUTE_END_ITERATION:
   default: 64
   stages:
     - route
+OR_K:
+  description: >
+    Passed as -or_k to detailed routing.
+  stages:
+    - route
 RCX_RULES:
   description: |
     RC Extraction rules file path.
