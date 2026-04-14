@@ -732,15 +732,6 @@ SETUP_SLACK_MARGIN:
     - grt
   default: 0
   tunable: 1
-SETUP_REPAIR_SEQUENCE:
-  description: |
-    Specifies the sequence of moves to do in repair_timing -setup. This should be a string
-    of move keywords separated by commas such as the default when not used:
-    "unbuffer,sizedown,sizeup,swap,buffer,clone,split".
-  stages:
-    - cts
-    - floorplan
-    - grt
 SETUP_MOVE_SEQUENCE:
   description: >
     Passed as -sequence to repair_timing. This should be a string of move
