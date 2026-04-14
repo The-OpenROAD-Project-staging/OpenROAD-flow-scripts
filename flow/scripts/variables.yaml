@@ -131,8 +131,9 @@ CORNER:
 CORNERS:
   description: >
     List of timing corner names for multi-corner analysis (e.g. "slow fast").
-    When set, liberty files are loaded per corner using [CORNER]_LIB_FILES
-    environment variables and timing models are generated per corner.
+    When set, liberty files are loaded per corner using uppercase
+    <CORNER>_LIB_FILES environment variables (e.g. corner "slow" reads
+    SLOW_LIB_FILES) and timing models are generated per corner.
   stages:
     - All stages
 TECH_LEF:
