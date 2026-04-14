@@ -1060,11 +1060,6 @@ CTS_BUF_LIST:
     List of cells used to construct the clock tree. Overrides buffer inference.
   stages:
     - cts
-CTS_BUF_CELL:
-  description: |
-    Single cell name for clock tree buffer insertion.
-  stages:
-    - cts
 CLUSTER_FLOPS:
   description: >
     Minimum number of flip-flops per sink cluster.
