@@ -51,6 +51,12 @@
   "ADDITIONAL_LIBS": {
     "description": "Hardened macro library files listed here. The library information is immutable and used throughout all stages. Not stored in the .odb file.\n"
   },
+  "ADDITIONAL_SITES": {
+    "description": "Passed as -additional_sites to initialize_floorplan.\n",
+    "stages": [
+      "floorplan"
+    ]
+  },
   "ASAP7_USE_VT": {
     "default": "RVT",
     "description": "A space separated list of VT options to use with the ASAP7 standard cell library: RVT, LVT, SLVT.\n",
@@ -74,8 +80,21 @@
       "place"
     ]
   },
+  "CACHED_REPORTS": {
+    "description": "List of pre-existing report files to copy into the reports directory before synthesis. Used when reusing prior synthesis results with SYNTH_NETLIST_FILES.\n",
+    "stages": [
+      "synth"
+    ]
+  },
   "CAP_MARGIN": {
-    "description": "Specifies a capacitance margin when fixing max capacitance violations. This option allows you to overfix.\n"
+    "description": "Specifies a capacitance margin when fixing max capacitance violations. This option allows you to overfix.\n",
+    "tunable": 1
+  },
+  "CDL_FILE": {
+    "description": "CDL master netlist file used as the -masters argument to write_cdl for generating Circuit Description Language output.\n",
+    "stages": [
+      "final"
+    ]
   },
   "CDL_FILES": {
     "description": "Insert additional Circuit Description Language (`.cdl`) netlist files.\n"
@@ -109,7 +128,14 @@
   },
   "CLUSTER_FLOPS": {
     "default": 0,
-    "description": "Minimum number of flip-flops per sink cluster.\n",
+    "description": "Enable clustering of flip-flops into multi-bit flip-flops, if the platform PDK includes multi-bit flip-flops\n",
+    "stages": [
+      "place"
+    ]
+  },
+  "CLUSTER_FLOPS_ARGS": {
+    "default": "",
+    "description": "Additional arguments passed to the cluster_flops command. Only used when CLUSTER_FLOPS is set.\n",
     "stages": [
       "place"
     ]
@@ -149,6 +175,12 @@
   },
   "CORNER": {
     "description": "PVT corner library selection. Only available for ASAP7 and GF180 PDKs.\n"
+  },
+  "CORNERS": {
+    "description": "List of timing corner names for multi-corner analysis (e.g. \"slow fast\"). When set, liberty files are loaded per corner using uppercase <CORNER>_LIB_FILES environment variables (e.g. corner \"slow\" reads SLOW_LIB_FILES) and timing models are generated per corner.\n",
+    "stages": [
+      "All stages"
+    ]
   },
   "CTS_ARGS": {
     "description": "Override `clock_tree_synthesis` arguments.\n",
@@ -239,8 +271,11 @@
       "place"
     ]
   },
-  "DFF_LIB_FILES": {
-    "description": "Technology mapping liberty files for flip-flops.\n"
+  "DFF_LIB_FILE": {
+    "description": "Single Liberty file for flip-flop technology mapping (dfflibmap) during synthesis. Takes precedence over DFF_MAP_FILE when set.\n",
+    "stages": [
+      "synth"
+    ]
   },
   "DFF_MAP_FILE": {
     "description": "Optional mapping file supplied to Yosys to map D flip-flops\n",
@@ -254,6 +289,12 @@
       "floorplan"
     ],
     "tunable": 1
+  },
+  "DISABLE_VIA_GEN": {
+    "description": "Passed as -disable_via_gen to detailed_route.\n",
+    "stages": [
+      "route"
+    ]
   },
   "DONT_BUFFER_PORTS": {
     "default": 0,
@@ -279,11 +320,10 @@
     "default": 1,
     "description": "Enable detail placement with improve_placement feature.\n"
   },
-  "EQUIVALENCE_CHECK": {
-    "default": 0,
-    "description": "Enable running equivalence checks to verify logical correctness of repair_timing.\n",
+  "ENABLE_RESISTANCE_AWARE": {
+    "description": "Passed as -resistance_aware to global_route.\n",
     "stages": [
-      "cts"
+      "grt"
     ]
   },
   "FASTROUTE_TCL": {
@@ -353,6 +393,12 @@
       "final"
     ]
   },
+  "GPL_KEEP_OVERFLOW": {
+    "description": "Passed as -keep_resize_below_overflow to global_placement. Only used when GPL_TIMING_DRIVEN is enabled.\n",
+    "stages": [
+      "place"
+    ]
+  },
   "GPL_ROUTABILITY_DRIVEN": {
     "default": 1,
     "description": "Specifies whether the placer should use routability driven placement.\n",
@@ -420,6 +466,12 @@
   "LAYER_PARASITICS_FILE": {
     "description": "Path to per layer parasitics file. Defaults to $(PLATFORM_DIR)/setRC.tcl.\n",
     "type": "string"
+  },
+  "LEC_AUX_VERILOG_FILES": {
+    "description": "Additional Verilog files (e.g. blackbox stubs) to include in LEC equivalence checks. Appended to the generated Verilog netlist before running the formal equivalence check.\n",
+    "stages": [
+      "cts"
+    ]
   },
   "LEC_CHECK": {
     "default": 0,
@@ -564,6 +616,18 @@
     "description": "Feature toggle to enable to run OpenROAD in hierarchical mode, otherwise considered flat. Will eventually be the default and this option will be retired.\n",
     "stages": [
       "All stages"
+    ]
+  },
+  "OR_K": {
+    "description": "Passed as -or_k to detailed routing.\n",
+    "stages": [
+      "route"
+    ]
+  },
+  "OR_SEED": {
+    "description": "Passed as -or_seed to detailed routing.\n",
+    "stages": [
+      "route"
     ]
   },
   "PDN_TCL": {
@@ -837,12 +901,6 @@
       "floorplan"
     ]
   },
-  "REMOVE_CELLS_FOR_EQY": {
-    "description": "String patterns directly passed to write_verilog -remove_cells <> for equivalence checks.\n",
-    "stages": [
-      "cts"
-    ]
-  },
   "REMOVE_CELLS_FOR_LEC": {
     "description": "String patterns directly passed to write_verilog -remove_cells <> for lec checks.\n",
     "type": "string"
@@ -1016,8 +1074,8 @@
   "SEAL_GDS": {
     "description": "Seal macro to place around the design.\n"
   },
-  "SETUP_REPAIR_SEQUENCE": {
-    "description": "Specifies the sequence of moves to do in repair_timing -setup. This should be a string\nof move keywords separated by commas such as the default when not used:\n\"unbuffer,sizedown,sizeup,swap,buffer,clone,split\".\n",
+  "SETUP_MOVE_SEQUENCE": {
+    "description": "Passed as -sequence to repair_timing. This should be a string of move keywords separated by commas.\n",
     "stages": [
       "cts",
       "floorplan",
@@ -1031,7 +1089,8 @@
       "cts",
       "floorplan",
       "grt"
-    ]
+    ],
+    "tunable": 1
   },
   "SET_RC_TCL": {
     "description": "Metal & Via RC definition file path.\n"
@@ -1054,6 +1113,14 @@
     "default": 0,
     "description": "Skips antenna repair pre-global routing.\n",
     "stages": [
+      "grt"
+    ]
+  },
+  "SKIP_BUFFER_REMOVAL": {
+    "description": "Passed as -skip_buffer_removal to repair_timing. Do not remove buffers as a transform to fix timing violations (default: allow buffer removal).\n",
+    "stages": [
+      "cts",
+      "floorplan",
       "grt"
     ]
   },
@@ -1138,8 +1205,16 @@
       "grt"
     ]
   },
+  "SLANG_PLUGIN_PATH": {
+    "default": "slang",
+    "description": "Path to the slang plugin for Yosys. This can be a full path to a custom-built plugin (e.g. for Bazel builds) or just the plugin name.\n",
+    "stages": [
+      "synth"
+    ]
+  },
   "SLEW_MARGIN": {
-    "description": "Specifies a slew margin when fixing max slew violations. This option allows you to overfix.\n"
+    "description": "Specifies a slew margin when fixing max slew violations. This option allows you to overfix.\n",
+    "tunable": 1
   },
   "SWAP_ARITH_OPERATORS": {
     "description": "Improve timing QoR by swapping ALU and MULT arithmetic operators.\n",
@@ -1235,6 +1310,12 @@
   },
   "SYNTH_NETLIST_FILES": {
     "description": "Skips synthesis and uses the supplied netlist files. If the netlist files contains duplicate modules, which can happen when using hierarchical synthesis on indvidual netlist files and combining here, subsequent modules are silently ignored and only the first module is used.\n",
+    "stages": [
+      "synth"
+    ]
+  },
+  "SYNTH_OPERATIONS_ARGS": {
+    "description": "Extra arguments appended to the Yosys synth command operations list. When set, replaces the default Kogge-Stone adder extra-map.\n",
     "stages": [
       "synth"
     ]
@@ -1359,6 +1440,20 @@
     "description": "Apply toplevel params (if exist). Passed in as a list of key value pairs\nin tcl syntax; separated by spaces: PARAM1 VALUE1 PARAM2 VALUE2\n",
     "stages": [
       "synth"
+    ]
+  },
+  "VIA_IN_PIN_MAX_LAYER": {
+    "description": "Passed as -via_in_pin_top_layer to pin_access and detailed_route.\n",
+    "stages": [
+      "grt",
+      "route"
+    ]
+  },
+  "VIA_IN_PIN_MIN_LAYER": {
+    "description": "Passed as -via_in_pin_bottom_layer to pin_access and detailed_route.\n",
+    "stages": [
+      "grt",
+      "route"
     ]
   },
   "WRITE_ODB_AND_SDC_EACH_STAGE": {
