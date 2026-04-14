@@ -112,16 +112,15 @@ configuration file.
 | <a name="CELL_PAD_IN_SITES_DETAIL_PLACEMENT"></a>CELL_PAD_IN_SITES_DETAIL_PLACEMENT| Cell padding on both sides in site widths to ease routability in detail placement.| 0|
 | <a name="CELL_PAD_IN_SITES_GLOBAL_PLACEMENT"></a>CELL_PAD_IN_SITES_GLOBAL_PLACEMENT| Cell padding on both sides in site widths to ease routability during global placement.| 0|
 | <a name="CLKGATE_MAP_FILE"></a>CLKGATE_MAP_FILE| Optional mapping file supplied to Yosys to map clock gating cells| |
-| <a name="CLUSTER_FLOPS"></a>CLUSTER_FLOPS| Minimum number of flip-flops per sink cluster.| 0|
+| <a name="CLUSTER_FLOPS"></a>CLUSTER_FLOPS| Enable clustering of flip-flops into multi-bit flip-flops, if the platform PDK includes multi-bit flip-flops| 0|
 | <a name="CLUSTER_FLOPS_ARGS"></a>CLUSTER_FLOPS_ARGS| Additional arguments passed to the cluster_flops command. Only used when CLUSTER_FLOPS is set.| |
 | <a name="CORE_AREA"></a>CORE_AREA| The core area specified as a list of lower-left and upper-right corners in microns (X1 Y1 X2 Y2).| |
 | <a name="CORE_ASPECT_RATIO"></a>CORE_ASPECT_RATIO| The core aspect ratio (height / width). This variable is only used when `CORE_UTILIZATION` is set.| 1.0|
 | <a name="CORE_MARGIN"></a>CORE_MARGIN| The margin between the core area and die area, specified in microns. Allowed values are either one value for all margins or a set of four values, one for each margin. The order of the four values are: `{bottom top left right}`. This variable is only used when `CORE_UTILIZATION` is set.| 1.0|
 | <a name="CORE_UTILIZATION"></a>CORE_UTILIZATION| The core utilization percentage (0-100).| |
 | <a name="CORNER"></a>CORNER| PVT corner library selection. Only available for ASAP7 and GF180 PDKs.| |
-| <a name="CORNERS"></a>CORNERS| List of timing corner names for multi-corner analysis (e.g. "slow fast"). When set, liberty files are loaded per corner using [CORNER]_LIB_FILES environment variables and timing models are generated per corner.| |
+| <a name="CORNERS"></a>CORNERS| List of timing corner names for multi-corner analysis (e.g. "slow fast"). When set, liberty files are loaded per corner using uppercase <CORNER>_LIB_FILES environment variables (e.g. corner "slow" reads SLOW_LIB_FILES) and timing models are generated per corner.| |
 | <a name="CTS_ARGS"></a>CTS_ARGS| Override `clock_tree_synthesis` arguments.| |
-| <a name="CTS_BUF_CELL"></a>CTS_BUF_CELL| Single cell name for clock tree buffer insertion.| |
 | <a name="CTS_BUF_DISTANCE"></a>CTS_BUF_DISTANCE| Distance (in microns) between buffers.| |
 | <a name="CTS_BUF_LIST"></a>CTS_BUF_LIST| List of cells used to construct the clock tree. Overrides buffer inference.| |
 | <a name="CTS_CLUSTER_DIAMETER"></a>CTS_CLUSTER_DIAMETER| Maximum diameter (in microns) of sink cluster.| |
@@ -136,7 +135,6 @@ configuration file.
 | <a name="DETAILED_ROUTE_END_ITERATION"></a>DETAILED_ROUTE_END_ITERATION| Maximum number of iterations.| 64|
 | <a name="DETAIL_PLACEMENT_ARGS"></a>DETAIL_PLACEMENT_ARGS| Specify arguments to the detailed_placement call during placement.| |
 | <a name="DFF_LIB_FILE"></a>DFF_LIB_FILE| Single Liberty file for flip-flop technology mapping (dfflibmap) during synthesis. Takes precedence over DFF_MAP_FILE when set.| |
-| <a name="DFF_LIB_FILES"></a>DFF_LIB_FILES| Technology mapping liberty files for flip-flops.| |
 | <a name="DFF_MAP_FILE"></a>DFF_MAP_FILE| Optional mapping file supplied to Yosys to map D flip-flops| |
 | <a name="DIE_AREA"></a>DIE_AREA| The die area specified as a list of lower-left and upper-right corners in microns (X1 Y1 X2 Y2).| |
 | <a name="DISABLE_VIA_GEN"></a>DISABLE_VIA_GEN| Passed as -disable_via_gen to detailed_route.| |
@@ -271,7 +269,6 @@ configuration file.
 | <a name="SDC_GUT"></a>SDC_GUT| Load design and remove all internal logic before doing synthesis. This is useful when creating a mock .lef abstract that has a smaller area than the amount of logic would allow. bazel-orfs uses this to mock SRAMs, for instance.| |
 | <a name="SEAL_GDS"></a>SEAL_GDS| Seal macro to place around the design.| |
 | <a name="SETUP_MOVE_SEQUENCE"></a>SETUP_MOVE_SEQUENCE| Passed as -sequence to repair_timing. This should be a string of move keywords separated by commas.| |
-| <a name="SETUP_REPAIR_SEQUENCE"></a>SETUP_REPAIR_SEQUENCE| Specifies the sequence of moves to do in repair_timing -setup. This should be a string of move keywords separated by commas such as the default when not used: "unbuffer,sizedown,sizeup,swap,buffer,clone,split".| |
 | <a name="SETUP_SLACK_MARGIN"></a>SETUP_SLACK_MARGIN| Specifies a time margin for the slack when fixing setup violations. This option allows you to overfix or underfix(negative value, terminate retiming before 0 or positive slack). See HOLD_SLACK_MARGIN for more details.| 0|
 | <a name="SET_RC_TCL"></a>SET_RC_TCL| Metal & Via RC definition file path.| |
 | <a name="SKIP_ANTENNA_REPAIR"></a>SKIP_ANTENNA_REPAIR| Skips antenna repair entirely.| 0|
@@ -301,7 +298,6 @@ configuration file.
 | <a name="SYNTH_INSBUF"></a>SYNTH_INSBUF| Insert input buffers on top-level input ports during synthesis. Useful to disable when doing parallel synthesis and concatenating netlists later as we're generating netlists of submodules.| 1|
 | <a name="SYNTH_KEEP_MOCKED_MEMORIES"></a>SYNTH_KEEP_MOCKED_MEMORIES| When `SYNTH_MOCK_LARGE_MEMORIES=1`, setting this to 1, will keep mocked memories (not flattening them). This preserves some of the access logic complexity and avoids optimizations outside of the mocked memory.| 1|
 | <a name="SYNTH_KEEP_MODULES"></a>SYNTH_KEEP_MODULES| Mark modules to keep from getting removed in flattening.| |
-| <a name="SYNTH_KEPT_MODULES"></a>SYNTH_KEPT_MODULES| Space-separated list of modules to keep as separate hierarchies during synthesis. Unlike the automatic size-based discovery (SYNTH_MINIMUM_KEEP_SIZE), the list of kept modules is known statically, which enables build systems to synthesize them in parallel.| |
 | <a name="SYNTH_MEMORY_MAX_BITS"></a>SYNTH_MEMORY_MAX_BITS| Maximum number of bits for memory synthesis. Ideally, real RAM or realistic fakeram should be used for RAMs much larger than 1024 bits. To temporarily ignore the RAM concerns and investigate other aspects of the design, consider setting `SYNTH_MOCK_LARGE_MEMORIES=1`, or adjusting `SYNTH_MEMORY_MAX_BITS`.| 4096|
 | <a name="SYNTH_MINIMUM_KEEP_SIZE"></a>SYNTH_MINIMUM_KEEP_SIZE| For hierarchical synthesis, we keep modules of larger area than given by this variable and flatten smaller modules. The area unit used is the size of a basic nand2 gate from the platform's standard cell library. The default value is platform specific.| 0|
 | <a name="SYNTH_MOCK_LARGE_MEMORIES"></a>SYNTH_MOCK_LARGE_MEMORIES| Reduce Yosys inferred memories larger than SYNTH_MEMORY_MAX_BITS to 1 row. Yosys will generally infer memories from behavioral Verilog code, whether the memories are in standalone modules or instantiated within some larger module. fakeram and empty Verilog memories(blackboxes) of memories will not be inferred memories by Yosys and are therefore not affected by this variable. This is useful and convenient to separate the concern of instantiating and placing memories from investigating other issues with a design, though it comes at the expense of the increased accuracy that using realistic fakemem would provide. Memories with a single 1 row will of course have unrealistically good timing and area characteristics, but timing will still correctly terminate in a register. Large port memories, typically register files, will still have the retain a lot of the port logic that can be useful to investigate issues. This can be especially useful during development of designs where the behavioral model comes first and suitable memories are matched up when the design RTL is stable. A typical use case would be Chisel which will generate a behavioral model for a memories with the required clocks, ports, etc. in addition to a computer readable file with the specification of the memories that is used to [automatically](https://chipyard.readthedocs.io/en/stable/Tools/Barstools.html/) match up suitable memory macros later in the flow. During an architectural screening study, a large range of memory configurations can be investigated quickly with this option, without getting bogged down in the concern of how to realize the memories in silicon for emphemral RTL configurations that exist only long enough to run through the ORFS flow to create a table of some characteristics of a design configuration.| 0|
@@ -359,7 +355,6 @@ configuration file.
 - [SYNTH_INSBUF](#SYNTH_INSBUF)
 - [SYNTH_KEEP_MOCKED_MEMORIES](#SYNTH_KEEP_MOCKED_MEMORIES)
 - [SYNTH_KEEP_MODULES](#SYNTH_KEEP_MODULES)
-- [SYNTH_KEPT_MODULES](#SYNTH_KEPT_MODULES)
 - [SYNTH_MEMORY_MAX_BITS](#SYNTH_MEMORY_MAX_BITS)
 - [SYNTH_MINIMUM_KEEP_SIZE](#SYNTH_MINIMUM_KEEP_SIZE)
 - [SYNTH_MOCK_LARGE_MEMORIES](#SYNTH_MOCK_LARGE_MEMORIES)
@@ -437,7 +432,6 @@ configuration file.
 - [RTLMP_RPT_DIR](#RTLMP_RPT_DIR)
 - [RTLMP_WIRELENGTH_WT](#RTLMP_WIRELENGTH_WT)
 - [SETUP_MOVE_SEQUENCE](#SETUP_MOVE_SEQUENCE)
-- [SETUP_REPAIR_SEQUENCE](#SETUP_REPAIR_SEQUENCE)
 - [SETUP_SLACK_MARGIN](#SETUP_SLACK_MARGIN)
 - [SKIP_BUFFER_REMOVAL](#SKIP_BUFFER_REMOVAL)
 - [SKIP_CRIT_VT_SWAP](#SKIP_CRIT_VT_SWAP)
@@ -500,7 +494,6 @@ configuration file.
 
 - [CELL_PAD_IN_SITES_DETAIL_PLACEMENT](#CELL_PAD_IN_SITES_DETAIL_PLACEMENT)
 - [CTS_ARGS](#CTS_ARGS)
-- [CTS_BUF_CELL](#CTS_BUF_CELL)
 - [CTS_BUF_DISTANCE](#CTS_BUF_DISTANCE)
 - [CTS_BUF_LIST](#CTS_BUF_LIST)
 - [CTS_CLUSTER_DIAMETER](#CTS_CLUSTER_DIAMETER)
@@ -518,7 +511,6 @@ configuration file.
 - [PRE_CTS_TCL](#PRE_CTS_TCL)
 - [REPORT_CLOCK_SKEW](#REPORT_CLOCK_SKEW)
 - [SETUP_MOVE_SEQUENCE](#SETUP_MOVE_SEQUENCE)
-- [SETUP_REPAIR_SEQUENCE](#SETUP_REPAIR_SEQUENCE)
 - [SETUP_SLACK_MARGIN](#SETUP_SLACK_MARGIN)
 - [SKIP_BUFFER_REMOVAL](#SKIP_BUFFER_REMOVAL)
 - [SKIP_CRIT_VT_SWAP](#SKIP_CRIT_VT_SWAP)
@@ -546,7 +538,6 @@ configuration file.
 - [REPORT_CLOCK_SKEW](#REPORT_CLOCK_SKEW)
 - [ROUTING_LAYER_ADJUSTMENT](#ROUTING_LAYER_ADJUSTMENT)
 - [SETUP_MOVE_SEQUENCE](#SETUP_MOVE_SEQUENCE)
-- [SETUP_REPAIR_SEQUENCE](#SETUP_REPAIR_SEQUENCE)
 - [SETUP_SLACK_MARGIN](#SETUP_SLACK_MARGIN)
 - [SKIP_ANTENNA_REPAIR](#SKIP_ANTENNA_REPAIR)
 - [SKIP_ANTENNA_REPAIR_PRE_GRT](#SKIP_ANTENNA_REPAIR_PRE_GRT)
@@ -634,7 +625,6 @@ configuration file.
 - [CORNER](#CORNER)
 - [DESIGN_NAME](#DESIGN_NAME)
 - [DESIGN_NICKNAME](#DESIGN_NICKNAME)
-- [DFF_LIB_FILES](#DFF_LIB_FILES)
 - [DONT_USE_CELLS](#DONT_USE_CELLS)
 - [DPO_MAX_DISPLACEMENT](#DPO_MAX_DISPLACEMENT)
 - [ENABLE_DPO](#ENABLE_DPO)
