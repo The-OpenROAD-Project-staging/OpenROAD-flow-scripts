@@ -46,7 +46,11 @@ set_placement_padding -global \
   -left $::env(CELL_PAD_IN_SITES_DETAIL_PLACEMENT) \
   -right $::env(CELL_PAD_IN_SITES_DETAIL_PLACEMENT)
 
-set result [catch { log_cmd detailed_placement } msg]
+if { [env_var_exists_and_non_empty USE_NEGOTIATION] && $::env(USE_NEGOTIATION) } {
+  set result [catch { log_cmd detailed_placement -use_negotiation } msg]
+} else {
+  set result [catch { log_cmd detailed_placement } msg]
+}  
 if { $result != 0 } {
   save_progress 4_1_error
   error "Detailed placement failed in CTS: $msg"
@@ -70,7 +74,11 @@ if { !$::env(SKIP_CTS_REPAIR_TIMING) } {
     run_lec_test 4_rsz 4_before_rsz_lec.v 4_after_rsz_lec.v
   }
 
+if { [env_var_exists_and_non_empty USE_NEGOTIATION] && $::env(USE_NEGOTIATION) } {
+  set result [catch { log_cmd detailed_placement -use_negotiation } msg]
+} else {
   set result [catch { log_cmd detailed_placement } msg]
+}  
   if { $result != 0 } {
     save_progress 4_1_error
     error "Detailed placement failed in CTS: $msg"

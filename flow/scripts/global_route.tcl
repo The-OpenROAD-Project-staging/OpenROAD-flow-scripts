@@ -62,7 +62,11 @@ proc global_route_helper { } {
     # Running DPL to fix overlapped instances
     # Run to get modified net by DPL
     log_cmd global_route -start_incremental
-    log_cmd detailed_placement
+    if { [env_var_exists_and_non_empty USE_NEGOTIATION] && $::env(USE_NEGOTIATION) } {
+      log_cmd detailed_placement -use_negotiation
+    } else {
+      log_cmd detailed_placement
+    }  
     # Route only the modified net by DPL
     log_cmd global_route -end_incremental {*}$res_aware \
       -congestion_report_file $::env(REPORTS_DIR)/congestion_post_repair_design.rpt
@@ -80,7 +84,11 @@ proc global_route_helper { } {
     # Running DPL to fix overlapped instances
     # Run to get modified net by DPL
     log_cmd global_route -start_incremental
-    log_cmd detailed_placement
+    if { [env_var_exists_and_non_empty USE_NEGOTIATION] && $::env(USE_NEGOTIATION) } {
+      log_cmd detailed_placement -use_negotiation
+    } else {
+      log_cmd detailed_placement
+    }  
     check_placement -verbose
     # Route only the modified net by DPL
     log_cmd global_route -end_incremental {*}$res_aware \
