@@ -70,15 +70,10 @@ export NUM_CORES
 
 #-------------------------------------------------------------------------------
 # setup all commands used within this flow
-export PYTHON_EXE ?= $(shell command -v python3)
+PYTHON_EXE ?= $(shell command -v python3)
+export PYTHON_EXE := $(PYTHON_EXE)
 
-export TIME_BIN   ?= env time
-TIME_CMD = $(TIME_BIN) -f 'Elapsed time: %E[h:]min:sec. CPU time: user %U sys %S (%P). Peak memory: %MKB.'
-TIME_TEST = $(shell $(TIME_CMD) echo foo 2>/dev/null)
-ifeq (,$(strip $(TIME_TEST)))
-  TIME_CMD = $(TIME_BIN)
-endif
-export TIME_CMD
+export RUN_CMD = $(PYTHON_EXE) $(FLOW_HOME)/scripts/run_command.py
 
 # The following determine the executable location for each tool used by this flow.
 # Priority is given to
@@ -87,15 +82,18 @@ export TIME_CMD
 #          2.1 if in Nix shell: openroad, yosys from the environment
 #          2.2 ORFS compiled tools: openroad, yosys
 ifneq (${IN_NIX_SHELL},)
-  export OPENROAD_EXE ?= $(shell command -v openroad)
+  OPENROAD_EXE ?= $(shell command -v openroad)
 else
-  export OPENROAD_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/OpenROAD/bin/openroad)
+  OPENROAD_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/OpenROAD/bin/openroad)
 endif
 ifneq (${IN_NIX_SHELL},)
-  export OPENSTA_EXE ?= $(shell command -v sta)
+  OPENSTA_EXE ?= $(shell command -v sta)
 else
-  export OPENSTA_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/OpenROAD/bin/sta)
+  OPENSTA_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/OpenROAD/bin/sta)
 endif
+
+export OPENROAD_EXE := $(OPENROAD_EXE)
+export OPENSTA_EXE  := $(OPENSTA_EXE)
 
 OPENROAD_IS_VALID := $(if $(OPENROAD_EXE),$(shell test -x $(OPENROAD_EXE) && echo "true"),)
 
@@ -109,7 +107,8 @@ ifneq (${IN_NIX_SHELL},)
 else
   YOSYS_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/yosys/bin/yosys)
 endif
-export YOSYS_EXE
+
+export YOSYS_EXE := $(YOSYS_EXE)
 
 YOSYS_IS_VALID := $(if $(YOSYS_EXE),$(shell test -x $(YOSYS_EXE) && echo "true"),)
 
@@ -121,16 +120,14 @@ KEPLER_FORMAL_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/kepler-formal/bin/k
 export KEPLER_FORMAL_EXE
 
 ifeq ($(wildcard $(KLAYOUT_BIN_FROM_DIR)), $(KLAYOUT_BIN_FROM_DIR))
-export KLAYOUT_CMD ?= sh -c 'LD_LIBRARY_PATH=$(dir $(KLAYOUT_BIN_FROM_DIR)) $$0 "$$@"' $(KLAYOUT_BIN_FROM_DIR)
+KLAYOUT_CMD ?= sh -c 'LD_LIBRARY_PATH=$(dir $(KLAYOUT_BIN_FROM_DIR)) $$0 "$$@"' $(KLAYOUT_BIN_FROM_DIR)
 else
 ifeq ($(KLAYOUT_CMD),)
-export KLAYOUT_CMD := $(shell command -v klayout)
+KLAYOUT_CMD ?= $(shell command -v klayout)
 endif
 endif
 
-ifneq ($(shell command -v stdbuf),)
-  STDBUF_CMD ?= stdbuf -o L
-endif
+export KLAYOUT_CMD := $(KLAYOUT_CMD)
 
 #-------------------------------------------------------------------------------
 WRAPPED_LEFS = $(foreach lef,$(notdir $(WRAP_LEFS)),$(OBJECTS_DIR)/lef/$(lef:.lef=_mod.lef))
@@ -191,7 +188,7 @@ export RESULTS_V = $(notdir $(sort $(wildcard $(RESULTS_DIR)/*.v)))
 export GDS_MERGED_FILE = $(RESULTS_DIR)/6_1_merged.$(STREAM_SYSTEM_EXT)
 
 define get_variables
-$(foreach V, $(.VARIABLES),$(if $(filter-out $(1), $(origin $V)), $(if $(filter-out .% %QT_QPA_PLATFORM% %TIME_CMD% KLAYOUT% GENERATE_ABSTRACT_RULE% do-step% do-copy% OPEN_GUI% OPEN_GUI_SHORTCUT% SUB_MAKE% UNSET_VARS% export%, $(V)), $V$ )))
+$(foreach V, $(.VARIABLES),$(if $(filter-out $(1), $(origin $V)), $(if $(filter-out .% %QT_QPA_PLATFORM% KLAYOUT% GENERATE_ABSTRACT_RULE% do-step% do-copy% OPEN_GUI% OPEN_GUI_SHORTCUT% SUB_MAKE% UNSET_VARS% export%, $(V)), $V$ )))
 endef
 
 export UNSET_VARIABLES_NAMES := $(call get_variables,command% line environment% default automatic)
