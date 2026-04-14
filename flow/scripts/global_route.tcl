@@ -66,7 +66,7 @@ proc global_route_helper { } {
       log_cmd detailed_placement -use_negotiation
     } else {
       log_cmd detailed_placement
-    }  
+    }
     # Route only the modified net by DPL
     log_cmd global_route -end_incremental {*}$res_aware \
       -congestion_report_file $::env(REPORTS_DIR)/congestion_post_repair_design.rpt
@@ -88,7 +88,7 @@ proc global_route_helper { } {
       log_cmd detailed_placement -use_negotiation
     } else {
       log_cmd detailed_placement
-    }  
+    }
     check_placement -verbose
     # Route only the modified net by DPL
     log_cmd global_route -end_incremental {*}$res_aware \
