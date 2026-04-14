@@ -149,7 +149,7 @@
   },
   "CORE_ASPECT_RATIO": {
     "default": 1.0,
-    "description": "The core aspect ratio (height / width).\nThis variable is only used when `CORE_UTILIZATION` is set.\n",
+    "description": "The core aspect ratio (height / width). This variable is only used when `CORE_UTILIZATION` is set.\n",
     "stages": [
       "floorplan"
     ],
@@ -158,7 +158,7 @@
   },
   "CORE_MARGIN": {
     "default": 1.0,
-    "description": "The margin between the core area and die area, specified in microns. Allowed values are either one value for all margins or a set of four values, one for each margin. The order of the four values are: `{bottom top left right}`.\nThis variable is only used when `CORE_UTILIZATION` is set.\n",
+    "description": "The margin between the core area and die area, specified in microns. Allowed values are either one value for all margins or a set of four values, one for each margin. The order of the four values are: `{bottom top left right}`. This variable is only used when `CORE_UTILIZATION` is set.\n",
     "stages": [
       "floorplan"
     ],
@@ -475,7 +475,7 @@
   },
   "LEC_CHECK": {
     "default": 0,
-    "description": "Perform a formal equivalence check between before and after netlists.\nIf this fails, report an issue to OpenROAD.\n",
+    "description": "Perform a formal equivalence check between before and after netlists. If this fails, report an issue to OpenROAD.\n",
     "stages": [
       "cts"
     ]
@@ -606,7 +606,7 @@
     ]
   },
   "NUM_CORES": {
-    "description": "Passed to `openroad -threads $(NUM_CORES)`, defaults to numbers of cores in system as determined by system specific code in Makefile, `nproc` is tried first.\nOpenROAD does not limit itself to this number of cores across OpenROAD running instances, which can lead to overprovisioning in contexts such as bazel-orfs where there could be many routing, or place jobs running at the same time.\n",
+    "description": "Passed to `openroad -threads $(NUM_CORES)`, defaults to numbers of cores in system as determined by system specific code in Makefile, `nproc` is tried first. OpenROAD does not limit itself to this number of cores across OpenROAD running instances, which can lead to overprovisioning in contexts such as bazel-orfs where there could be many routing, or place jobs running at the same time.\n",
     "stages": [
       "All stages"
     ]
@@ -637,7 +637,7 @@
     ]
   },
   "PLACE_DENSITY": {
-    "description": "The desired average placement density of cells: 1.0 = dense, 0.0 = widely spread.\nThe intended effort is also communicated by this parameter. Use a low value for faster builds and higher value for better quality of results.\nIf a too low value is used, the placer will not be able to place all cells and a recommended minimum placement density can be found in the logs.\nA too high value can lead to excessive runtimes, even timeouts and subtle failures in the flow after placement, such as in CTS or global routing when timing repair fails.\nThe default is platform specific.\n",
+    "description": "The desired average placement density of cells: 1.0 = dense, 0.0 = widely spread. The intended effort is also communicated by this parameter. Use a low value for faster builds and higher value for better quality of results. If a too low value is used, the placer will not be able to place all cells and a recommended minimum placement density can be found in the logs. A too high value can lead to excessive runtimes, even timeouts and subtle failures in the flow after placement, such as in CTS or global routing when timing repair fails. The default is platform specific.\n",
     "stages": [
       "floorplan",
       "place"
@@ -1229,7 +1229,7 @@
     ]
   },
   "SYNTH_BLACKBOXES": {
-    "description": "List of cells treated as a black box by Yosys. With Bazel, this can be used to run synthesis in parallel for the large modules of the design.\nNon-existant modules are ignored silently, useful when listing modules statically, even if modules come and go dynamically.\n",
+    "description": "List of cells treated as a black box by Yosys. With Bazel, this can be used to run synthesis in parallel for the large modules of the design. Non-existant modules are ignored silently, useful when listing modules statically, even if modules come and go dynamically.\n",
     "stages": [
       "synth"
     ]
@@ -1269,14 +1269,14 @@
   },
   "SYNTH_INSBUF": {
     "default": 1,
-    "description": "Insert input buffers on top-level input ports during synthesis.\nUseful to disable when doing parallel synthesis and concatenating netlists later as we're generating netlists of submodules.\n",
+    "description": "Insert input buffers on top-level input ports during synthesis. Useful to disable when doing parallel synthesis and concatenating netlists later as we're generating netlists of submodules.\n",
     "stages": [
       "synth"
     ]
   },
   "SYNTH_KEEP_MOCKED_MEMORIES": {
     "default": 1,
-    "description": "When `SYNTH_MOCK_LARGE_MEMORIES=1`, setting this to 1, will keep mocked memories (not flattening them).\nThis preserves some of the access logic complexity and avoids optimizations outside of the mocked memory.\n",
+    "description": "When `SYNTH_MOCK_LARGE_MEMORIES=1`, setting this to 1, will keep mocked memories (not flattening them). This preserves some of the access logic complexity and avoids optimizations outside of the mocked memory.\n",
     "stages": [
       "synth"
     ]
@@ -1289,7 +1289,7 @@
   },
   "SYNTH_MEMORY_MAX_BITS": {
     "default": 4096,
-    "description": "Maximum number of bits for memory synthesis.\nIdeally, real RAM or realistic fakeram should be used for RAMs much larger than 1024 bits.\nTo temporarily ignore the RAM concerns and investigate other aspects of the design, consider setting `SYNTH_MOCK_LARGE_MEMORIES=1`, or adjusting `SYNTH_MEMORY_MAX_BITS`.\n",
+    "description": "Maximum number of bits for memory synthesis. Ideally, real RAM or realistic fakeram should be used for RAMs much larger than 1024 bits. To temporarily ignore the RAM concerns and investigate other aspects of the design, consider setting `SYNTH_MOCK_LARGE_MEMORIES=1`, or adjusting `SYNTH_MEMORY_MAX_BITS`.\n",
     "stages": [
       "synth"
     ]
@@ -1303,7 +1303,7 @@
   },
   "SYNTH_MOCK_LARGE_MEMORIES": {
     "default": 0,
-    "description": "Reduce Yosys inferred memories larger than SYNTH_MEMORY_MAX_BITS to 1 row.\nYosys will generally infer memories from behavioral Verilog code, whether the memories are in standalone modules or instantiated within some larger module.\nfakeram and empty Verilog memories(blackboxes) of memories will not be inferred memories by Yosys and are therefore not affected by this variable.\nThis is useful and convenient to separate the concern of instantiating and placing memories from investigating other issues with a design, though it comes at the expense of the increased accuracy that using realistic fakemem would provide.\nMemories with a single 1 row will of course have unrealistically good timing and area characteristics, but timing will still correctly terminate in a register.\nLarge port memories, typically register files, will still have the retain a lot of the port logic that can be useful to investigate issues.\nThis can be especially useful during development of designs where the behavioral model comes first and suitable memories are matched up when the design RTL is stable.\nA typical use case would be Chisel which will generate a behavioral model for a memories with the required clocks, ports, etc. in addition to a computer readable file with the specification of the memories that is used to [automatically](https://chipyard.readthedocs.io/en/stable/Tools/Barstools.html/) match up suitable memory macros later in the flow.\nDuring an architectural screening study, a large range of memory configurations can be investigated quickly with this option, without getting bogged down in the concern of how to realize the memories in silicon for emphemral RTL configurations that exist only long enough to run through the ORFS flow to create a table of some characteristics of a design configuration.\n",
+    "description": "Reduce Yosys inferred memories larger than SYNTH_MEMORY_MAX_BITS to 1 row. Yosys will generally infer memories from behavioral Verilog code, whether the memories are in standalone modules or instantiated within some larger module. fakeram and empty Verilog memories(blackboxes) of memories will not be inferred memories by Yosys and are therefore not affected by this variable. This is useful and convenient to separate the concern of instantiating and placing memories from investigating other issues with a design, though it comes at the expense of the increased accuracy that using realistic fakemem would provide. Memories with a single 1 row will of course have unrealistically good timing and area characteristics, but timing will still correctly terminate in a register. Large port memories, typically register files, will still have the retain a lot of the port logic that can be useful to investigate issues. This can be especially useful during development of designs where the behavioral model comes first and suitable memories are matched up when the design RTL is stable. A typical use case would be Chisel which will generate a behavioral model for a memories with the required clocks, ports, etc. in addition to a computer readable file with the specification of the memories that is used to [automatically](https://chipyard.readthedocs.io/en/stable/Tools/Barstools.html/) match up suitable memory macros later in the flow. During an architectural screening study, a large range of memory configurations can be investigated quickly with this option, without getting bogged down in the concern of how to realize the memories in silicon for emphemral RTL configurations that exist only long enough to run through the ORFS flow to create a table of some characteristics of a design configuration.\n",
     "stages": [
       "synth"
     ]
@@ -1328,13 +1328,13 @@
   },
   "SYNTH_REPEATABLE_BUILD": {
     "default": 0,
-    "description": "License to prune anything that makes builds less repeatable, typically used with Bazel to ensure that builds are bit-for-bit identical so that caching works optimally.\nRemoves debug information that encodes paths, timestamps, etc.\n",
+    "description": "License to prune anything that makes builds less repeatable, typically used with Bazel to ensure that builds are bit-for-bit identical so that caching works optimally. Removes debug information that encodes paths, timestamps, etc.\n",
     "stages": [
       "synth"
     ]
   },
   "SYNTH_RETIME_MODULES": {
-    "description": "*This is an experimental option and may cause adverse effects.* *No effort has been made to check if the retimed RTL is logically equivalent to the non-retimed RTL.*\nList of modules to apply automatic retiming to. These modules must not get dissolved and as such they should either be the top module or be included in SYNTH_KEEP_MODULES.\nThe main use case is to quickly identify if performance can be improved by manually retiming the input RTL.\nRetiming will treat module ports like register endpoints/startpoints. The objective function of retiming isn't informed by SDC, even the clock period is ignored. As such, retiming will optimize for best delay at potentially high register number cost. Automatic retiming can produce suboptimal results as its timing model is crude and it doesn't find the optimal distribution of registers on long pipelines. See OR discussion #8080.\n",
+    "description": "*This is an experimental option and may cause adverse effects.* *No effort has been made to check if the retimed RTL is logically equivalent to the non-retimed RTL.* List of modules to apply automatic retiming to. These modules must not get dissolved and as such they should either be the top module or be included in SYNTH_KEEP_MODULES. The main use case is to quickly identify if performance can be improved by manually retiming the input RTL. Retiming will treat module ports like register endpoints/startpoints. The objective function of retiming isn't informed by SDC, even the clock period is ignored. As such, retiming will optimize for best delay at potentially high register number cost. Automatic retiming can produce suboptimal results as its timing model is crude and it doesn't find the optimal distribution of registers on long pipelines. See OR discussion  # 8080.\n",
     "stages": [
       "synth"
     ]
