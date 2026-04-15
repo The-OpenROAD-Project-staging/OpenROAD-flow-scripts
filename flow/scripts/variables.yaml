@@ -599,7 +599,7 @@ ENABLE_DPO:
 ENABLE_NB_LEGALIZER:
   description: |
     Enable negotation-based legalizer in detailed placement.
-  default: 1
+  default: 0
 DPO_MAX_DISPLACEMENT:
   description: |
     Specifies how far an instance can be moved when optimizing.

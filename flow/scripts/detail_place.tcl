@@ -16,7 +16,10 @@ proc do_dpl { } {
     -left $::env(CELL_PAD_IN_SITES_DETAIL_PLACEMENT) \
     -right $::env(CELL_PAD_IN_SITES_DETAIL_PLACEMENT)
   set dpl_args [env_var_or_empty DETAIL_PLACEMENT_ARGS]
-  if { $::env(ENABLE_NB_LEGALIZER) } {
+  if {
+    [env_var_exists_and_non_empty ENABLE_NB_LEGALIZER] &&
+    $::env(ENABLE_NB_LEGALIZER)
+  } {
     lappend dpl_args "-use_negotiation"
   }
   detailed_placement {*}$dpl_args

@@ -62,7 +62,11 @@ proc global_route_helper { } {
     # Running DPL to fix overlapped instances
     # Run to get modified net by DPL
     log_cmd global_route -start_incremental
-    if { $::env(ENABLE_NB_LEGALIZER) } {
+
+    if {
+      [env_var_exists_and_non_empty ENABLE_NB_LEGALIZER] &&
+      $::env(ENABLE_NB_LEGALIZER)
+    } {
       log_cmd detailed_placement -use_negotiation
     } else {
       log_cmd detailed_placement
@@ -84,7 +88,10 @@ proc global_route_helper { } {
     # Running DPL to fix overlapped instances
     # Run to get modified net by DPL
     log_cmd global_route -start_incremental
-    if { $::env(ENABLE_NB_LEGALIZER) } {
+    if {
+      [env_var_exists_and_non_empty ENABLE_NB_LEGALIZER] &&
+      $::env(ENABLE_NB_LEGALIZER)
+    } {
       log_cmd detailed_placement -use_negotiation
     } else {
       log_cmd detailed_placement
