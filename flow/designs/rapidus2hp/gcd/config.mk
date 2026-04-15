@@ -18,7 +18,7 @@ export CORE_UTILIZATION = $(strip \
         $(if $(filter 0.3,$(RAPIDUS_PDK_VERSION)), \
             $(if $(filter ra02h138_DST_45CPP,$(PLACE_SITE)), \
 	        36, \
-	        42), \
+	        41), \
 	    $(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
 	        43, \
 	        45 \

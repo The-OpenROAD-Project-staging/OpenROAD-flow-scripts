@@ -228,11 +228,12 @@ def extract_metrics(
     # Synthesis
     # =========================================================================
 
-    # The new format (>= 0.57) is: <count> <area> cells
+    # The new format (>= 0.57) with -hierarchy is:
+    #    <count> <area> <local_count> <local_area> cells
     extractTagFromFile(
         "synth__design__instance__count__stdcell",
         metrics_dict,
-        "^\\s+(\\d+)\\s+[-0-9.]+\\s+cells$",
+        "^\\s+(\\d+)\\s+[-0-9.]+\\s+\\S+\\s+\\S+\\s+cells$",
         rptPath + "/synth_stat.txt",
     )
 
