@@ -50,9 +50,9 @@ if {
   [env_var_exists_and_non_empty ENABLE_NB_LEGALIZER] &&
   $::env(ENABLE_NB_LEGALIZER)
 } {
-  set result [catch { detailed_placement -use_negotiation } msg]
+  set result [catch { log_cmd detailed_placement -use_negotiation } msg]
 } else {
-  set result [catch { detailed_placement } msg]
+  set result [catch { log_cmd detailed_placement } msg]
 }
 if { $result != 0 } {
   save_progress 4_1_error
@@ -81,9 +81,9 @@ if { !$::env(SKIP_CTS_REPAIR_TIMING) } {
     [env_var_exists_and_non_empty ENABLE_NB_LEGALIZER] &&
     $::env(ENABLE_NB_LEGALIZER)
   } {
-    set result [catch { detailed_placement -use_negotiation } msg]
+    set result [catch { log_cmd detailed_placement -use_negotiation } msg]
   } else {
-    set result [catch { detailed_placement } msg]
+    set result [catch { log_cmd detailed_placement } msg]
   }
   if { $result != 0 } {
     save_progress 4_1_error

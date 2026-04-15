@@ -22,7 +22,7 @@ proc do_dpl { } {
   } {
     lappend dpl_args "-use_negotiation"
   }
-  detailed_placement {*}$dpl_args
+  log_cmd detailed_placement {*}$dpl_args
 
   if { $::env(ENABLE_DPO) } {
     if { [env_var_exists_and_non_empty DPO_MAX_DISPLACEMENT] } {
