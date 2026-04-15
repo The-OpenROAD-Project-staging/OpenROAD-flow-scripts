@@ -15,7 +15,11 @@ proc do_dpl { } {
   set_placement_padding -global \
     -left $::env(CELL_PAD_IN_SITES_DETAIL_PLACEMENT) \
     -right $::env(CELL_PAD_IN_SITES_DETAIL_PLACEMENT)
-  detailed_placement {*}[env_var_or_empty DETAIL_PLACEMENT_ARGS]
+  set dpl_args [env_var_or_empty DETAIL_PLACEMENT_ARGS]
+  if { $::env(ENABLE_NB_LEGALIZER) } {
+    lappend dpl_args "-use_negotiation"
+  }
+  detailed_placement {*}$dpl_args
 
   if { $::env(ENABLE_DPO) } {
     if { [env_var_exists_and_non_empty DPO_MAX_DISPLACEMENT] } {

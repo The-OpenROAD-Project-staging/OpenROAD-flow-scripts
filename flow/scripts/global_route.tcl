@@ -62,7 +62,11 @@ proc global_route_helper { } {
     # Running DPL to fix overlapped instances
     # Run to get modified net by DPL
     log_cmd global_route -start_incremental
-    log_cmd detailed_placement
+    if { $::env(ENABLE_NB_LEGALIZER) } {
+      log_cmd detailed_placement -use_negotiation
+    } else {
+      log_cmd detailed_placement
+    }
     # Route only the modified net by DPL
     log_cmd global_route -end_incremental {*}$res_aware \
       -congestion_report_file $::env(REPORTS_DIR)/congestion_post_repair_design.rpt
@@ -80,7 +84,11 @@ proc global_route_helper { } {
     # Running DPL to fix overlapped instances
     # Run to get modified net by DPL
     log_cmd global_route -start_incremental
-    log_cmd detailed_placement
+    if { $::env(ENABLE_NB_LEGALIZER) } {
+      log_cmd detailed_placement -use_negotiation
+    } else {
+      log_cmd detailed_placement
+    }
     # Route only the modified net by DPL
     log_cmd global_route -end_incremental {*}$res_aware \
       -congestion_report_file $::env(REPORTS_DIR)/congestion_post_repair_timing.rpt

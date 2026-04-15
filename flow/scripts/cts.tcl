@@ -46,7 +46,11 @@ set_placement_padding -global \
   -left $::env(CELL_PAD_IN_SITES_DETAIL_PLACEMENT) \
   -right $::env(CELL_PAD_IN_SITES_DETAIL_PLACEMENT)
 
-set result [catch { detailed_placement } msg]
+if { $::env(ENABLE_NB_LEGALIZER) } {
+  set result [catch { detailed_placement -use_negotiation } msg]
+} else {
+  set result [catch { detailed_placement } msg]
+}
 if { $result != 0 } {
   save_progress 4_1_error
   error "Detailed placement failed in CTS: $msg"
@@ -69,8 +73,12 @@ if { !$::env(SKIP_CTS_REPAIR_TIMING) } {
     write_lec_verilog 4_after_rsz_lec.v
     run_lec_test 4_rsz 4_before_rsz_lec.v 4_after_rsz_lec.v
   }
-
-  set result [catch { detailed_placement } msg]
+    
+  if { $::env(ENABLE_NB_LEGALIZER) } {
+    set result [catch { detailed_placement -use_negotiation } msg]
+  } else {
+    set result [catch { detailed_placement } msg]
+  }
   if { $result != 0 } {
     save_progress 4_1_error
     error "Detailed placement failed in CTS: $msg"

@@ -592,6 +592,10 @@ ENABLE_DPO:
   description: |
     Enable detail placement with improve_placement feature.
   default: 1
+ENABLE_NB_LEGALIZER:
+  description: |
+    Enable negotation-based legalizer in detailed placement.
+  default: 1
 DPO_MAX_DISPLACEMENT:
   description: |
     Specifies how far an instance can be moved when optimizing.
