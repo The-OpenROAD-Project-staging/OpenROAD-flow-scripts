@@ -15,7 +15,7 @@ proc do_dpl { } {
   set_placement_padding -global \
     -left $::env(CELL_PAD_IN_SITES_DETAIL_PLACEMENT) \
     -right $::env(CELL_PAD_IN_SITES_DETAIL_PLACEMENT)
-  if { [env_var_exists_and_non_empty USE_NEGOTIATION] && $::env(USE_NEGOTIATION) } {
+  if { $::env(USE_NEGOTIATION) } {
     log_cmd detailed_placement -use_negotiation {*}[env_var_or_empty DETAIL_PLACEMENT_ARGS]
   } else {
     log_cmd detailed_placement {*}[env_var_or_empty DETAIL_PLACEMENT_ARGS]
