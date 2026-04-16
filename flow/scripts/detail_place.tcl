@@ -21,12 +21,12 @@ proc do_dpl { } {
 
   if { $::env(ENABLE_DPO) } {
     if { [env_var_exists_and_non_empty DPO_MAX_DISPLACEMENT] } {
-      improve_placement -max_displacement $::env(DPO_MAX_DISPLACEMENT)
+      log_cmd improve_placement -max_displacement $::env(DPO_MAX_DISPLACEMENT)
     } else {
-      improve_placement
+      log_cmd improve_placement
     }
   }
-  optimize_mirroring
+  log_cmd optimize_mirroring
 
   utl::info FLW 12 "Placement violations [check_placement -verbose]."
 
