@@ -70,7 +70,8 @@ export NUM_CORES
 
 #-------------------------------------------------------------------------------
 # setup all commands used within this flow
-export PYTHON_EXE ?= $(shell command -v python3)
+PYTHON_EXE ?= $(shell command -v python3)
+export PYTHON_EXE := $(PYTHON_EXE)
 
 export RUN_CMD = $(PYTHON_EXE) $(FLOW_HOME)/scripts/run_command.py
 
@@ -81,15 +82,18 @@ export RUN_CMD = $(PYTHON_EXE) $(FLOW_HOME)/scripts/run_command.py
 #          2.1 if in Nix shell: openroad, yosys from the environment
 #          2.2 ORFS compiled tools: openroad, yosys
 ifneq (${IN_NIX_SHELL},)
-  export OPENROAD_EXE ?= $(shell command -v openroad)
+  OPENROAD_EXE ?= $(shell command -v openroad)
 else
-  export OPENROAD_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/OpenROAD/bin/openroad)
+  OPENROAD_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/OpenROAD/bin/openroad)
 endif
 ifneq (${IN_NIX_SHELL},)
-  export OPENSTA_EXE ?= $(shell command -v sta)
+  OPENSTA_EXE ?= $(shell command -v sta)
 else
-  export OPENSTA_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/OpenROAD/bin/sta)
+  OPENSTA_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/OpenROAD/bin/sta)
 endif
+
+export OPENROAD_EXE := $(OPENROAD_EXE)
+export OPENSTA_EXE  := $(OPENSTA_EXE)
 
 OPENROAD_IS_VALID := $(if $(OPENROAD_EXE),$(shell test -x $(OPENROAD_EXE) && echo "true"),)
 
@@ -103,7 +107,8 @@ ifneq (${IN_NIX_SHELL},)
 else
   YOSYS_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/yosys/bin/yosys)
 endif
-export YOSYS_EXE
+
+export YOSYS_EXE := $(YOSYS_EXE)
 
 YOSYS_IS_VALID := $(if $(YOSYS_EXE),$(shell test -x $(YOSYS_EXE) && echo "true"),)
 
@@ -115,13 +120,14 @@ KEPLER_FORMAL_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/kepler-formal/bin/k
 export KEPLER_FORMAL_EXE
 
 ifeq ($(wildcard $(KLAYOUT_BIN_FROM_DIR)), $(KLAYOUT_BIN_FROM_DIR))
-export KLAYOUT_CMD ?= sh -c 'LD_LIBRARY_PATH=$(dir $(KLAYOUT_BIN_FROM_DIR)) $$0 "$$@"' $(KLAYOUT_BIN_FROM_DIR)
+KLAYOUT_CMD ?= sh -c 'LD_LIBRARY_PATH=$(dir $(KLAYOUT_BIN_FROM_DIR)) $$0 "$$@"' $(KLAYOUT_BIN_FROM_DIR)
 else
 ifeq ($(KLAYOUT_CMD),)
-export KLAYOUT_CMD := $(shell command -v klayout)
+KLAYOUT_CMD ?= $(shell command -v klayout)
 endif
 endif
 
+export KLAYOUT_CMD := $(KLAYOUT_CMD)
 
 #-------------------------------------------------------------------------------
 WRAPPED_LEFS = $(foreach lef,$(notdir $(WRAP_LEFS)),$(OBJECTS_DIR)/lef/$(lef:.lef=_mod.lef))

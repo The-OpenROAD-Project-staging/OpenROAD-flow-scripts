@@ -1,6 +1,6 @@
 {
     "synth__design__instance__area__stdcell": {
-        "value": 3290.0,
+        "value": 2830.0,
         "compare": "<="
     },
     "constraints__clocks__count": {
@@ -8,11 +8,11 @@
         "compare": "=="
     },
     "placeopt__design__instance__area": {
-        "value": 4563,
+        "value": 3153,
         "compare": "<="
     },
     "placeopt__design__instance__count__stdcell": {
-        "value": 88191,
+        "value": 46009,
         "compare": "<="
     },
     "detailedplace__design__violations": {
@@ -20,19 +20,19 @@
         "compare": "=="
     },
     "cts__design__instance__count__setup_buffer": {
-        "value": 5929,
+        "value": 4001,
         "compare": "<="
     },
     "cts__design__instance__count__hold_buffer": {
-        "value": 5929,
+        "value": 4001,
         "compare": "<="
     },
     "cts__timing__setup__ws": {
-        "value": -0.0725,
+        "value": -0.0557,
         "compare": ">="
     },
     "cts__timing__setup__tns": {
-        "value": -4.25,
+        "value": -1.81,
         "compare": ">="
     },
     "cts__timing__hold__ws": {
@@ -48,11 +48,11 @@
         "compare": "<="
     },
     "globalroute__timing__setup__ws": {
-        "value": -0.0981,
+        "value": -0.0716,
         "compare": ">="
     },
     "globalroute__timing__setup__tns": {
-        "value": -7.21,
+        "value": -3.08,
         "compare": ">="
     },
     "globalroute__timing__hold__ws": {
@@ -64,11 +64,11 @@
         "compare": ">="
     },
     "finish__timing__setup__ws": {
-        "value": -0.0981,
+        "value": -0.0716,
         "compare": ">="
     },
     "finish__timing__setup__tns": {
-        "value": -7.21,
+        "value": -3.08,
         "compare": ">="
     },
     "finish__timing__hold__ws": {
@@ -80,7 +80,7 @@
         "compare": ">="
     },
     "finish__design__instance__area": {
-        "value": 4731,
+        "value": 3298,
         "compare": "<="
     }
 }
