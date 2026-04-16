@@ -37,10 +37,23 @@ _installPipCommon() {
         set -u
     fi
     local pkgs="pandas numpy firebase_admin click pyyaml yamlfix"
-    if [[ $(id -u) == 0 ]]; then
-        pip3 install --no-cache-dir -U $pkgs
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        if [[ "$EUID" -eq 0 ]]; then
+            echo "Error: Do NOT run with sudo."
+            exit 1
+        fi
+        if [[ -n "${VIRTUAL_ENV:-}" ]]; then
+            pip3 install --no-cache-dir -U $pkgs
+        else
+            echo "Error: Activate a virtual environment on macOS."
+            exit 1
+        fi
     else
-        pip3 install --no-cache-dir --user -U $pkgs
+        if [[ $(id -u) == 0 ]]; then
+            pip3 install --no-cache-dir -U $pkgs
+        else
+            pip3 install --no-cache-dir --user -U $pkgs
+        fi
     fi
 }
 
