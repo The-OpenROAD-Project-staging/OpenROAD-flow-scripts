@@ -320,6 +320,10 @@
     "default": 1,
     "description": "Enable detail placement with improve_placement feature.\n"
   },
+  "ENABLE_NB_LEGALIZER": {
+    "default": 0,
+    "description": "Enable negotiation-based legalizer in detailed placement.\n"
+  },
   "ENABLE_RESISTANCE_AWARE": {
     "description": "Passed as -resistance_aware to global_route.\n",
     "stages": [
