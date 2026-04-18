@@ -28,11 +28,11 @@
         "compare": "<="
     },
     "cts__timing__setup__ws": {
-        "value": -0.164,
+        "value": -0.193,
         "compare": ">="
     },
     "cts__timing__setup__tns": {
-        "value": -332.0,
+        "value": -448.0,
         "compare": ">="
     },
     "cts__timing__hold__ws": {
@@ -48,19 +48,39 @@
         "compare": "<="
     },
     "globalroute__timing__setup__ws": {
-        "value": -0.212,
+        "value": -0.239,
         "compare": ">="
     },
     "globalroute__timing__setup__tns": {
-        "value": -983.0,
+        "value": -1190.0,
         "compare": ">="
     },
     "globalroute__timing__hold__ws": {
-        "value": -0.0125,
+        "value": -0.0394,
         "compare": ">="
     },
     "globalroute__timing__hold__tns": {
-        "value": -0.581,
+        "value": -1.37,
         "compare": ">="
+    },
+    "finish__timing__setup__ws": {
+        "value": -0.239,
+        "compare": ">="
+    },
+    "finish__timing__setup__tns": {
+        "value": -1190.0,
+        "compare": ">="
+    },
+    "finish__timing__hold__ws": {
+        "value": -0.0394,
+        "compare": ">="
+    },
+    "finish__timing__hold__tns": {
+        "value": -1.37,
+        "compare": ">="
+    },
+    "finish__design__instance__area": {
+        "value": 30446,
+        "compare": "<="
     }
 }

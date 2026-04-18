@@ -38,8 +38,8 @@ class TestParams(ParamTestBase):
                     return 45
                 return 45
             if front_end in ["", "slang"]:
-                return 58
-            return 54
+                return 59
+            return 58
         if pdk_version == "t0.5" and place_site == "SC5T":
             if front_end in ["", "slang"]:
                 return 48

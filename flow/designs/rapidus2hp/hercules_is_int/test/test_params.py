@@ -41,10 +41,8 @@ class TestParams(ParamTestBase):
             return 56
         if pdk_version in ["", "0.3"]:
             if place_site == "ra02h138_DST_45CPP":
-                return 52
-            if front_end in ["", "slang"]:
-                return 60
-            return 61
+                return 55
+            return 57
         if pdk_version == "t0.5" and place_site == "SC5T":
             return 45
         if front_end == "verific":

@@ -58,11 +58,8 @@ export CORE_UTILIZATION = $(strip \
             ), \
             $(if $(filter 0.3,$(RAPIDUS_PDK_VERSION)), \
                 $(if $(filter ra02h138_DST_45CPP SC6T,$(PLACE_SITE)), \
-		    52, \
-                    $(if $(filter slang,$(SYNTH_HDL_FRONTEND)), \
-                        60, \
-		        61 \
-                    ) \
+		    55, \
+                    57 \
 		), \
                 $(if $(and $(filter t0.5,$(RAPIDUS_PDK_VERSION)),$(filter SC5T,$(PLACE_SITE))), \
                     45, \
