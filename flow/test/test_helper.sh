@@ -19,7 +19,7 @@ fi
 LOG_FILE=${WORK_HOME}/logs/$PLATFORM/$DESIGN_NAME.log
 mkdir -p "${WORK_HOME}/logs/$PLATFORM"
 
-__make="make DESIGN_CONFIG=$DESIGN_CONFIG USE_NEGOTIATION=1"
+__make="make DESIGN_CONFIG=$DESIGN_CONFIG"
 if [ -n "${FLOW_VARIANT+x}" ]; then
   __make+=" FLOW_VARIANT=$FLOW_VARIANT"
 fi
