@@ -48,6 +48,7 @@ parser.add_argument(
 parser.add_argument(
     "--pubsubCred", type=str, help="Service account credentials file for Pub/Sub"
 )
+parser.add_argument("--runID", type=str, help="Unique identifier for this CI run")
 # --- END PUBSUB args ---
 
 # Parse the arguments
@@ -209,6 +210,7 @@ def publish_to_pubsub(
         "change_branch": args.changeBranch,
         "commit_sha": args.commitSHA,
         "jenkins_url": args.jenkinsURL,
+        "run_id": args.runID,
         "rules": rules,
     }
 
