@@ -70,8 +70,18 @@ export NUM_CORES
 
 #-------------------------------------------------------------------------------
 # setup all commands used within this flow
+#
+# HERE BE DRAGONS: use bare `export VAR`, never `export VAR := $(VAR)`.
+#
+# `export VAR := $(VAR)` rebinds the variable to origin "file", which makes
+# get_variables (below) include it in UNSET_VARIABLES_NAMES. UNSET_AND_MAKE
+# then unsets it before the sub-make runs, so any `?=` fallback here fires
+# with the wrong value in the sub-make (e.g. the in-tree tools/install path
+# that does not exist in a Bazel sandbox). A bare `export` preserves the
+# original origin (environment when bazel-orfs supplies it, file when the
+# local default fills in), so the value survives UNSET_VARS.
 PYTHON_EXE ?= $(shell command -v python3)
-export PYTHON_EXE := $(PYTHON_EXE)
+export PYTHON_EXE
 
 export RUN_CMD = $(PYTHON_EXE) $(FLOW_HOME)/scripts/run_command.py
 
@@ -92,6 +102,7 @@ else
   OPENSTA_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/OpenROAD/bin/sta)
 endif
 
+# See dragons comment near PYTHON_EXE: bare `export`, not `export := $(VAR)`.
 export OPENROAD_EXE
 export OPENSTA_EXE
 
@@ -108,7 +119,8 @@ else
   YOSYS_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/yosys/bin/yosys)
 endif
 
-export YOSYS_EXE := $(YOSYS_EXE)
+# See dragons comment near PYTHON_EXE: bare `export`, not `export := $(VAR)`.
+export YOSYS_EXE
 
 YOSYS_IS_VALID := $(if $(YOSYS_EXE),$(shell test -x $(YOSYS_EXE) && echo "true"),)
 
