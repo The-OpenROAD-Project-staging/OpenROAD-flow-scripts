@@ -102,7 +102,7 @@ else
   OPENSTA_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/OpenROAD/bin/sta)
 endif
 
-# See dragons comment near PYTHON_EXE: bare `export`, not `export := $(VAR)`.
+# See dragons comment near PYTHON_EXE: bare `export`, not `export VAR := $(VAR)`.
 export OPENROAD_EXE
 export OPENSTA_EXE
 
@@ -119,7 +119,7 @@ else
   YOSYS_EXE ?= $(abspath $(FLOW_HOME)/../tools/install/yosys/bin/yosys)
 endif
 
-# See dragons comment near PYTHON_EXE: bare `export`, not `export := $(VAR)`.
+# See dragons comment near PYTHON_EXE: bare `export`, not `export VAR := $(VAR)`.
 export YOSYS_EXE
 
 YOSYS_IS_VALID := $(if $(YOSYS_EXE),$(shell test -x $(YOSYS_EXE) && echo "true"),)
