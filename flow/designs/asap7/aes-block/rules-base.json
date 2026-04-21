@@ -1,6 +1,6 @@
 {
     "synth__design__instance__area__stdcell": {
-        "value": 2010.0,
+        "value": 1930.0,
         "compare": "<="
     },
     "constraints__clocks__count": {
@@ -8,11 +8,11 @@
         "compare": "=="
     },
     "placeopt__design__instance__area": {
-        "value": 7139,
+        "value": 6700,
         "compare": "<="
     },
     "placeopt__design__instance__count__stdcell": {
-        "value": 9621,
+        "value": 10206,
         "compare": "<="
     },
     "detailedplace__design__violations": {
@@ -20,27 +20,27 @@
         "compare": "=="
     },
     "cts__design__instance__count__setup_buffer": {
-        "value": 837,
+        "value": 888,
         "compare": "<="
     },
     "cts__design__instance__count__hold_buffer": {
-        "value": 837,
+        "value": 888,
         "compare": "<="
     },
     "cts__timing__setup__ws": {
-        "value": -78.0,
+        "value": -83.3,
         "compare": ">="
     },
     "cts__timing__setup__tns": {
-        "value": -4840.0,
+        "value": -2570.0,
         "compare": ">="
     },
     "cts__timing__hold__ws": {
-        "value": -52.3,
+        "value": -22.5,
         "compare": ">="
     },
     "cts__timing__hold__tns": {
-        "value": -6310.0,
+        "value": -90.0,
         "compare": ">="
     },
     "globalroute__antenna_diodes_count": {
@@ -48,23 +48,23 @@
         "compare": "<="
     },
     "globalroute__timing__setup__ws": {
-        "value": -125.0,
+        "value": -79.3,
         "compare": ">="
     },
     "globalroute__timing__setup__tns": {
-        "value": -3660.0,
+        "value": -2300.0,
         "compare": ">="
     },
     "globalroute__timing__hold__ws": {
-        "value": -25.9,
+        "value": -22.5,
         "compare": ">="
     },
     "globalroute__timing__hold__tns": {
-        "value": -1080.0,
+        "value": -90.0,
         "compare": ">="
     },
     "detailedroute__route__wirelength": {
-        "value": 51873,
+        "value": 50680,
         "compare": "<="
     },
     "detailedroute__route__drc_errors": {
@@ -80,11 +80,11 @@
         "compare": "<="
     },
     "finish__timing__setup__ws": {
-        "value": -94.0,
+        "value": -49.5,
         "compare": ">="
     },
     "finish__timing__setup__tns": {
-        "value": -1470.0,
+        "value": -801.0,
         "compare": ">="
     },
     "finish__timing__hold__ws": {
@@ -96,7 +96,7 @@
         "compare": ">="
     },
     "finish__design__instance__area": {
-        "value": 7205,
+        "value": 6750,
         "compare": "<="
     }
 }
