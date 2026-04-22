@@ -44,7 +44,9 @@ if { $::env(SYNTH_GUT) } {
 
 if { [env_var_exists_and_non_empty SYNTH_KEEP_MODULES] } {
   foreach module $::env(SYNTH_KEEP_MODULES) {
-    select -module $module
+    # Match the module and any `$`-suffixed canonical names the slang
+    # frontend generates for parameterized instances.
+    select "$module" "$module\\\$*"
     setattr -mod -set keep_hierarchy 1
     select -clear
   }
