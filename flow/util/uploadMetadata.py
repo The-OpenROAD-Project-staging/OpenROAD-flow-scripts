@@ -38,6 +38,13 @@ parser.add_argument("--cred", type=str, help="Service account credentials file")
 parser.add_argument("--variant", type=str, default="base")
 
 # --- PUBSUB args ---
+parser.add_argument(
+    "--jenkinsEnv",
+    type=str,
+    default="unknown",
+    choices=["public", "secure", "unknown"],
+    help="Jenkins environment (public or secure)",
+)
 parser.add_argument("--pubsubProjectID", type=str, help="GCP project ID for Pub/Sub")
 parser.add_argument(
     "--pubsubTopicID",
@@ -194,34 +201,46 @@ def upload_data(db, dataFile, platform, design, variant, args, rules):
 
 
 # --- PUBSUB ---
-def publish_to_pubsub(
-    publisher, topic_path, dataFile, platform, design, variant, args, rules
-):
-    """Publish a single design's metrics to Pub/Sub as a JSON message."""
+def build_design_record(dataFile, platform, design, variant, rules):
+    """Return a dict for one design to be included in the pipeline-level payload."""
     with open(dataFile) as f:
         data = json.load(f)
+    metrics = {re.sub(":", "__", k): v for k, v in data.items()}
+    return {
+        "platform": platform,
+        "design": design,
+        "variant": variant,
+        "rules": rules,
+        "metrics": metrics,
+    }
 
-    # Build the payload: CLI args + metrics with ':' replaced by '__'
+
+def publish_pipeline_report(publisher, topic_path, design_records, args):
+    """Publish one message for the entire pipeline run."""
     payload = {
+        "payload_schema_version": 2,
+        "jenkins_env": args.jenkinsEnv,
         "build_id": args.buildID,
         "branch_name": args.branchName,
         "pipeline_id": args.pipelineID,
         "change_branch": args.changeBranch,
         "commit_sha": args.commitSHA,
         "jenkins_url": args.jenkinsURL,
-        "rules": rules,
+        "designs": design_records,
     }
-
-    for k, v in data.items():
-        new_key = re.sub(":", "__", k)
-        payload[new_key] = v
-
-    message_data = json.dumps(payload).encode("utf-8")
-    future = publisher.publish(topic_path, data=message_data)
-    message_id = future.result()
+    message_data = json.dumps(payload, default=str).encode("utf-8")
+    size_kb = len(message_data) / 1024
     print(
-        f"[INFO] Published to Pub/Sub (message ID: {message_id}) for {platform} {design} {variant}."
+        f"[INFO] Publishing pipeline report ({len(design_records)} designs, {size_kb:.1f} KB) to Pub/Sub."
     )
+    future = publisher.publish(
+        topic_path,
+        data=message_data,
+        payload_schema_version="2",
+        jenkins_env=args.jenkinsEnv,
+    )
+    message_id = future.result()
+    print(f"[INFO] Published pipeline report to Pub/Sub (message ID: {message_id}).")
 
 
 # --- END PUBSUB ---
@@ -264,6 +283,10 @@ elif args.pubsubProjectID:
 
 RUN_FILENAME = "metadata.json"
 
+# --- PUBSUB ---
+design_records = []
+# --- END PUBSUB ---
+
 for reportDir, dirs, files in sorted(os.walk("reports", topdown=False)):
     dirList = reportDir.split(os.sep)
     if len(dirList) != 4:
@@ -293,12 +316,17 @@ for reportDir, dirs, files in sorted(os.walk("reports", topdown=False)):
 
     # --- PUBSUB ---
     if publisher:
-        try:
-            publish_to_pubsub(
-                publisher, topic_path, dataFile, platform, design, variant, args, rules
-            )
-        except Exception as e:
-            print(
-                f"[WARN] Pub/Sub publish failed for {platform} {design} {variant}: {e}"
-            )
+        design_records.append(
+            build_design_record(dataFile, platform, design, variant, rules)
+        )
     # --- END PUBSUB ---
+
+# --- PUBSUB ---
+if publisher and design_records:
+    try:
+        publish_pipeline_report(publisher, topic_path, design_records, args)
+    except Exception as e:
+        print(f"[WARN] Pub/Sub publish failed for pipeline report: {e}")
+elif publisher and not design_records:
+    print("[WARN] Pub/Sub publisher initialized but no design records were collected.")
+# --- END PUBSUB ---
