@@ -107,3 +107,13 @@ class ParamTestBase(unittest.TestCase):
         if isinstance(exp_result, int):
             value = int(value)
         self.assertEqual(value, exp_result, f"Results for {test_tag} don't match")
+
+    def get_site_list(self, pdk_version):
+        """Returns the site list based on the pdk_version"""
+
+        if pdk_version in ["", "0.2a", "0.15", "0.3s", "0.3"]:
+            return list(self._synopsys_site_list)
+        site_list = list(self._ibm_site_list)
+        if pdk_version == "t0.5":
+            site_list.append("SC5T")
+        return site_list

@@ -8,11 +8,11 @@
         "compare": "=="
     },
     "placeopt__design__instance__area": {
-        "value": 12740,
+        "value": 12283,
         "compare": "<="
     },
     "placeopt__design__instance__count__stdcell": {
-        "value": 121146,
+        "value": 114272,
         "compare": "<="
     },
     "detailedplace__design__violations": {
@@ -20,11 +20,11 @@
         "compare": "=="
     },
     "cts__design__instance__count__setup_buffer": {
-        "value": 10534,
+        "value": 9937,
         "compare": "<="
     },
     "cts__design__instance__count__hold_buffer": {
-        "value": 10534,
+        "value": 9937,
         "compare": "<="
     },
     "cts__timing__setup__ws": {
@@ -72,15 +72,15 @@
         "compare": ">="
     },
     "finish__timing__hold__ws": {
-        "value": -0.041,
+        "value": -0.04,
         "compare": ">="
     },
     "finish__timing__hold__tns": {
-        "value": -0.161,
+        "value": -0.16,
         "compare": ">="
     },
     "finish__design__instance__area": {
-        "value": 13245,
+        "value": 12798,
         "compare": "<="
     }
 }

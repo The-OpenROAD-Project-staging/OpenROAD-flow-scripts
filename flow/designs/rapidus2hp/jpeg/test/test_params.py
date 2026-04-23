@@ -62,7 +62,7 @@ class TestParams(ParamTestBase):
 
         pdk_version = ""
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 exp_util = self.get_exp_util(place_site, pdk_version, front_end)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
@@ -87,7 +87,7 @@ class TestParams(ParamTestBase):
 
         pdk_version = "0.2"
         for front_end in self._front_end_list:
-            for place_site in self._ibm_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 exp_util = self.get_exp_util(place_site, pdk_version, front_end)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
@@ -112,7 +112,7 @@ class TestParams(ParamTestBase):
 
         pdk_version = "0.2a"
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 exp_util = self.get_exp_util(place_site, pdk_version, front_end)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
@@ -137,7 +137,7 @@ class TestParams(ParamTestBase):
 
         pdk_version = "0.15"
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 exp_util = self.get_exp_util(place_site, pdk_version, front_end)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
@@ -162,7 +162,7 @@ class TestParams(ParamTestBase):
 
         pdk_version = "0.3s"
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 exp_util = self.get_exp_util(place_site, pdk_version, front_end)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
@@ -187,7 +187,7 @@ class TestParams(ParamTestBase):
 
         pdk_version = "0.3"
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 exp_util = self.get_exp_util(place_site, pdk_version, front_end)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
@@ -212,7 +212,7 @@ class TestParams(ParamTestBase):
 
         pdk_version = "t0.5"
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 exp_util = self.get_exp_util(place_site, pdk_version, front_end)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version, front_end)
                 self.execute_cmd(
