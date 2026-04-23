@@ -1417,9 +1417,9 @@
     "default": 0,
     "description": "Whether to perform metal density filling.\n"
   },
-  "USE_NEGOTIATION": {
+  "DPL_USE_OLD_DIAMOND": {
     "default": 0,
-    "description": "Enable using negotiation legalizer for detailed placement.\n"
+    "description": "Use the former diamond search legalizer for detailed placement instead of the default negotiation legalizer.\n"
   },
   "VERILOG_DEFINES": {
     "description": "Preprocessor defines passed to the language frontend. Example: `-D HPDCACHE_ASSERT_OFF`\n",
