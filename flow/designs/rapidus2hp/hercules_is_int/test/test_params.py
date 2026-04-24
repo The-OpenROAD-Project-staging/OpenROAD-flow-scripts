@@ -41,12 +41,10 @@ class TestParams(ParamTestBase):
             return 56
         if pdk_version in ["", "0.3"]:
             if place_site == "ra02h138_DST_45CPP":
-                return 52
-            if front_end in ["", "slang"]:
-                return 60
-            return 61
+                return 55
+            return 57
         if pdk_version == "t0.5" and place_site == "SC5T":
-            return 45
+            return 39
         if front_end == "verific":
             if place_site in ["SC6T", "ra02h138_DST_45CPP"]:
                 return 30
@@ -63,6 +61,8 @@ class TestParams(ParamTestBase):
             if pdk_version == "":
                 pdk_version = "0.3"
             return os.path.join(self._design_full_dir, f"prects_{pdk_version}.sdc")
+        if pdk_version == "t0.5":
+            return os.path.join(self._design_full_dir, f"prects_{pdk_version}.sdc")
         return os.path.join(self._design_full_dir, "prects.sdc")
 
     def test_pdk_0p3_default(self):
@@ -72,7 +72,7 @@ class TestParams(ParamTestBase):
 
         pdk_version = ""
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 for layer_stack in self._layer_stack_list:
                     exp_util = self.get_exp_util(
                         place_site, front_end, pdk_version, layer_stack
@@ -94,7 +94,7 @@ class TestParams(ParamTestBase):
         pdk_version = "0.2"
         layer_stack = "16LM"
         for front_end in self._front_end_list:
-            for place_site in self._ibm_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 exp_util = self.get_exp_util(
                     place_site, front_end, pdk_version, layer_stack
                 )
@@ -113,7 +113,7 @@ class TestParams(ParamTestBase):
 
         pdk_version = "0.2a"
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 for layer_stack in self._layer_stack_list:
                     exp_util = self.get_exp_util(
                         place_site, front_end, pdk_version, layer_stack
@@ -134,7 +134,7 @@ class TestParams(ParamTestBase):
 
         pdk_version = "0.15"
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 for layer_stack in self._layer_stack_list:
                     exp_util = self.get_exp_util(
                         place_site, front_end, pdk_version, layer_stack
@@ -155,7 +155,7 @@ class TestParams(ParamTestBase):
 
         pdk_version = "0.3s"
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 for layer_stack in self._layer_stack_list:
                     exp_util = self.get_exp_util(
                         place_site, front_end, pdk_version, layer_stack
@@ -176,7 +176,7 @@ class TestParams(ParamTestBase):
 
         pdk_version = "0.3"
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 for layer_stack in self._layer_stack_list:
                     exp_util = self.get_exp_util(
                         place_site, front_end, pdk_version, layer_stack
@@ -198,7 +198,7 @@ class TestParams(ParamTestBase):
         layer_stack = "16LM"
         pdk_version = "t0.5"
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 exp_util = self.get_exp_util(
                     place_site, front_end, pdk_version, layer_stack
                 )
