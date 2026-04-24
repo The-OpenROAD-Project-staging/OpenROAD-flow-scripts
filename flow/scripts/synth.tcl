@@ -138,7 +138,7 @@ exec -- $::env(PYTHON_EXE) $::env(SCRIPTS_DIR)/mem_dump.py \
   --max-bits $::env(SYNTH_MEMORY_MAX_BITS) $::env(RESULTS_DIR)/mem.json
 
 if { [env_var_exists_and_non_empty SYNTH_RETIME_MODULES] } {
-  select $::env(SYNTH_RETIME_MODULES)
+  select {*}$::env(SYNTH_RETIME_MODULES)
   opt -fast -full
   memory_map
   opt -full
