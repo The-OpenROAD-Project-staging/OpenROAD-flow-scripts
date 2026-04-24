@@ -64,8 +64,6 @@ proc global_route_helper { } {
     set dpl_args {}
     append_env_var dpl_args DPL_USE_OLD_DIAMOND -use_old_diamond 0
     log_cmd global_route -start_incremental
-    #set_debug_level DPL negotiation 1
-    dpl::detailed_placement_debug
     log_cmd detailed_placement {*}$dpl_args
     # Route only the modified net by DPL
     log_cmd global_route -end_incremental {*}$res_aware \
