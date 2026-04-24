@@ -626,6 +626,10 @@ DPL_USE_OLD_DIAMOND:
   description: |
     Use the former diamond search legalizer for detailed placement instead of the default negotiation legalizer.
   default: 0
+  stages:
+    - place
+    - cts
+    - grt
 GPL_TIMING_DRIVEN:
   description: |
     Specifies whether the placer should use timing driven placement.
