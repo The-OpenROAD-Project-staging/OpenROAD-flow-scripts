@@ -32,7 +32,11 @@ proc get_dfflegalize_args { file_path } {
 }
 
 source $::env(SCRIPTS_DIR)/synth_preamble.tcl
-read_checkpoint $::env(RESULTS_DIR)/1_1_yosys_canonicalize.rtlil
+if { [env_var_exists_and_non_empty SYNTH_CHECKPOINT] } {
+  read_checkpoint $::env(SYNTH_CHECKPOINT)
+} else {
+  read_checkpoint $::env(RESULTS_DIR)/1_1_yosys_canonicalize.rtlil
+}
 
 hierarchy -check -top $::env(DESIGN_NAME)
 
@@ -65,7 +69,19 @@ if { [env_var_exists_and_non_empty SYNTH_OPT_HIER] } {
   set synth_full_args [concat $synth_full_args -hieropt]
 }
 
-if { !$::env(SYNTH_HIERARCHICAL) } {
+if {
+  [env_var_exists_and_non_empty SYNTH_CHECKPOINT] &&
+  $::env(SYNTH_SKIP_KEEP)
+} {
+  # Partition mode where the checkpoint is still canonical RTLIL (the keep
+  # decision for this partition is driven externally). Run the full
+  # coarse+fine synthesis, flattened.
+  synth -flatten -run :fine {*}$synth_full_args
+} elseif { [env_var_exists_and_non_empty SYNTH_CHECKPOINT] } {
+  # Partition mode where the checkpoint already holds coarse synth +
+  # keep_hierarchy output. Just flatten and continue from coarse.
+  synth -flatten -run coarse:fine {*}$synth_full_args
+} elseif { !$::env(SYNTH_HIERARCHICAL) } {
   # Perform standard coarse-level synthesis script, flatten right away
   synth -flatten -run :fine {*}$synth_full_args
 } else {
