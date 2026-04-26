@@ -45,7 +45,7 @@ if { $::env(SYNTH_GUT) } {
 if { [env_var_exists_and_non_empty SYNTH_KEEP_MODULES] } {
   foreach module $::env(SYNTH_KEEP_MODULES) {
     # Two patterns so both frontends work:
-    #  - `$module` matches the bare name produced by verilog/verific.
+    #  - `$module` matches the bare name produced by verilog.
     #  - `$module\$*` matches the `$`-suffixed canonical names the
     #    slang frontend generates for parameterized instances
     #    (e.g. `\foo$1`); yosys's match_ids retries the pattern with
