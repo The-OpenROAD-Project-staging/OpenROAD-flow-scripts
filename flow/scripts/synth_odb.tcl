@@ -22,7 +22,7 @@ source_step_tcl PRE SYNTH
 # stay in floorplan.tcl — moving them here was tried in PR #4187 and
 # regressed setup TNS by 1.7-46x on I/O-heavy designs (asap7/aes-block,
 # asap7/jpeg_lvt, asap7/swerv_wrapper, nangate45/ariane133).
-eliminate_dead_logic
+log_cmd eliminate_dead_logic
 
 source_step_tcl POST SYNTH
 orfs_write_db $::env(RESULTS_DIR)/1_synth.odb
