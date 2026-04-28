@@ -24,13 +24,19 @@ class TestParams(ParamTestBase):
     def get_exp_util(self, place_site, pdk_version):
         """Returns the expected utilization"""
 
-        if pdk_version in ["", "0.3s"]:
-            if place_site == "ra02h138_DST_45CPP":
-                return 60
-            return 65
         if pdk_version == "0.15":
             if place_site == "ra02h138_DST_45CPP":
                 return 52
+            return 65
+        if pdk_version == "0.3s":
+            if place_site == "ra02h138_DST_45CPP":
+                return 60
+            return 65
+        if pdk_version in ["", "0.3"]:
+            if place_site == "ra02h138_DST_45CPP":
+                return 55
+            return 60
+        if pdk_version == "t0.5" and place_site == "SC5T":
             return 65
         return 70
 
@@ -47,9 +53,7 @@ class TestParams(ParamTestBase):
             )
         if pdk_version == "0.15":
             return os.path.join(self._design_full_dir, f"constraint_{pdk_version}.sdc")
-        if pdk_version in ["", "0.3s"]:
-            if pdk_version == "":
-                pdk_version = "0.3s"
+        if pdk_version == "0.3s":
             if place_site == "ra02h138_DST_45CPP":
                 return os.path.join(
                     self._design_full_dir, f"constraint_{pdk_version}_6T.sdc"
@@ -58,16 +62,27 @@ class TestParams(ParamTestBase):
                 self._design_full_dir, f"constraint_{pdk_version}_8T.sdc"
             )
 
+        if pdk_version in ["", "0.3"]:
+            if place_site in ["", "ra02h184_HST_45CPP"]:
+                if pdk_version == "":
+                    pdk_version = "0.3"
+                return os.path.join(
+                    self._design_full_dir, f"constraint_{pdk_version}_8T.sdc"
+                )
+        if pdk_version == "t0.5" and place_site in ["", "SC8T"]:
+            return os.path.join(
+                self._design_full_dir, f"constraint_{pdk_version}_8T.sdc"
+            )
         return os.path.join(self._design_full_dir, "constraint.sdc")
 
-    def test_pdk_0p3s_default(self):
+    def test_pdk_0p3_default(self):
         """
-        Tests PDK 0.3s utilization
+        Tests PDK 0.3 utilization
         """
 
         pdk_version = ""
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 exp_util = self.get_exp_util(place_site, pdk_version)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version)
                 self.execute_cmd(
@@ -92,7 +107,7 @@ class TestParams(ParamTestBase):
 
         pdk_version = "0.2"
         for front_end in self._front_end_list:
-            for place_site in self._ibm_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 exp_util = self.get_exp_util(place_site, pdk_version)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version)
                 self.execute_cmd(
@@ -117,7 +132,7 @@ class TestParams(ParamTestBase):
 
         pdk_version = "0.2a"
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 exp_util = self.get_exp_util(place_site, pdk_version)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version)
                 self.execute_cmd(
@@ -142,7 +157,7 @@ class TestParams(ParamTestBase):
 
         pdk_version = "0.15"
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
                 exp_util = self.get_exp_util(place_site, pdk_version)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version)
                 self.execute_cmd(
@@ -165,10 +180,59 @@ class TestParams(ParamTestBase):
         Tests PDK 0.3s utilization
         """
 
-        front_end = ""
         pdk_version = "0.3s"
         for front_end in self._front_end_list:
-            for place_site in self._synopsys_site_list:
+            for place_site in self.get_site_list(pdk_version):
+                exp_util = self.get_exp_util(place_site, pdk_version)
+                exp_sdc = self.get_exp_sdc(place_site, pdk_version)
+                self.execute_cmd(
+                    "CORE_UTILIZATION",
+                    exp_util,
+                    place_site=place_site,
+                    pdk_version=pdk_version,
+                    front_end=front_end,
+                )
+                self.execute_cmd(
+                    "SDC_FILE",
+                    exp_sdc,
+                    place_site=place_site,
+                    pdk_version=pdk_version,
+                    front_end=front_end,
+                )
+
+    def test_pdk_0p3(self):
+        """
+        Tests PDK 0.3 utilization
+        """
+
+        pdk_version = "0.3"
+        for front_end in self._front_end_list:
+            for place_site in self.get_site_list(pdk_version):
+                exp_util = self.get_exp_util(place_site, pdk_version)
+                exp_sdc = self.get_exp_sdc(place_site, pdk_version)
+                self.execute_cmd(
+                    "CORE_UTILIZATION",
+                    exp_util,
+                    place_site=place_site,
+                    pdk_version=pdk_version,
+                    front_end=front_end,
+                )
+                self.execute_cmd(
+                    "SDC_FILE",
+                    exp_sdc,
+                    place_site=place_site,
+                    pdk_version=pdk_version,
+                    front_end=front_end,
+                )
+
+    def test_pdk_t0p5(self):
+        """
+        Tests Titan PDK 0.5 utilization
+        """
+
+        pdk_version = "t0.5"
+        for front_end in self._front_end_list:
+            for place_site in self.get_site_list(pdk_version):
                 exp_util = self.get_exp_util(place_site, pdk_version)
                 exp_sdc = self.get_exp_sdc(place_site, pdk_version)
                 self.execute_cmd(

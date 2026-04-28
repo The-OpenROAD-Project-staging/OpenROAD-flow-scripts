@@ -10,7 +10,7 @@ else
 fi
 
 # package versions
-klayoutVersion=0.30.3
+klayoutVersion=0.30.7
 if [[ "$OSTYPE" == "darwin"* ]]; then
     numThreads=$(sysctl -n hw.logicalcpu)
 else
@@ -37,17 +37,33 @@ _installPipCommon() {
         set -u
     fi
     local pkgs="pandas numpy firebase_admin click pyyaml yamlfix"
-    if [[ $(id -u) == 0 ]]; then
-        pip3 install --no-cache-dir -U $pkgs
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        if [[ "$EUID" -eq 0 ]]; then
+            echo "Error: Do NOT run with sudo."
+            exit 1
+        fi
+        if [[ -n "${VIRTUAL_ENV:-}" ]]; then
+            pip3 install --no-cache-dir -U $pkgs
+        else
+            echo "Error: Activate a virtual environment on macOS."
+            exit 1
+        fi
     else
-        pip3 install --no-cache-dir --user -U $pkgs
+        if [[ $(id -u) == 0 ]]; then
+            pip3 install --no-cache-dir -U $pkgs
+        else
+            pip3 install --no-cache-dir --user -U $pkgs
+        fi
     fi
+}
+
+_installPipSystem() {
+    apt-get -y install python3-pandas python3-numpy python3-click python3-yaml python3-yamlfix
 }
 
 # Enterprise Linux 7 cleanup
 _install_EL7_CleanUp() {
     yum clean -y all
-    rm -rf /var/lib/apt/lists/*
 }
 
 # Enterprise Linux 7 package installation (EL7 = RHEL 7 or CentOS 7)
@@ -76,7 +92,6 @@ _install_EL7_Packages() {
 # Enterprise Linux 8/9 cleanup
 _install_EL8_EL9_CleanUp() {
     dnf clean -y all
-    rm -rf /var/lib/apt/lists/*
 }
 
 # Enterprise Linux 8/9 package installation (EL8/EL9 = RHEL, Rocky Linux, AlmaLinux, or CentOS 8 as no CentOS 9 exists)
@@ -199,8 +214,6 @@ _installUbuntuPackages() {
     # install KLayout
     if  [[ $1 == "rodete" ]]; then
         apt-get -y install --no-install-recommends klayout python3-pandas
-    elif _versionCompare "$1" -ge 23.04; then
-        apt-get -y install --no-install-recommends klayout python3-pandas
     else
         arch=$(uname -m)
         lastDir="$(pwd)"
@@ -221,13 +234,13 @@ _installUbuntuPackages() {
         fi
         else
             if [[ $1 == 20.04 ]]; then
-                klayoutChecksum=e83be08033f2f69d83ab7bd494a7a858
+                klayoutChecksum=e95175a8053d3577375fbd3a7b3d7dbf
             elif [[ $1 == 22.04 ]]; then
-                klayoutChecksum=6e431b0a1a34c16eab9958a2c28f88bd
+                klayoutChecksum=202530d198b0c7b93aa5af0e8e438ccd
             elif [[ $1 == 24.04 ]]; then
-                klayoutChecksum=2d186f0225dbac7ae2d790aa8fa57814
+                klayoutChecksum=145adaa044101bb41179aa63ec6d7f86
             else
-                echo "Unrecognized version of Ubuntu $1. Please install KLayout manually"
+                echo "Unsupported Ubuntu version $1. Supported versions: 20.04, 22.04, 24.04. Please upgrade to a supported LTS release or install KLayout ${klayoutVersion} manually from https://www.klayout.org/build.html"
                 exit 1
             fi
             wget https://www.klayout.org/downloads/Ubuntu-${1%.*}/klayout_${klayoutVersion}-1_amd64.deb
@@ -370,6 +383,9 @@ while [ "$#" -gt 0 ]; do
             CI="yes"
             OR_INSTALLER_ARGS="${OR_INSTALLER_ARGS} -save-deps-prefixes=/etc/openroad_deps_prefixes.txt"
             ;;
+        -save-deps-prefixes=*)
+            OR_INSTALLER_ARGS="${OR_INSTALLER_ARGS} $1"
+            ;;
         -yosys-ver=*)
             YOSYS_VER=${1#*=}
             ;;
@@ -428,7 +444,7 @@ case "${os}" in
         if [[ ${CI} == "yes" ]]; then
             echo "WARNING: Installing CI dependencies is only supported on Ubuntu 22.04" >&2
         fi
-        
+
         # Detect EL version to choose appropriate functions
         if [[ -f /etc/os-release ]]; then
             elVersion=$(awk -F= '/^VERSION_ID/{print $2}' /etc/os-release | sed 's/"//g' | cut -d. -f1)
@@ -436,10 +452,10 @@ case "${os}" in
             echo "ERROR: Could not detect Enterprise Linux version" >&2
             exit 1
         fi
-        
+
         # First install OpenROAD base
         _installORDependencies
-        
+
         # Determine between EL7 vs EL8/9, since yum vs dnf should be used, and different Klayout builds exist
         case "${elVersion}" in
             "7")
@@ -461,7 +477,7 @@ case "${os}" in
                 exit 1
                 ;;
         esac
-        
+
         if [[ "${option}" == "common" || "${option}" == "all" ]]; then
             _installPipCommon
         fi
@@ -480,14 +496,18 @@ case "${os}" in
             _installUbuntuPackages "${version}"
             _installUbuntuCleanUp
         fi
-        if [[ "${option}" == "common" || "${option}" == "all" ]]; then
-            if [[ $version != "rodete" ]]; then
+        if [[ $version != "rodete" ]]; then
+            if [[ "${option}" == "common" || "${option}" == "all" ]]; then
                 if _versionCompare ${version} -lt 23.04 ; then
                     _installPipCommon
+                else
+                    if [[ "${option}" == "base" || "${option}" == "all" ]]; then
+                        _installPipSystem
+                    fi
                 fi
-            else
-                echo "Skip common for rodete"
             fi
+        else
+            echo "Skip pip packages for rodete"
         fi
         ;;
     "Darwin" )

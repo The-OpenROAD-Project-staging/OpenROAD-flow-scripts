@@ -100,6 +100,7 @@ export ADDITIONAL_LIBS += $(PLATFORM_DIR)/ram/lib/sacrls0g0d1p64x128m2b1w0c1p0d0
 ._0P15_8T_SDC_FILE = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint_0.15_8T.sdc
 ._0P3S_6T_SDC_FILE  = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint_0.3s_6T.sdc
 ._0P3S_8T_SDC_FILE  = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint_0.3s_8T.sdc
+.T0P5_8T_SDC_FILE  = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint_t0.5_8T.sdc
 
 # Use $(if) to defer conditional eval until all makefiles are read
 export SDC_FILE = $(strip \
@@ -118,7 +119,10 @@ export SDC_FILE = $(strip \
                     $(._0P3S_6T_SDC_FILE), \
                     $(._0P3S_8T_SDC_FILE) \
                 ), \
-                $(.DEFAULT_SDC_FILE) \
+                $(if $(and $(filter t0.5,$(RAPIDUS_PDK_VERSION)),$(filter SC8T,$(PLACE_SITE)),$(filter verific,$(SYNTH_HDL_FRONTEND))), \
+	            $(.T0P5_8T_SDC_FILE), \
+                    $(.DEFAULT_SDC_FILE) \
+                ) \
             ) \
         ) \
     ))
@@ -148,6 +152,3 @@ export SYNTH_CANONICALIZE_TCL = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NAME)/canoni
 
 export SWAP_ARITH_OPERATORS = 1
 export OPENROAD_HIERARCHICAL = 1
-
-# Until the verilog writer fix is merged
-export LEC_CHECK = 0

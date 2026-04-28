@@ -1,6 +1,6 @@
 {
     "synth__design__instance__area__stdcell": {
-        "value": 8720.0,
+        "value": 8130.0,
         "compare": "<="
     },
     "constraints__clocks__count": {
@@ -8,11 +8,11 @@
         "compare": "=="
     },
     "placeopt__design__instance__area": {
-        "value": 11599,
+        "value": 9648,
         "compare": "<="
     },
     "placeopt__design__instance__count__stdcell": {
-        "value": 296166,
+        "value": 212534,
         "compare": "<="
     },
     "detailedplace__design__violations": {
@@ -20,19 +20,19 @@
         "compare": "=="
     },
     "cts__design__instance__count__setup_buffer": {
-        "value": 25754,
+        "value": 18481,
         "compare": "<="
     },
     "cts__design__instance__count__hold_buffer": {
-        "value": 25754,
+        "value": 18481,
         "compare": "<="
     },
     "cts__timing__setup__ws": {
-        "value": -0.0575,
+        "value": -0.0581,
         "compare": ">="
     },
     "cts__timing__setup__tns": {
-        "value": -55.2,
+        "value": -0.292,
         "compare": ">="
     },
     "cts__timing__hold__ws": {
@@ -48,11 +48,11 @@
         "compare": "<="
     },
     "globalroute__timing__setup__ws": {
-        "value": -0.0724,
+        "value": -0.104,
         "compare": ">="
     },
     "globalroute__timing__setup__tns": {
-        "value": -236.0,
+        "value": -9.79,
         "compare": ">="
     },
     "globalroute__timing__hold__ws": {
@@ -64,23 +64,23 @@
         "compare": ">="
     },
     "finish__timing__setup__ws": {
-        "value": -0.0724,
+        "value": -0.104,
         "compare": ">="
     },
     "finish__timing__setup__tns": {
-        "value": -236.0,
+        "value": -9.79,
         "compare": ">="
     },
     "finish__timing__hold__ws": {
-        "value": -0.0125,
+        "value": -0.0185,
         "compare": ">="
     },
     "finish__timing__hold__tns": {
-        "value": -0.05,
+        "value": -0.074,
         "compare": ">="
     },
     "finish__design__instance__area": {
-        "value": 11865,
+        "value": 9915,
         "compare": "<="
     }
 }
