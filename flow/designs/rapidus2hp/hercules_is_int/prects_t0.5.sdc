@@ -18,5 +18,5 @@ create_clock -name "clk" -add -period $clk_period \
 set_clock_latency $clk_period clk
 
 ### No SDC provided, so hold off on input/output delays
-#set_input_delay [expr { $clk_period * $input_pct }] -clock clk [all_inputs]
+#set_input_delay [expr { $clk_period * $input_pct }] -clock clk [all_inputs -no_clocks]
 #set_output_delay [expr { $clk_period * $output_pct }] -clock clk [all_outputs]
