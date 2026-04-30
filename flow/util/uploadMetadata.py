@@ -2,7 +2,6 @@
 
 import json
 import argparse
-import re
 import os
 from datetime import datetime, timezone
 
@@ -88,7 +87,7 @@ def upload_data(db, dataFile, platform, design, variant, args, rules):
     excludes = ["run", "commit", "total_time", "constraints"]
     gen_date = datetime.now()
     for k, v in data.items():
-        new_key = re.sub(":", "__", k)  # replace ':' with '__'
+        new_key = k.replace(":", "__")  # replace ':' with '__'
         new_data[new_key] = v
         stage_name = k.split("__")[0]
         if stage_name not in excludes:
@@ -210,7 +209,7 @@ def build_design_record(dataFile, platform, design, variant, rules):
     """Return a dict for one design to be included in the pipeline-level payload."""
     with open(dataFile) as f:
         data = json.load(f)
-    metrics = {re.sub(":", "__", k): v for k, v in data.items()}
+    metrics = {k.replace(":", "__"): v for k, v in data.items()}
     return {
         "platform": platform,
         "design": design,
@@ -258,6 +257,7 @@ def publish_v1_per_design(publisher, topic_path, design_records, args):
     flattened at the root), matching the legacy schema the ingestion service
     still supports.
     """
+    futures = []
     for d in design_records:
         payload = {
             "build_id": args.buildID,
@@ -269,8 +269,7 @@ def publish_v1_per_design(publisher, topic_path, design_records, args):
             "jenkins_env": args.jenkinsEnv,
             "rules": d["rules"],
         }
-        for k, v in d["metrics"].items():
-            payload[k] = v
+        payload.update(d["metrics"])
 
         message_data = json.dumps(payload, default=str).encode("utf-8")
         try:
@@ -279,6 +278,15 @@ def publish_v1_per_design(publisher, topic_path, design_records, args):
                 data=message_data,
                 jenkins_env=args.jenkinsEnv,
             )
+            futures.append((d, future))
+        except Exception as e:
+            print(
+                f"[WARN] Pub/Sub v1 fallback publish failed for "
+                f"{d['platform']} {d['design']} {d['variant']}: {e}"
+            )
+
+    for d, future in futures:
+        try:
             message_id = future.result()
             print(
                 f"[INFO] Published v1 fallback message (ID: {message_id}) for "
