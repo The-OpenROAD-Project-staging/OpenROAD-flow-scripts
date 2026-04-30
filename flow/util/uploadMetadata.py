@@ -201,6 +201,11 @@ def upload_data(db, dataFile, platform, design, variant, args, rules):
 
 
 # --- PUBSUB ---
+# Pub/Sub hard cap is 10 MB. Stay under with safety margin to leave room for
+# attribute overhead and future payload growth.
+MAX_PUBSUB_BYTES = 8 * 1024 * 1024
+
+
 def build_design_record(dataFile, platform, design, variant, rules):
     """Return a dict for one design to be included in the pipeline-level payload."""
     with open(dataFile) as f:
@@ -215,9 +220,9 @@ def build_design_record(dataFile, platform, design, variant, rules):
     }
 
 
-def publish_pipeline_report(publisher, topic_path, design_records, args):
-    """Publish one message for the entire pipeline run."""
-    payload = {
+def build_pipeline_payload(design_records, args):
+    """Return the v2 pipeline-level payload dict."""
+    return {
         "payload_schema_version": 2,
         "jenkins_env": args.jenkinsEnv,
         "build_id": args.buildID,
@@ -228,10 +233,13 @@ def publish_pipeline_report(publisher, topic_path, design_records, args):
         "jenkins_url": args.jenkinsURL,
         "designs": design_records,
     }
-    message_data = json.dumps(payload, default=str).encode("utf-8")
+
+
+def publish_pipeline_report(publisher, topic_path, message_data, design_count, args):
+    """Publish a pre-encoded v2 pipeline message."""
     size_kb = len(message_data) / 1024
     print(
-        f"[INFO] Publishing pipeline report ({len(design_records)} designs, {size_kb:.1f} KB) to Pub/Sub."
+        f"[INFO] Publishing pipeline report ({design_count} designs, {size_kb:.1f} KB) to Pub/Sub."
     )
     future = publisher.publish(
         topic_path,
@@ -241,6 +249,46 @@ def publish_pipeline_report(publisher, topic_path, design_records, args):
     )
     message_id = future.result()
     print(f"[INFO] Published pipeline report to Pub/Sub (message ID: {message_id}).")
+
+
+def publish_v1_per_design(publisher, topic_path, design_records, args):
+    """Fallback path used when the v2 pipeline payload exceeds MAX_PUBSUB_BYTES.
+
+    Emits one v1-format message per design (no payload_schema_version, metrics
+    flattened at the root), matching the legacy schema the ingestion service
+    still supports.
+    """
+    for d in design_records:
+        payload = {
+            "build_id": args.buildID,
+            "branch_name": args.branchName,
+            "pipeline_id": args.pipelineID,
+            "change_branch": args.changeBranch,
+            "commit_sha": args.commitSHA,
+            "jenkins_url": args.jenkinsURL,
+            "jenkins_env": args.jenkinsEnv,
+            "rules": d["rules"],
+        }
+        for k, v in d["metrics"].items():
+            payload[k] = v
+
+        message_data = json.dumps(payload, default=str).encode("utf-8")
+        try:
+            future = publisher.publish(
+                topic_path,
+                data=message_data,
+                jenkins_env=args.jenkinsEnv,
+            )
+            message_id = future.result()
+            print(
+                f"[INFO] Published v1 fallback message (ID: {message_id}) for "
+                f"{d['platform']} {d['design']} {d['variant']}."
+            )
+        except Exception as e:
+            print(
+                f"[WARN] Pub/Sub v1 fallback publish failed for "
+                f"{d['platform']} {d['design']} {d['variant']}: {e}"
+            )
 
 
 # --- END PUBSUB ---
@@ -323,10 +371,23 @@ for reportDir, dirs, files in sorted(os.walk("reports", topdown=False)):
 
 # --- PUBSUB ---
 if publisher and design_records:
-    try:
-        publish_pipeline_report(publisher, topic_path, design_records, args)
-    except Exception as e:
-        print(f"[WARN] Pub/Sub publish failed for pipeline report: {e}")
+    payload = build_pipeline_payload(design_records, args)
+    message_data = json.dumps(payload, default=str).encode("utf-8")
+
+    if len(message_data) > MAX_PUBSUB_BYTES:
+        print(
+            f"[WARN] v2 payload size {len(message_data) / 1024:.1f} KB exceeds "
+            f"{MAX_PUBSUB_BYTES // 1024} KB cap. Falling back to v1 per-design publish "
+            f"({len(design_records)} messages)."
+        )
+        publish_v1_per_design(publisher, topic_path, design_records, args)
+    else:
+        try:
+            publish_pipeline_report(
+                publisher, topic_path, message_data, len(design_records), args
+            )
+        except Exception as e:
+            print(f"[WARN] Pub/Sub publish failed for pipeline report: {e}")
 elif publisher and not design_records:
     print("[WARN] Pub/Sub publisher initialized but no design records were collected.")
 # --- END PUBSUB ---
