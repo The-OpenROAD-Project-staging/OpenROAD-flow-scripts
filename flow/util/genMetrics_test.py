@@ -5,37 +5,35 @@ import shutil
 import subprocess
 import sys
 import unittest
-from unittest import mock
 
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
 
 import genMetrics
 
 
-class IsGitRepoTests(unittest.TestCase):
-    """Tests is_git_repo()'s tolerance of a missing git binary."""
+class GitHeadCommitTests(unittest.TestCase):
+    """Tests git_head_commit()'s fallback behavior so commit metadata
+    extraction degrades gracefully instead of raising."""
 
-    def test_returns_false_when_git_not_on_path(self):
-        """When git is absent from PATH, is_git_repo() must return False
-        without raising (e.g. Nix builds, hermetic Bazel sandboxes)."""
-        with mock.patch.object(genMetrics.shutil, "which", return_value=None):
-            self.assertFalse(genMetrics.is_git_repo())
-            self.assertFalse(genMetrics.is_git_repo(folder="/tmp"))
+    def test_returns_descriptive_string_when_git_not_on_path(self):
+        """Nix builds and hermetic Bazel sandboxes can lack git; the
+        helper must report that distinctly rather than masquerading as
+        'not a git repo'."""
+        self.assertEqual(genMetrics.git_head_commit(None, "/tmp"), "git not on PATH")
 
-    def test_returns_false_when_folder_is_not_a_directory(self):
-        """When the caller passes a folder that doesn't exist (e.g. an
-        unset/misconfigured PLATFORM_DIR), is_git_repo() must return False
-        without letting subprocess raise FileNotFoundError on cwd."""
-        with mock.patch.object(genMetrics.shutil, "which", return_value="/usr/bin/git"):
-            self.assertFalse(
-                genMetrics.is_git_repo(folder="/no/such/directory/orfs-test")
-            )
+    def test_returns_na_when_folder_is_not_a_directory(self):
+        """An unset/misconfigured PLATFORM_DIR must not let subprocess
+        raise FileNotFoundError on cwd."""
+        self.assertEqual(
+            genMetrics.git_head_commit("/usr/bin/git", "/no/such/directory/orfs-test"),
+            "N/A",
+        )
 
 
 class ShutilWhichGitConsistencyTests(unittest.TestCase):
     """Cross-checks shutil.which("git") against actually invoking git, so
     we catch any environment (e.g. a stripped Nix sandbox) where the two
-    disagree and is_git_repo()'s PATH probe would give the wrong answer."""
+    disagree and the PATH probe would give the wrong answer."""
 
     def test_which_matches_git_version(self):
         which_result = shutil.which("git")
@@ -59,9 +57,9 @@ class ShutilWhichGitConsistencyTests(unittest.TestCase):
 
 class ShutilWhichMissingCommandTests(unittest.TestCase):
     """Validates shutil.which() returns None for a non-existent command.
-    This is the primitive is_git_repo() relies on; if it ever returned a
-    bogus path (in Nix, in a Bazel sandbox, anywhere) the missing-git
-    branch would never fire."""
+    This is the primitive git_head_commit() relies on at the call site;
+    if it ever returned a bogus path (in Nix, in a Bazel sandbox,
+    anywhere) the missing-git branch would never fire."""
 
     BOGUS_CMD = "orfs-genmetrics-no-such-command-xyzzy"
 
