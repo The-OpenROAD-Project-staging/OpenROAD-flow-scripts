@@ -373,17 +373,18 @@ def extract_metrics(
         json.dump(metrics_dict, resultSpecfile, indent=2, sort_keys=True)
 
 
-args = parse_args()
-now = datetime.now()
+if __name__ == "__main__":
+    args = parse_args()
+    now = datetime.now()
 
-extract_metrics(
-    os.path.join(os.path.dirname(os.path.realpath(__file__)), "../"),
-    args.platform,
-    args.design,
-    args.flowVariant,
-    args.output,
-    args.hier,
-    args.logs,
-    args.reports,
-    args.results,
-)
+    extract_metrics(
+        os.path.join(os.path.dirname(os.path.realpath(__file__)), "../"),
+        args.platform,
+        args.design,
+        args.flowVariant,
+        args.output,
+        args.hier,
+        args.logs,
+        args.reports,
+        args.results,
+    )
