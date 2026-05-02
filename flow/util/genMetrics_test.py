@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import datetime
 import os
 import shutil
 import subprocess
@@ -21,6 +22,24 @@ class IsGitRepoTests(unittest.TestCase):
         with mock.patch.object(genMetrics.shutil, "which", return_value=None):
             self.assertFalse(genMetrics.is_git_repo())
             self.assertFalse(genMetrics.is_git_repo(folder="/tmp"))
+
+    def test_returns_false_when_folder_is_not_a_directory(self):
+        """When the caller passes a folder that doesn't exist (e.g. an
+        unset/misconfigured PLATFORM_DIR), is_git_repo() must return False
+        without letting subprocess raise FileNotFoundError on cwd."""
+        with mock.patch.object(genMetrics.shutil, "which", return_value="/usr/bin/git"):
+            self.assertFalse(
+                genMetrics.is_git_repo(folder="/no/such/directory/orfs-test")
+            )
+
+
+class ModuleImportableTests(unittest.TestCase):
+    """Guards against module-scope state that extract_metrics() depends on
+    silently moving into the `if __name__ == "__main__"` block — that would
+    break library imports with a NameError at call time."""
+
+    def test_now_is_module_level_datetime(self):
+        self.assertIsInstance(genMetrics.now, datetime.datetime)
 
 
 class ShutilWhichGitConsistencyTests(unittest.TestCase):

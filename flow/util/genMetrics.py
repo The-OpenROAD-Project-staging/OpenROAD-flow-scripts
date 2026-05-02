@@ -174,6 +174,8 @@ def read_sdc(file_name):
 def is_git_repo(folder=None):
     if shutil.which("git") is None:
         return False
+    if folder is not None and not os.path.isdir(folder):
+        return False
     cmd = ["git", "branch"]
     with open(os.devnull, "w") as devnull:
         if folder is not None:
@@ -373,9 +375,11 @@ def extract_metrics(
         json.dump(metrics_dict, resultSpecfile, indent=2, sort_keys=True)
 
 
+now = datetime.now()
+
+
 if __name__ == "__main__":
     args = parse_args()
-    now = datetime.now()
 
     extract_metrics(
         os.path.join(os.path.dirname(os.path.realpath(__file__)), "../"),
