@@ -198,7 +198,7 @@ def extract_metrics(
     baseRegEx = "^{}\n^-*\n^{}"
 
     metrics_dict = defaultdict(dict)
-    metrics_dict["run__flow__generate_date"] = now.strftime("%Y-%m-%d %H:%M")
+    metrics_dict["run__flow__generate_date"] = datetime.now().strftime("%Y-%m-%d %H:%M")
     metrics_dict["run__flow__metrics_version"] = "Metrics_2.1.2"
     cmdOutput = check_output([os.environ.get("OPENROAD_EXE", "openroad"), "-version"])
     cmdFields = [x.decode("utf-8") for x in cmdOutput.split()]
@@ -207,8 +207,8 @@ def extract_metrics(
         metrics_dict["run__flow__openroad_commit"] = str(cmdFields[1])
     else:
         metrics_dict["run__flow__openroad_commit"] = "N/A"
-    if is_git_repo():
-        cmdOutput = check_output(["git", "rev-parse", "HEAD"])
+    if is_git_repo(folder=cwd):
+        cmdOutput = check_output(["git", "rev-parse", "HEAD"], cwd=cwd)
         cmdOutput = cmdOutput.decode("utf-8").strip()
     else:
         cmdOutput = "not a git repo"
@@ -373,9 +373,6 @@ def extract_metrics(
 
     with open(output, "w") as resultSpecfile:
         json.dump(metrics_dict, resultSpecfile, indent=2, sort_keys=True)
-
-
-now = datetime.now()
 
 
 if __name__ == "__main__":

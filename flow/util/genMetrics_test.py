@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import datetime
 import os
 import shutil
 import subprocess
@@ -31,15 +30,6 @@ class IsGitRepoTests(unittest.TestCase):
             self.assertFalse(
                 genMetrics.is_git_repo(folder="/no/such/directory/orfs-test")
             )
-
-
-class ModuleImportableTests(unittest.TestCase):
-    """Guards against module-scope state that extract_metrics() depends on
-    silently moving into the `if __name__ == "__main__"` block — that would
-    break library imports with a NameError at call time."""
-
-    def test_now_is_module_level_datetime(self):
-        self.assertIsInstance(genMetrics.now, datetime.datetime)
 
 
 class ShutilWhichGitConsistencyTests(unittest.TestCase):
