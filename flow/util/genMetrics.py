@@ -6,6 +6,7 @@
 # -----------------------------------------------------------------------------
 
 import os
+import shutil
 from datetime import datetime, timedelta
 from collections import defaultdict
 from uuid import uuid4 as uuid
@@ -171,6 +172,8 @@ def read_sdc(file_name):
 
 
 def is_git_repo(folder=None):
+    if shutil.which("git") is None:
+        return False
     cmd = ["git", "branch"]
     with open(os.devnull, "w") as devnull:
         if folder is not None:
