@@ -51,6 +51,12 @@ lappend global_placement_args -force_center_initial_place
 lappend global_placement_args -min_phi_coef $::env(MIN_PLACE_STEP_COEF)
 lappend global_placement_args -max_phi_coef $::env(MAX_PLACE_STEP_COEF)
 
+# Concurrent IO placement: the movable pins become variables of this solve
+# instead of fixed anchors placed by the preceding place_pins run.
+if { [env_var_exists_and_non_empty GPL_PLACE_IOS] } {
+  lappend global_placement_args -place_ios
+}
+
 proc do_placement { global_placement_args } {
   set all_args [concat [list -density [place_density_with_lb_addon] \
     -pad_left $::env(CELL_PAD_IN_SITES_GLOBAL_PLACEMENT) \
@@ -66,6 +72,20 @@ set result [catch { do_placement $global_placement_args } errMsg]
 if { $result != 0 } {
   orfs_write_db $::env(RESULTS_DIR)/3_3_place_gp-failed.odb
   error $errMsg
+}
+
+# Concurrent IO placement writes the solved pin locations to the database but
+# does not legalize them onto routing-track slots, the same way global placement
+# leaves the cells for detailed placement. Run place_pins once against the final
+# cell positions to assign the slots. Skipping it costs routed wirelength: on a
+# 186k-instance design, setup WNS -0.060 -> -0.139 ns and global-route
+# wirelength +5.1%.
+if { [env_var_exists_and_non_empty GPL_PLACE_IOS] } {
+  log_cmd place_pins \
+    -hor_layers $::env(IO_PLACER_H) \
+    -ver_layers $::env(IO_PLACER_V) \
+    {*}[env_var_or_empty PLACE_PINS_ARGS]
+  write_pin_placement $::env(RESULTS_DIR)/3_3_place_gp_pins.tcl
 }
 
 log_cmd estimate_parasitics -placement

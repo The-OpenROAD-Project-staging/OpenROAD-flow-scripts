@@ -1,7 +1,13 @@
 source $::env(SCRIPTS_DIR)/load.tcl
 erase_non_stage_variables place
 
-if {
+if { [env_var_exists_and_non_empty GPL_PLACE_IOS] } {
+  # The pins are placed inside the next step's global_placement -place_ios, so
+  # they pass through this one unplaced.
+  puts "GPL_PLACE_IOS is set. Deferring IO pin placement to global placement"
+  orfs_copy_db $::env(RESULTS_DIR)/3_1_place_gp_skip_io.odb \
+    $::env(RESULTS_DIR)/3_2_place_iop.odb
+} elseif {
   ![env_var_exists_and_non_empty FLOORPLAN_DEF] &&
   ![env_var_exists_and_non_empty FOOTPRINT] &&
   ![env_var_exists_and_non_empty FOOTPRINT_TCL]

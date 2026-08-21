@@ -3,7 +3,11 @@ erase_non_stage_variables place
 load_design 2_floorplan.odb 2_floorplan.sdc
 source_step_tcl PRE GLOBAL_PLACE_SKIP_IO
 
-if { [env_var_exists_and_non_empty FLOORPLAN_DEF] } {
+if { [env_var_exists_and_non_empty GPL_PLACE_IOS] } {
+  # -place_ios places cells and pins in one solve, so the IO-less pass that only
+  # exists to seed the pin placement has nothing to seed.
+  puts "GPL_PLACE_IOS is set. Skipping global placement without IOs"
+} elseif { [env_var_exists_and_non_empty FLOORPLAN_DEF] } {
   puts "FLOORPLAN_DEF is set. Skipping global placement without IOs"
 } elseif { [all_pins_placed] } {
   puts "All pins are placed. Skipping global placement without IOs"
