@@ -75,6 +75,10 @@ if { $place_ios } {
   # order entitles it to, so crowding ahead of it displaces it too.
   lappend global_placement_args -place_ios_density
   lappend global_placement_args -place_ios_density_rank
+  # The force alone never finishes: hand the pins to ppl periodically and adopt
+  # the assignment, so the cells only ever settle against positions place_pins
+  # can reproduce.
+  lappend global_placement_args -place_ios_legalize_every 50
   # rsz and STA read the pin locations during a timing-driven iteration.
   if { $::env(GPL_TIMING_DRIVEN) } {
     lappend global_placement_args -place_ios_td_preview
