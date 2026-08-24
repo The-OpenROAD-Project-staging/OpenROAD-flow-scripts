@@ -692,14 +692,6 @@ GPL_ROUTABILITY_DRIVEN:
   stages:
     - place
   default: 1
-GPL_PLACE_IOS:
-  description: |
-    Place the movable IO pins inside global placement instead of with a
-    preceding place_pins run. The IO-less placement pass and the standalone
-    io_placement step are skipped, and place_pins runs once after the solve to
-    assign the pins to their routing-track slots.
-  stages:
-    - place
 GPL_KEEP_OVERFLOW:
   description: >
     Passed as -keep_resize_below_overflow to global_placement.

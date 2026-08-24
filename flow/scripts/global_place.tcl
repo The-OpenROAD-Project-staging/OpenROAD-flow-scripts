@@ -51,9 +51,19 @@ lappend global_placement_args -force_center_initial_place
 lappend global_placement_args -min_phi_coef $::env(MIN_PLACE_STEP_COEF)
 lappend global_placement_args -max_phi_coef $::env(MAX_PLACE_STEP_COEF)
 
-# Concurrent IO placement: the movable pins become variables of this solve
-# instead of fixed anchors placed by the preceding place_pins run.
-if { [env_var_exists_and_non_empty GPL_PLACE_IOS] } {
+# The only global placement the flow runs: -place_ios co-optimizes the movable
+# IO pins with the cells, and place_pins below legalizes what it picks. Unusable
+# on a design whose pins the floorplan already placed.
+set place_ios 1
+if {
+  [env_var_exists_and_non_empty FLOORPLAN_DEF]
+  || [env_var_exists_and_non_empty FOOTPRINT]
+  || [env_var_exists_and_non_empty FOOTPRINT_TCL]
+  || [all_pins_placed]
+} {
+  set place_ios 0
+}
+if { $place_ios } {
   lappend global_placement_args -place_ios
   # The solve writes the pin shapes itself, and the mid-solve legalization
   # builds ppl's slot grid, so both need the layers place_pins uses below.
@@ -88,7 +98,7 @@ if { $result != 0 } {
 # cell positions to assign the slots. Skipping it costs routed wirelength: on a
 # 186k-instance design, setup WNS -0.060 -> -0.139 ns and global-route
 # wirelength +5.1%.
-if { [env_var_exists_and_non_empty GPL_PLACE_IOS] } {
+if { $place_ios } {
   log_cmd place_pins \
     -hor_layers $::env(IO_PLACER_H) \
     -ver_layers $::env(IO_PLACER_V) \
