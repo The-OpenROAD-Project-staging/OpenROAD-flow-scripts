@@ -70,8 +70,11 @@ if { $place_ios } {
   lappend global_placement_args -place_ios_hor_layers $::env(IO_PLACER_H)
   lappend global_placement_args -place_ios_ver_layers $::env(IO_PLACER_V)
   # The pins are the only objects in the solve with no density force, so the
-  # wirelength gradient stacks them past what place_pins below can honour.
+  # wirelength gradient stacks them past what place_pins below can honour. The
+  # rank term is what carries it down the edge: a pin aims at the slot its
+  # order entitles it to, so crowding ahead of it displaces it too.
   lappend global_placement_args -place_ios_density
+  lappend global_placement_args -place_ios_density_rank
   # rsz and STA read the pin locations during a timing-driven iteration.
   if { $::env(GPL_TIMING_DRIVEN) } {
     lappend global_placement_args -place_ios_td_preview
