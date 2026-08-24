@@ -55,6 +55,14 @@ lappend global_placement_args -max_phi_coef $::env(MAX_PLACE_STEP_COEF)
 # instead of fixed anchors placed by the preceding place_pins run.
 if { [env_var_exists_and_non_empty GPL_PLACE_IOS] } {
   lappend global_placement_args -place_ios
+  # The solve writes the pin shapes itself, and the mid-solve legalization
+  # builds ppl's slot grid, so both need the layers place_pins uses below.
+  lappend global_placement_args -place_ios_hor_layers $::env(IO_PLACER_H)
+  lappend global_placement_args -place_ios_ver_layers $::env(IO_PLACER_V)
+  # rsz and STA read the pin locations during a timing-driven iteration.
+  if { $::env(GPL_TIMING_DRIVEN) } {
+    lappend global_placement_args -place_ios_td_preview
+  }
 }
 
 proc do_placement { global_placement_args } {
