@@ -69,6 +69,9 @@ if { $place_ios } {
   # builds ppl's slot grid, so both need the layers place_pins uses below.
   lappend global_placement_args -place_ios_hor_layers $::env(IO_PLACER_H)
   lappend global_placement_args -place_ios_ver_layers $::env(IO_PLACER_V)
+  # The pins are the only objects in the solve with no density force, so the
+  # wirelength gradient stacks them past what place_pins below can honour.
+  lappend global_placement_args -place_ios_density
   # rsz and STA read the pin locations during a timing-driven iteration.
   if { $::env(GPL_TIMING_DRIVEN) } {
     lappend global_placement_args -place_ios_td_preview
