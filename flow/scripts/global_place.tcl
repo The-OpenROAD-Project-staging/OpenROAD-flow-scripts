@@ -74,7 +74,6 @@ if { $place_ios } {
   # rank term is what carries it down the edge: a pin aims at the slot its
   # order entitles it to, so crowding ahead of it displaces it too.
   lappend global_placement_args -place_ios_density
-  lappend global_placement_args -place_ios_density_rank
   # The force alone never finishes: hand the pins to ppl periodically and adopt
   # the assignment, so the cells only ever settle against positions place_pins
   # can reproduce.
