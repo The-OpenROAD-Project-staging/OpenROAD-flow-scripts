@@ -78,6 +78,17 @@ if { $place_ios } {
   # the assignment, so the cells only ever settle against positions place_pins
   # can reproduce.
   lappend global_placement_args -place_ios_legalize_every 50
+  # A design that packs its pins tighter than ppl's default two tracks has to
+  # say so, or the solve models a slot grid coarser than the one place_pins
+  # below will build and can run out of positions on it.
+  set place_pins_args [env_var_or_empty PLACE_PINS_ARGS]
+  if {
+    [lsearch -exact $place_pins_args -min_distance_in_tracks] >= 0
+    && [set i [lsearch -exact $place_pins_args -min_distance]] >= 0
+  } {
+    lappend global_placement_args -place_ios_min_distance_tracks \
+      [lindex $place_pins_args [expr { $i + 1 }]]
+  }
   # rsz and STA read the pin locations during a timing-driven iteration.
   if { $::env(GPL_TIMING_DRIVEN) } {
     lappend global_placement_args -place_ios_td_preview
