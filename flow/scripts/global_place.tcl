@@ -69,14 +69,8 @@ if { $place_ios } {
   # builds ppl's slot grid, so both need the layers place_pins uses below.
   lappend global_placement_args -place_ios_hor_layers $::env(IO_PLACER_H)
   lappend global_placement_args -place_ios_ver_layers $::env(IO_PLACER_V)
-  # The pins are the only objects in the solve with no density force, so the
-  # wirelength gradient stacks them past what place_pins below can honour. The
-  # rank term is what carries it down the edge: a pin aims at the slot its
-  # order entitles it to, so crowding ahead of it displaces it too.
-  lappend global_placement_args -place_ios_density
-  # The force alone never finishes: hand the pins to ppl periodically and adopt
-  # the assignment, so the cells only ever settle against positions place_pins
-  # can reproduce.
+  # Spacing and the periodic ppl assignment are on by default; 50 iterations is
+  # that default, stated here so the other flows can vary it against this one.
   lappend global_placement_args -place_ios_legalize_every 50
   # A design that packs its pins tighter than ppl's default two tracks has to
   # say so, or the solve models a slot grid coarser than the one place_pins
