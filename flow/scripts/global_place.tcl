@@ -57,31 +57,14 @@ lappend global_placement_args -max_phi_coef $::env(MAX_PLACE_STEP_COEF)
 set place_ios [place_ios_enabled]
 if { $place_ios } {
   lappend global_placement_args -place_ios
-  # The solve places the pins on these layers and builds its slot grid from
-  # their tracks, so they have to be the ones the flow would route them on.
-  lappend global_placement_args -place_ios_hor_layers $::env(IO_PLACER_H)
-  lappend global_placement_args -place_ios_ver_layers $::env(IO_PLACER_V)
-  # Spacing and the periodic ppl assignment are on by default; 50 iterations is
+  # Everything about how the pins are to be placed now lives with the pin
+  # placer, so the solve reads it instead of being told it again and the flow
+  # passes PLACE_PINS_ARGS through untouched.
+  set_io_pin_placement -hor_layers $::env(IO_PLACER_H) \
+    -ver_layers $::env(IO_PLACER_V) {*}[env_var_or_empty PLACE_PINS_ARGS]
+  # Spacing and the periodic assignment are on by default; 50 iterations is
   # that default, stated here so the other flows can vary it against this one.
   lappend global_placement_args -place_ios_legalize_every 50
-  # Whatever the flow would have run place_pins with, the solve has to run its
-  # own assignment with: a design that packs its pins tighter than the default
-  # two tracks otherwise models a coarser grid than it will be placed on.
-  set place_pins_args [env_var_or_empty PLACE_PINS_ARGS]
-  if {
-    [lsearch -exact $place_pins_args -min_distance_in_tracks] >= 0
-    && [set i [lsearch -exact $place_pins_args -min_distance]] >= 0
-  } {
-    lappend global_placement_args -place_ios_min_distance_tracks \
-      [lindex $place_pins_args [expr { $i + 1 }]]
-  }
-  if { [lsearch -exact $place_pins_args -annealing] >= 0 } {
-    lappend global_placement_args -place_ios_annealing
-  }
-  # rsz and STA read the pin locations during a timing-driven iteration.
-  if { $::env(GPL_TIMING_DRIVEN) } {
-    lappend global_placement_args -place_ios_td_preview
-  }
 }
 
 proc do_placement { global_placement_args } {
