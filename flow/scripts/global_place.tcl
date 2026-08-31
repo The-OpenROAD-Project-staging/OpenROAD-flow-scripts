@@ -62,9 +62,9 @@ if { $place_ios } {
   # passes PLACE_PINS_ARGS through untouched.
   set_io_pin_placement -hor_layers $::env(IO_PLACER_H) \
     -ver_layers $::env(IO_PLACER_V) {*}[env_var_or_empty PLACE_PINS_ARGS]
-  # Spacing and the periodic assignment are on by default; 50 iterations is
-  # that default, stated here so the other flows can vary it against this one.
-  lappend global_placement_args -place_ios_legalize_every 50
+  # A slower cadence than the default, to price how much of the gain comes from
+  # reassigning the pins often rather than merely once in a while.
+  lappend global_placement_args -place_ios_legalize_every 200
 }
 
 proc do_placement { global_placement_args } {
