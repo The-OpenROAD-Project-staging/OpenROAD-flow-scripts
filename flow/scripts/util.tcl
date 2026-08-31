@@ -329,3 +329,18 @@ proc source_step_tcl { hook_type step_name } {
   set env_var "${hook_type}_${step_name}_TCL"
   source_env_var_if_exists $env_var
 }
+
+# global_placement -place_ios co-optimizes the movable IO pins with the cells
+# and assigns them to slots itself. A design whose pins the floorplan already
+# placed has nothing for it to move.
+proc place_ios_enabled { } {
+  if {
+    [env_var_exists_and_non_empty FLOORPLAN_DEF]
+    || [env_var_exists_and_non_empty FOOTPRINT]
+    || [env_var_exists_and_non_empty FOOTPRINT_TCL]
+    || [all_pins_placed]
+  } {
+    return 0
+  }
+  return 1
+}

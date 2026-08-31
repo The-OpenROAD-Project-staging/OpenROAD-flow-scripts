@@ -52,29 +52,21 @@ lappend global_placement_args -min_phi_coef $::env(MIN_PLACE_STEP_COEF)
 lappend global_placement_args -max_phi_coef $::env(MAX_PLACE_STEP_COEF)
 
 # The only global placement the flow runs: -place_ios co-optimizes the movable
-# IO pins with the cells, and place_pins below legalizes what it picks. Unusable
-# on a design whose pins the floorplan already placed.
-set place_ios 1
-if {
-  [env_var_exists_and_non_empty FLOORPLAN_DEF]
-  || [env_var_exists_and_non_empty FOOTPRINT]
-  || [env_var_exists_and_non_empty FOOTPRINT_TCL]
-  || [all_pins_placed]
-} {
-  set place_ios 0
-}
+# IO pins with the cells and hands them to the pin placer itself, so there is no
+# place_pins call after it.
+set place_ios [place_ios_enabled]
 if { $place_ios } {
   lappend global_placement_args -place_ios
-  # The solve writes the pin shapes itself, and the mid-solve legalization
-  # builds ppl's slot grid, so both need the layers place_pins uses below.
+  # The solve places the pins on these layers and builds its slot grid from
+  # their tracks, so they have to be the ones the flow would route them on.
   lappend global_placement_args -place_ios_hor_layers $::env(IO_PLACER_H)
   lappend global_placement_args -place_ios_ver_layers $::env(IO_PLACER_V)
   # Spacing and the periodic ppl assignment are on by default; 50 iterations is
   # that default, stated here so the other flows can vary it against this one.
   lappend global_placement_args -place_ios_legalize_every 50
-  # A design that packs its pins tighter than ppl's default two tracks has to
-  # say so, or the solve models a slot grid coarser than the one place_pins
-  # below will build and can run out of positions on it.
+  # Whatever the flow would have run place_pins with, the solve has to run its
+  # own assignment with: a design that packs its pins tighter than the default
+  # two tracks otherwise models a coarser grid than it will be placed on.
   set place_pins_args [env_var_or_empty PLACE_PINS_ARGS]
   if {
     [lsearch -exact $place_pins_args -min_distance_in_tracks] >= 0
@@ -82,6 +74,9 @@ if { $place_ios } {
   } {
     lappend global_placement_args -place_ios_min_distance_tracks \
       [lindex $place_pins_args [expr { $i + 1 }]]
+  }
+  if { [lsearch -exact $place_pins_args -annealing] >= 0 } {
+    lappend global_placement_args -place_ios_annealing
   }
   # rsz and STA read the pin locations during a timing-driven iteration.
   if { $::env(GPL_TIMING_DRIVEN) } {
@@ -106,17 +101,7 @@ if { $result != 0 } {
   error $errMsg
 }
 
-# Concurrent IO placement writes the solved pin locations to the database but
-# does not legalize them onto routing-track slots, the same way global placement
-# leaves the cells for detailed placement. Run place_pins once against the final
-# cell positions to assign the slots. Skipping it costs routed wirelength: on a
-# 186k-instance design, setup WNS -0.060 -> -0.139 ns and global-route
-# wirelength +5.1%.
 if { $place_ios } {
-  log_cmd place_pins \
-    -hor_layers $::env(IO_PLACER_H) \
-    -ver_layers $::env(IO_PLACER_V) \
-    {*}[env_var_or_empty PLACE_PINS_ARGS]
   write_pin_placement $::env(RESULTS_DIR)/3_3_place_gp_pins.tcl
 }
 
