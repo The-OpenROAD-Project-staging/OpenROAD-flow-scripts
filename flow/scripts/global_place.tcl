@@ -59,6 +59,21 @@ if { $place_ios } {
   lappend global_placement_args -place_ios \
     -place_ios_hor_layers $::env(IO_PLACER_H) \
     -place_ios_ver_layers $::env(IO_PLACER_V)
+  # The solve models the slot grid place_pins will assign on, so it has to be
+  # told the same spacing: left to guess it counts slots the design does not
+  # have and packs the pins against a crowding that is not there.
+  set pin_args [env_var_or_empty PLACE_PINS_ARGS]
+  if { [set i [lsearch -exact $pin_args -min_distance]] >= 0 } {
+    lappend global_placement_args \
+      -place_ios_min_distance [lindex $pin_args [expr { $i + 1 }]]
+  }
+  if { [lsearch -exact $pin_args -min_distance_in_tracks] >= 0 } {
+    lappend global_placement_args -place_ios_min_distance_in_tracks
+  }
+  if { [set i [lsearch -exact $pin_args -corner_avoidance]] >= 0 } {
+    lappend global_placement_args \
+      -place_ios_corner_avoidance [lindex $pin_args [expr { $i + 1 }]]
+  }
 }
 
 proc do_placement { global_placement_args } {
