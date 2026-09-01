@@ -51,20 +51,14 @@ lappend global_placement_args -force_center_initial_place
 lappend global_placement_args -min_phi_coef $::env(MIN_PLACE_STEP_COEF)
 lappend global_placement_args -max_phi_coef $::env(MAX_PLACE_STEP_COEF)
 
-# The only global placement the flow runs: -place_ios co-optimizes the movable
-# IO pins with the cells and hands them to the pin placer itself, so there is no
-# place_pins call after it.
+# -place_ios co-optimizes the movable IO pins with the cells, holding them a
+# slot pitch apart on the track grid of the pin layers. It does not assign them
+# to slots, so place_pins runs after the solve instead of before it.
 set place_ios [place_ios_enabled]
 if { $place_ios } {
-  lappend global_placement_args -place_ios
-  # Everything about how the pins are to be placed now lives with the pin
-  # placer, so the solve reads it instead of being told it again and the flow
-  # passes PLACE_PINS_ARGS through untouched.
-  set_io_pin_placement -hor_layers $::env(IO_PLACER_H) \
-    -ver_layers $::env(IO_PLACER_V) {*}[env_var_or_empty PLACE_PINS_ARGS]
-  # Spacing and the periodic assignment are on by default; 50 iterations is
-  # that default, stated here so the other flows can vary it against this one.
-  lappend global_placement_args -place_ios_legalize_every 50
+  lappend global_placement_args -place_ios \
+    -place_ios_hor_layers $::env(IO_PLACER_H) \
+    -place_ios_ver_layers $::env(IO_PLACER_V)
 }
 
 proc do_placement { global_placement_args } {
@@ -85,6 +79,12 @@ if { $result != 0 } {
 }
 
 if { $place_ios } {
+  # The solve left the pins spaced and on track but unassigned; this is what
+  # legalizes them, against the cell placement it ended on.
+  log_cmd place_pins \
+    -hor_layers $::env(IO_PLACER_H) \
+    -ver_layers $::env(IO_PLACER_V) \
+    {*}[env_var_or_empty PLACE_PINS_ARGS]
   write_pin_placement $::env(RESULTS_DIR)/3_3_place_gp_pins.tcl
 }
 
