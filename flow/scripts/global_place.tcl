@@ -56,24 +56,12 @@ lappend global_placement_args -max_phi_coef $::env(MAX_PLACE_STEP_COEF)
 # to slots, so place_pins runs after the solve instead of before it.
 set place_ios [place_ios_enabled]
 if { $place_ios } {
-  lappend global_placement_args -place_ios \
-    -place_ios_hor_layers $::env(IO_PLACER_H) \
-    -place_ios_ver_layers $::env(IO_PLACER_V)
-  # The solve models the slot grid place_pins will assign on, so it has to be
-  # told the same spacing: left to guess it counts slots the design does not
-  # have and packs the pins against a crowding that is not there.
-  set pin_args [env_var_or_empty PLACE_PINS_ARGS]
-  if { [set i [lsearch -exact $pin_args -min_distance]] >= 0 } {
-    lappend global_placement_args \
-      -place_ios_min_distance [lindex $pin_args [expr { $i + 1 }]]
-  }
-  if { [lsearch -exact $pin_args -min_distance_in_tracks] >= 0 } {
-    lappend global_placement_args -place_ios_min_distance_in_tracks
-  }
-  if { [set i [lsearch -exact $pin_args -corner_avoidance]] >= 0 } {
-    lappend global_placement_args \
-      -place_ios_corner_avoidance [lindex $pin_args [expr { $i + 1 }]]
-  }
+  lappend global_placement_args -place_ios
+  # Everything about how the pins are to be placed lives with the pin placer:
+  # the solve reads it to model the grid place_pins will assign on, and
+  # place_pins reads it again below, so PLACE_PINS_ARGS is passed through once.
+  set_io_pin_placement -hor_layers $::env(IO_PLACER_H) \
+    -ver_layers $::env(IO_PLACER_V) {*}[env_var_or_empty PLACE_PINS_ARGS]
 }
 
 proc do_placement { global_placement_args } {
@@ -95,11 +83,10 @@ if { $result != 0 } {
 
 if { $place_ios } {
   # The solve left the pins spaced and on track but unassigned; this is what
-  # legalizes them, against the cell placement it ended on.
-  log_cmd place_pins \
-    -hor_layers $::env(IO_PLACER_H) \
-    -ver_layers $::env(IO_PLACER_V) \
-    {*}[env_var_or_empty PLACE_PINS_ARGS]
+  # legalizes them. Ranking the slots by wirelength here would discard the
+  # placement the solve arrived at, which is weighted by net timing that the
+  # pin placer cannot see, so rank them by displacement instead.
+  log_cmd place_pins -minimize_displacement
   write_pin_placement $::env(RESULTS_DIR)/3_3_place_gp_pins.tcl
 }
 
