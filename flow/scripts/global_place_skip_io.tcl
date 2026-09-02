@@ -3,9 +3,24 @@ erase_non_stage_variables place
 load_design 2_floorplan.odb 2_floorplan.sdc
 source_step_tcl PRE GLOBAL_PLACE_SKIP_IO
 
-# 3_3 runs a single global_placement -place_ios that co-optimizes the cells and
-# the IO pins, so there is no IO-blind placement to run first.
-puts "Concurrent IO placement is enabled. Skipping global placement without IOs"
+if { [place_ios_enabled] } {
+  # 3_3 runs a single global_placement -place_ios that co-optimizes the cells
+  # and the IO pins, so there is no IO-blind placement to run first.
+  puts "Concurrent IO placement is enabled. Skipping global placement without IOs"
+} elseif { [env_var_exists_and_non_empty FLOORPLAN_DEF] } {
+  puts "FLOORPLAN_DEF is set. Skipping global placement without IOs"
+} elseif { [all_pins_placed] } {
+  puts "All pins are placed. Skipping global placement without IOs"
+} else {
+  set global_placement_args {}
+  append_env_var global_placement_args GPL_RANDOM_SEED -random_seed 1
+
+  log_cmd global_placement -skip_io -density [place_density_with_lb_addon] \
+    -pad_left $::env(CELL_PAD_IN_SITES_GLOBAL_PLACEMENT) \
+    -pad_right $::env(CELL_PAD_IN_SITES_GLOBAL_PLACEMENT) \
+    {*}[env_var_or_empty GLOBAL_PLACEMENT_ARGS] \
+    {*}$global_placement_args
+}
 
 source_step_tcl POST GLOBAL_PLACE_SKIP_IO
 
